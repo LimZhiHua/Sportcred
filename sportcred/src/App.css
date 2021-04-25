@@ -102,7 +102,7 @@
     transition: height 0.20s ease;
   }
   #navbar>.body.opened {
-    height: 400px;
+    height: 380px;
     width: 100%;
   }
   /* body {
