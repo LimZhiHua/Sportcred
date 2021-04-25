@@ -1,9 +1,11 @@
 import React from "react";
+import FloatingSection from "../customComponents/FloatingSection";
+
 const TriviaLanding = () => {
     return (
-        <div>
+        <FloatingSection>
             <h1>TriviaLanding TODO</h1>
-        </div>
+        </FloatingSection>
     )
 }
 

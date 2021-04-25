@@ -1,11 +1,12 @@
 import React from "react";
+import FloatingSection from "../customComponents/FloatingSection";
 
 function ComponentPage() {
   return (
-    <div>
+    <FloatingSection>
         <h1>Components</h1>
         <p>Page to throw our custom components to know what we have</p>
-    </div>
+    </FloatingSection>
   );
 }
 

@@ -1,9 +1,11 @@
 import React from "react";
+import FloatingSection from "../customComponents/FloatingSection";
+
 const PicksPredictLanding = () => {
     return (
-        <div>
+        <FloatingSection>
             <h1>PicksPredictLanding TODO</h1>
-        </div>
+        </FloatingSection>
     )
 }
 

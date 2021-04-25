@@ -1,9 +1,11 @@
 import React from "react";
+import FloatingSection from "../customComponents/FloatingSection";
+
 const ZoneLanding = () => {
     return (
-        <div>
+        <FloatingSection>
             <h1>ZoneLanding TODO</h1>
-        </div>
+        </FloatingSection>
     )
 }
 
