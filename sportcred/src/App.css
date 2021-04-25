@@ -2,6 +2,23 @@
   display: flex;
   flex-direction: row;
   text-align: center;
+  min-height: 100vh;
+  position: relative;
+}
+
+.App::after {
+  content: "";
+  background-image: url("./images/5.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 9;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;   
 }
 
 .App-logo {
@@ -20,6 +37,7 @@
   display: flex;
   flex-direction: row;
   height: 100vh;
+  opacity: 0.92;
 }
 
 #navbar a {
@@ -28,7 +46,7 @@
 }
 
 #navbar>.body {
-  background-color: #484848; /* Navbar Background */
+  background-color: #383838; /* Navbar Background */
   color: white;
   transition: all 0.35s ease;
   width: 0;
@@ -53,7 +71,7 @@
 }
 
 #navbar>.burger-btn {
-  background-color: #484848; /* Navbar Background */
+  background-color: #383838; /* Navbar Background */
   border-style: none;
   line-height: 3.2em;
   padding: 0;
