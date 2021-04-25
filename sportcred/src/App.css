@@ -16,9 +16,15 @@
 /* Navbar ------------------------------------------- */
 
 #navbar {
+  /* color: white; */
   display: flex;
   flex-direction: row;
   height: 100vh;
+}
+
+#navbar a {
+  color: inherit;
+  text-decoration: inherit;
 }
 
 #navbar>.body {

@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Signin from "./Signin";
 
 import {
     SIGNIN_URL,
@@ -10,7 +9,8 @@ import {
 const Homepage = () => {
     return (
         <div>
-            <h1>Sportscred App TODO</h1>
+            <h1>Sportscred App</h1>
+            <p>This is the initial landing page for when users are not logged in?</p>
             {/* TODO: make navbar elsewhere */}
             <ul>
                 <li><Link to={SIGNIN_URL}>Sigin</Link></li>
