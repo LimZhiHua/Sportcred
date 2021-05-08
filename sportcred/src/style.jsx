@@ -5,7 +5,7 @@ const orangeButton = {
     'border-radius': '5px',
     'text-align': 'center',
     'width': "75%",
-    "background-color": "orange"
+    "backgroundColor": "#FF652F"
 
 }
 
@@ -14,8 +14,22 @@ const redButton = {
     'border-radius': '5px',
     'text-align': 'center',
     'width': "75%",
-    "background-color": "green"
+    "backgroundColor": "#14A76C"
 }
 
+const yellowButton = {
+    'color': "black",
+    'border-radius': '5px',
+    'text-align': 'center',
+    'width': "75%",
+    "backgroundColor": "#FFE400"
+}
+const greyButton = {
+    'color': "black",
+    'border-radius': '5px',
+    'text-align': 'center',
+    'width': "75%",
+    "backgroundColor": "#747474"
+}
 
-export {orangeButton, redButton}
+export {orangeButton, redButton, yellowButton, greyButton}
