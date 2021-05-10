@@ -1,12 +1,18 @@
 
 .floating-section {
+    color: #d0d0d0;
     border-radius: 0.20em;
     padding: 1em;
     width: 85%;
     max-width: 1200px;
     margin: 0.5em auto;
     /* background-color: rgba(180, 180, 180, 0.85); */
-    background-color: rgba(240, 240, 240, 0.75);
+    /* background-color: rgba(240, 240, 240, 0.75); */
+    background-color: #343434;
+    
+    border-width: 3px;
+    border-style: solid;
+    border-image: linear-gradient(45deg, #fc3f32, #9ddd43) 1;
 }
 
 @media only screen and (max-width: 800px) {
