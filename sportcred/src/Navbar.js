@@ -40,7 +40,7 @@ let Navbar = () => {
         <div className={"body flex-container flex-vertical" + ((opened)? " opened":"")}>
           <div className="flex-primary">
             {/* <h1>SportsCred</h1> */}
-            <img src="/static/media/Logo.84d78d75.png" className="App-logo"></img>
+            <img src="Logo.png" className="App-logo"></img>
             <div>
               <Navlink to={ZONE_LANDING_URL}>Open Court</Navlink>
               <Navlink to={TRIVIA_LANDING_URL}>Trivia</Navlink>
