@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^5.3.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.9",
+    "nodemailer": "^2.7.2"
+  },
+  "devDependencies": {
+    "@babel/core": "~7.9.0",
+    "chai": "^4.2.0",
+    "mongodb-memory-server": "^6.9.2",
+    "node-request": "0.0.3",
+    "request": "^2.88.2",
+    "supertest": "^5.0.0"
+  },
+  "proxy": "http://localhost:5000/",
+  "name": "src"
+}
