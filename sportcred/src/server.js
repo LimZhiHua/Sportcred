@@ -71,6 +71,6 @@ app.use('/notif', notif);
 app.use('/picks', picks);
 app.use('/trivia', trivia);
 
-console.log(`Backend starting on port ${port}`);
+console.log(`Backend starting on port ${port}...\n`);
 app.listen(port);
 module.exports = ({ connect, app });
