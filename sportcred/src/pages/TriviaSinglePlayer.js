@@ -29,6 +29,9 @@ const TriviaSinglePlayer = () => {
     const startGame = () =>{
         gameEnded = false;
         setGameStarted(true)
+        setScore(0)
+        setQuestNum(0)
+        
     }
 
     const checkAnswer = (e) => {
@@ -88,6 +91,7 @@ const TriviaSinglePlayer = () => {
             )
     }
     
+    // Returns the questions if we are in a game. Once the game ends, return the score screen.
     const triviaBoard = () =>{
         if(gameStarted){
             if(questNum  < questionList.length){
@@ -97,12 +101,19 @@ const TriviaSinglePlayer = () => {
                 return questionBoard()
             }else{
                 gameEnded = true;
-                return <p> You got {score}/{questionList.length}</p>
+                return scoreScreen()
             }
            
         }
                
     }    
+
+    const scoreScreen = () =>{
+        return <div>
+        <p> You got {score}/{questionList.length}</p>
+        <Button style = {yellowButton} onClick={startGame}>Play Again</Button>
+        </div>
+    }
     //----------Lets put all the API calls in this section-------------
     // (hardcoding them for now though)
     const getQuestions=  () =>{
