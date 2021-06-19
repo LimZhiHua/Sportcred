@@ -11,7 +11,7 @@ import {greyButton, yellowButton} from "../style.jsx"
 
 const TriviaSinglePlayer = () => {
     const [gameStarted, setGameStarted] = useState(false);
-
+    
     const [questionList, setQuestionList] = useState([])
     const [curQuestion, setCurQuestion] = useState('')
     const [questNum, setQuestNum ] = useState(0)
@@ -27,6 +27,7 @@ const TriviaSinglePlayer = () => {
 
 
     const startGame = () =>{
+        gameEnded = false;
         setGameStarted(true)
     }
 
@@ -43,6 +44,8 @@ const TriviaSinglePlayer = () => {
         setSecondsLeft(15)
     }
 
+    let gameEnded = false;
+
     //----------Lets put all the random components in this section----------
     const startButton = () =>{
         if(! gameStarted){
@@ -54,7 +57,15 @@ const TriviaSinglePlayer = () => {
         }
     }
 
-
+    const playAgainButton = () =>{
+        if(gameEnded){
+            return <div>
+            <br></br>
+               <Button style = {yellowButton} onClick={startGame}>Play Again</Button>
+               <br></br>`
+           </div>
+        }
+    }
 
     const questionBoard = () =>{
         return(
@@ -85,6 +96,7 @@ const TriviaSinglePlayer = () => {
                 }
                 return questionBoard()
             }else{
+                gameEnded = true;
                 return <p> You got {score}/{questionList.length}</p>
             }
            
@@ -132,21 +144,9 @@ const TriviaSinglePlayer = () => {
       }, [secondsLeft]);
 
     //------------------------------------------------------------------------
-    const testing = () =>{
-        setQuestNum(questNum + 1)
-        console.log("question number is", questNum)
-        console.log('question is', curQuestion)
-        console.log('answer is', curAnswers)
-        console.log("game started is", gameStarted)
-    }
 
-    const testing2 = () =>{
-        setGameStarted(false)
-    }
     return (
         <FloatingSection>
-            <Button onClick={testing} style={yellowButton}> testing button</Button>
-            <Button onClick={testing2} style={yellowButton}> testing button 2</Button>
             <h1>Trivia Single Player</h1>
             <br></br>
             <br></br>
