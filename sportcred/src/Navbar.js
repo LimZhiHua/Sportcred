@@ -39,7 +39,8 @@ let Navbar = () => {
       <div id="navbar" key={thisRoute}>
         <div className={"body flex-container flex-vertical" + ((opened)? " opened":"")}>
           <div className="flex-primary">
-            <h1>SportsCred</h1>
+            {/* <h1>SportsCred</h1> */}
+            <img src="Logo.png" className="App-logo"></img>
             <div>
               <Navlink to={ZONE_LANDING_URL}>Open Court</Navlink>
               <Navlink to={TRIVIA_LANDING_URL}>Trivia</Navlink>

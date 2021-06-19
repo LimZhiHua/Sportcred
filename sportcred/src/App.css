@@ -8,11 +8,12 @@
 
 .App::after {
   content: "";
-  background-image: url("./images/5.jpg");
+  /* background-image: url("./images/5.jpg");
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
-  opacity: 0.6;
+  background-size: cover; */
+  background-color: #5B5C5E;
+  /* opacity: 0.6; */
   top: 0;
   left: 0;
   bottom: 0;
@@ -22,8 +23,15 @@
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+  /* background-image: url("./images/Logo.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover; */
+  /* width: 128px; */
+  height: 100px;
+  margin-top: 1.5em;
+  margin-bottom: 1em;
+  /* pointer-events: none; */
 }
 
 .App>.body {
@@ -48,7 +56,8 @@
 }
 
 #navbar>.body {
-  background-color: #383838; /* Navbar Background */
+  /* background-color: #383838; Navbar Background */
+  background-color: #343434;
   color: snow;
   transition: all 0.35s ease;
   width: 0;
@@ -73,7 +82,8 @@
 }
 
 #navbar>.burger-btn {
-  background-color: #383838; /* Navbar Background */
+  /* background-color: #383838; Navbar Background */
+  background-color: #343434;
   border-style: none;
   line-height: 3.2em;
   padding: 0;
@@ -128,7 +138,7 @@
     transition: height 0.20s ease;
   }
   #navbar>.body.opened {
-    height: 380px;
+    height: 420px;
     width: 100%;
   }
   /* body {
