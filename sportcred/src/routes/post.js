@@ -3,7 +3,23 @@ const router = express.Router();
 const Post = require('../models/post')
 const { postValidation, getPostValidation } = require('../validations/postValidations');
 
-// Display all posts
+ /**
+ * @swagger
+ * /post:
+ *   get:
+ *     summary: Get all posts.
+ *     description: Gets all posts.
+ *     tags:
+ *      - post
+ *     responses:
+ *       200:
+ *         description: List of all posts.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items: string
+*/
 router.get('/', async (req, res) => {
   const allPosts = await Post.find({}).catch((error) => {
     return res.status(400).send("error getting all posts")
