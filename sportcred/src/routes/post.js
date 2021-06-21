@@ -18,7 +18,8 @@ const { postValidation, getPostValidation } = require('../validations/postValida
  *           application/json:
  *             schema:
  *               type: array
- *               items: string
+ *               items: 
+ *                $ref: '#/components/schemas/Post'
 */
 router.get('/', async (req, res) => {
   const allPosts = await Post.find({}).catch((error) => {
