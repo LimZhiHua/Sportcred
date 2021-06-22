@@ -4,7 +4,31 @@ const Post = require('../models/post')
 const PostComment = require('../models/postComment');
 const {postCommentValidation} = require('../validations/postCommentValidations');
 
-// Create a new postComment
+ /**
+ * @swagger
+ * /post/{:id}/postComment:
+ *   post:
+ *     summary: Comment on post.
+ *     description: Adds a comment to a post.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the post to comment on.
+ *         schema:
+ *           type: string
+ *     tags:
+ *      - post
+ *     responses:
+ *       400:
+ *         description: Invalid request.
+ *       404:
+ *         description: Post not found.
+ *       500:
+ *         description: Cannot add comment to post.
+ *       200:
+ *         description: Success.
+*/
 router.post('/', async (req, res) => {
   // Front end validations
   const {error} = postCommentValidation(req.body);
@@ -16,7 +40,7 @@ router.post('/', async (req, res) => {
         return res.status(400).send(err)
     })
   if (foundPost == null) {
-    return res.status(500).send("foundPost is null");  
+    return res.status(404).send("foundPost is null");  
   }
 
   // Create postComment
@@ -39,7 +63,7 @@ router.post('/', async (req, res) => {
     return res.status(200).send("postComment saved")
 
   } catch(err){
-    return res.status(400).send('error creating postComment');
+    return res.status(500).send('error creating postComment');
   }
 });
 
