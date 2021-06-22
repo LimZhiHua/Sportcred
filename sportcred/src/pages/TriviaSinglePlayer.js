@@ -60,7 +60,7 @@ const TriviaSinglePlayer = () => {
         if(! gameStarted){
             return <div>
             <br></br>
-               <Button style = {yellowButton} onClick={startGame}>Start Game</Button>
+               <Button onClick={startGame}>Start Game</Button>
                <br></br>
            </div>
         }
@@ -70,7 +70,7 @@ const TriviaSinglePlayer = () => {
         if(gameEnded){
             return <div>
             <br></br>
-               <Button style = {yellowButton} onClick={endGame}>Play Again</Button>
+               <Button onClick={endGame}>Play Again</Button>
                <br></br>`
            </div>
         }
