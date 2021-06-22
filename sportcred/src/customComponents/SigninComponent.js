@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
         flexWrap: 'wrap',
         width: '27ch',
         background: "white",
-        borderRadius: "10px",
+        borderRadius: "5px",
         margin: "auto"
 
     },
@@ -22,7 +22,9 @@ const useStyles = makeStyles((theme) => ({
     },
     button: {
         width: '23ch',
-        margin: "auto"
+        margin: "auto",
+        marginTop: "15px",
+        marginBottom: "10px"
 
     },
     container: {
@@ -33,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const Signin = () => {
+const SigninComponent = () => {
     const styles = useStyles();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -66,17 +68,17 @@ const Signin = () => {
                         className={styles.textField}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        className={styles.button}
-                        onClick={(e) => validateForm()}>
-                        Login
-                    </Button>
                 </div>
             </div>
+            <Button
+                variant="contained"
+                color="primary"
+                className={styles.button}
+                onClick={(e) => validateForm()}>
+                Login
+            </Button>
         </div>
     );
 }
 
-export default Signin;
+export default SigninComponent;
