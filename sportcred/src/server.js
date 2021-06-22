@@ -29,7 +29,6 @@ function connect() {
       () => console.log('connected to db')
     );
   }
-
 }
 
 connect();
