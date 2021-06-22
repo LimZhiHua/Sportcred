@@ -29,7 +29,6 @@ function connect() {
       () => console.log('connected to db')
     );
   }
-
 }
 
 connect();
@@ -70,6 +69,50 @@ app.use('/radar', radar);
 app.use('/notif', notif);
 app.use('/picks', picks);
 app.use('/trivia', trivia);
+
+// ----------------------------------- Swagger API Docs ------------------------------------------------
+// https://dev.to/kabartolo/how-to-document-an-express-api-with-swagger-ui-and-jsdoc-50do
+
+// -- Auto convert all mongoDB schemas to swagger schemas 
+
+const m2s = require('mongoose-to-swagger');
+
+let fs = require('fs');
+let files = fs.readdirSync('./models/');
+let schemas = {};
+
+files.forEach(file => {
+  const model = require('./models/' + file);
+  let swaggerSchema = m2s(model);
+  swaggerSchema["type"] = "object";
+  schemas[swaggerSchema.title] = swaggerSchema;
+});
+
+// console.log(JSON.stringify(schemas, null, 2));
+
+// -- Setup swagger to generate API docs from doc strings
+const swaggerUi = require('swagger-ui-express');
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerDefinition = {
+  openapi: "3.0.0",
+  info: {
+    title: 'Sportscred REST API',
+    version: '1.0.0',
+  },
+};
+const options = {
+  swaggerDefinition,
+  // Paths to files containing API definitions
+  apis: ['./routes/*.js'],
+};
+
+const swaggerSpec = swaggerJSDoc(options);
+swaggerSpec.components = {
+  schemas: schemas 
+}; 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// -------------------------- START ---------------------------------
 
 console.log(`Backend starting on port ${port}...\n`);
 app.listen(port);

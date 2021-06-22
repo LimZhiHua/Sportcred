@@ -2,7 +2,6 @@ import React, { useState, useEffect }  from "react";
 import { Button } from "reactstrap";
 import FloatingSection from "../customComponents/FloatingSection";
 import "../App.css";
-import {greyButton, yellowButton} from "../style.jsx"
 
  import  {addTrivia} from '../controller/trivia';
 
@@ -85,12 +84,12 @@ const TriviaSinglePlayer = () => {
                 <table className="table table-dark">
                     <tbody>
                     <tr>
-                        <th><Button id="answer 0" for style = {greyButton} onClick={checkAnswer}>{curAnswers[0]}</Button></th>
-                        <th><Button id="answer 1" style = {greyButton} onClick={checkAnswer} >{curAnswers[1]}</Button></th>
+                        <th><Button id="answer 0" onClick={checkAnswer}>{curAnswers[0]}</Button></th>
+                        <th><Button id="answer 1" onClick={checkAnswer} >{curAnswers[1]}</Button></th>
                     </tr>       
                     <tr>
-                        <th><Button id="answer 2" style = {greyButton} onClick={checkAnswer}>{curAnswers[2]}</Button></th>
-                        <th><Button id="answer 3" style = {greyButton} onClick={checkAnswer} >{curAnswers[3]}</Button></th>
+                        <th><Button id="answer 2" onClick={checkAnswer}>{curAnswers[2]}</Button></th>
+                        <th><Button id="answer 3" onClick={checkAnswer} >{curAnswers[3]}</Button></th>
                     </tr>
                     </tbody>
                 </table>

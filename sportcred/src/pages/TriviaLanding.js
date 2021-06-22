@@ -2,7 +2,6 @@ import React from "react";
 import { Button } from "reactstrap";
 import FloatingSection from "../customComponents/FloatingSection";
 import "../App.css";
-import {yellowButton} from "../style.jsx"
 import { useHistory } from "react-router-dom";
 
 import {
@@ -21,11 +20,11 @@ const TriviaLanding = () => {
         <FloatingSection>
             <h1>TriviaLanding TODO</h1>
             <br></br>
-            <Button style = {yellowButton} id="SinglePlayerButton" onClick={goToSinglePlayer}>Single Player</Button>
+            <Button  id="SinglePlayerButton" onClick={goToSinglePlayer}>Single Player</Button>
 
             <br></br>
             <br></br>
-            <Button style = {yellowButton}>Multiplayer</Button>
+            <Button >Multiplayer</Button>
 
         </FloatingSection>
     )
