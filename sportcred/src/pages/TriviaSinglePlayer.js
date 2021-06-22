@@ -4,6 +4,8 @@ import FloatingSection from "../customComponents/FloatingSection";
 import "../App.css";
 import {greyButton, yellowButton} from "../style.jsx"
 
+ import  {addTrivia} from '../controller/trivia';
+
 
 
 
@@ -26,12 +28,17 @@ const TriviaSinglePlayer = () => {
     const [score, setScore] = useState(0)
 
 
+    // Used to start a game (duh)
     const startGame = () =>{
         gameEnded = false;
         setGameStarted(true)
-        setScore(0)
+    }
+ 
+    // Once they finish answering, there is a play again button to bring them back to home.
+    const endGame = () =>{
+        setGameStarted(false)
         setQuestNum(0)
-        
+        setScore(0)
     }
 
     const checkAnswer = (e) => {
@@ -55,7 +62,7 @@ const TriviaSinglePlayer = () => {
             return <div>
             <br></br>
                <Button style = {yellowButton} onClick={startGame}>Start Game</Button>
-               <br></br>`
+               <br></br>
            </div>
         }
     }
@@ -64,7 +71,7 @@ const TriviaSinglePlayer = () => {
         if(gameEnded){
             return <div>
             <br></br>
-               <Button style = {yellowButton} onClick={startGame}>Play Again</Button>
+               <Button style = {yellowButton} onClick={endGame}>Play Again</Button>
                <br></br>`
            </div>
         }
@@ -111,7 +118,7 @@ const TriviaSinglePlayer = () => {
     const scoreScreen = () =>{
         return <div>
         <p> You got {score}/{questionList.length}</p>
-        <Button style = {yellowButton} onClick={startGame}>Play Again</Button>
+        {playAgainButton()}
         </div>
     }
     //----------Lets put all the API calls in this section-------------
@@ -158,6 +165,7 @@ const TriviaSinglePlayer = () => {
 
     return (
         <FloatingSection>
+            <Button onClick={addTrivia("hello")}> </Button>
             <h1>Trivia Single Player</h1>
             <br></br>
             <br></br>

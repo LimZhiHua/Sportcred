@@ -49,6 +49,7 @@ router.post('/', async (req, res) => {
 
 // Show a specific post
 router.get("/:id", async (req, res) => {
+  console.log("hello there")
   const foundPost = await Post.findById(req.params.id)
     .populate("comments")
     .exec()
