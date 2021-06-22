@@ -1,21 +1,5 @@
 const mongoose = require('mongoose')
-
-const player = new mongoose.Schema({
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'User'
-    },
-    totalScore: {
-        type: Number,
-        default: 0
-    },
-    done: {
-        type: Boolean,
-        default: false
-    }
-})
-
+const triviaPlayer = require("./triviaPlayer")
 
 const answerOptionSchema = new mongoose.Schema({
     optionNumber: {
@@ -53,7 +37,7 @@ const questionSchema = new mongoose.Schema({
 
 const triviaSession = new mongoose.Schema({
     players: [{
-        type: player,
+        type: triviaPlayer.schema
     }],
     questions: {
         type: [questionSchema],
