@@ -1,0 +1,8 @@
+.default-button-class {
+    background:'#00BCD4';
+    border-Radius: 20rem;
+    padding: 1em;
+    width: 20%;
+    height: 50%;
+    margin: 0.5em auto;
+}
