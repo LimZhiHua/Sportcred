@@ -2,7 +2,39 @@ const express = require('express');
 const router = express.Router();
 const triviaSession = require('../models/triviaSession');
 
-//POST A NEW SESSION
+ /**
+ * @swagger
+ * /trivia/addSession:
+ *   post:
+ *     summary: Create a new trivia session with players.
+ *     description: Creates a new trivia game session given the players and returns the session id. A trivia session has information about the generated questions and the players.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               players:
+ *                 type: array
+ *                 description: Players for the round.
+ *                 items:
+ *                    $ref: '#/components/schemas/triviaPlayer'
+ *     tags:
+ *      - trivia
+ *     responses:
+ *       500:
+ *         description: Error creating the game session.
+ *       200:
+ *         description: Returns the session id of the trivia game.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string 
+*/
 router.post('/addSession', async (req, res) => {
     const questions = [
         {
@@ -63,19 +95,73 @@ router.post('/addSession', async (req, res) => {
         return res.status(200).send({ id: sesh._id })
     } catch (err) {
         console.log("\n\nERR =\n\n" + err);
-        res.status(400).send('error adding trivia');
+        res.status(500).send('error adding trivia');
     }
 });
 
-//GET A TRIV SESSION
+ /**
+ * @swagger
+ * /trivia/{:id}:
+ *   get:
+ *     summary: Get the trivia session info.
+ *     description: Given an trivia session id, returns the game info.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the post to retrieve.
+ *         schema:
+ *           type: string
+ *     tags:
+ *      - trivia
+ *     responses:
+ *       404:
+ *         description: Could not find the session id.
+ *       200:
+ *         description: Returns the game session info.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties: 
+ *                foundSession: 
+ *                  type: object
+ *                  $ref: '#/components/schemas/triviaSession'
+*/
 router.get('/:id', async (req, res) => {
     const foundSession = await triviaSession.findById(req.params.id).catch((err) => {
-        return res.status(400).send(err)
+        return res.status(404).send(err)
     })
     return res.status(200).send({ foundSession: foundSession })
 })
 
-//UPDATE SCORE BY 1 POINT
+ /**
+ * @swagger
+ * /trivia/add-point:
+ *   post:
+ *     summary: Update score by 1 point.
+ *     description: Update the score of a player by one point given the player's pid and game session sid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               pid:
+ *                 type: string
+ *                 description: Player id to increment.
+ *               sid:
+ *                 type: string
+ *                 description: Game session id.
+ *     tags:
+ *      - trivia
+ *     responses:
+ *       404:
+ *         description: Game session not found.
+ *       200:
+ *         description: success
+*/
 router.post('/add-point', async (req, res) => {
     try {
         const game = await triviaSession.findById(req.body.sid)
@@ -88,10 +174,49 @@ router.post('/add-point', async (req, res) => {
         return res.status(200).send("Correct!")
     } catch (err) {
         console.log(err)
-        res.status(400).send(err);
+        res.status(404).send(err);
     }
 })
 
+ /**
+ * @swagger
+ * /trivia/finish-trivia:
+ *   post:
+ *     summary: Finish the trivia game.
+ *     description: Finish the trivia game.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               pid:
+ *                 type: string
+ *                 description: Current player's id.
+ *               sid:
+ *                 type: string
+ *                 description: Game session id.
+ *     tags:
+ *      - trivia
+ *     responses:
+ *       404:
+ *         description: Game session not found.
+ *       200:
+ *         description: Complete the game
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 trivia:
+ *                   type: string 
+ *                   description: Game session id.
+ *                 currPlayer:
+ *                   type: string 
+ *                 otherPlayer:
+ *                   type: string 
+*/
 router.post('/finish-trivia', async (req, res) => {
     try {
         const game = await triviaSession.findById(req.body.sid)
@@ -111,7 +236,7 @@ router.post('/finish-trivia', async (req, res) => {
         return res.status(200).send({trivia: game._id, currPlayer: currPlayer, otherPlayer: otherPlayer})
     } catch (err) {
         console.log(err)
-        res.status(400).send(err);
+        res.status(404).send(err);
     }
 })
 
