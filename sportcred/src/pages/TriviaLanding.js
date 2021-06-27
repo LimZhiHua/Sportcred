@@ -3,6 +3,8 @@ import { Button } from "reactstrap";
 import FloatingSection from "../customComponents/FloatingSection";
 import "../App.css";
 import { useHistory } from "react-router-dom";
+import {DefaultButton} from "../customComponents/buttons/Buttons"
+
 
 import {
     TRIVIA_SINGLE_PLAYER_URL
@@ -20,11 +22,10 @@ const TriviaLanding = () => {
         <FloatingSection>
             <h1>TriviaLanding TODO</h1>
             <br></br>
-            <Button  id="SinglePlayerButton" onClick={goToSinglePlayer}>Single Player</Button>
-
+            <DefaultButton label= {"Single Player"} handleClick = {goToSinglePlayer}/>
             <br></br>
             <br></br>
-            <Button >Multiplayer</Button>
+            <DefaultButton label= {"Multiplayer"} />
 
         </FloatingSection>
     )

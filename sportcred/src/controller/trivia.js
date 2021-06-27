@@ -6,7 +6,6 @@ const fetch = require("node-fetch");
 export const addTrivia = async (players) => {
 
     const url = "http://localhost:5000/trivia/addSession"
-    console.log("well, at least we got here")
     const request = {
       method: "post",
       body: JSON.stringify(players),

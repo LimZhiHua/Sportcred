@@ -2,6 +2,8 @@ import React, { useState, useEffect }  from "react";
 import { Button } from "reactstrap";
 import FloatingSection from "../customComponents/FloatingSection";
 import "../App.css";
+import {DefaultButton, AnswerButton} from "../customComponents/buttons/Buttons"
+import {Grid, Paper} from '@material-ui/core/';
 
  import  {addTrivia} from '../controller/trivia';
 
@@ -41,7 +43,7 @@ const TriviaSinglePlayer = () => {
     }
 
     const checkAnswer = (e) => {
-        if(e.target.innerText === correctAnswers[questNum]){
+        if(e.target.textContent === correctAnswers[questNum]){
             setScore(score + 1)
         }
         
@@ -60,7 +62,7 @@ const TriviaSinglePlayer = () => {
         if(! gameStarted){
             return <div>
             <br></br>
-               <Button onClick={startGame}>Start Game</Button>
+            <DefaultButton label= {"Start Game"} handleClick = {startGame}/>
                <br></br>
            </div>
         }
@@ -81,22 +83,25 @@ const TriviaSinglePlayer = () => {
             <div>
                 <h1> {curQuestion}</h1>
                 <h2> {secondsLeft}</h2>
-                <table className="table table-dark">
-                    <tbody>
-                    <tr>
-                        <th><Button id="answer 0" onClick={checkAnswer}>{curAnswers[0]}</Button></th>
-                        <th><Button id="answer 1" onClick={checkAnswer} >{curAnswers[1]}</Button></th>
-                    </tr>       
-                    <tr>
-                        <th><Button id="answer 2" onClick={checkAnswer}>{curAnswers[2]}</Button></th>
-                        <th><Button id="answer 3" onClick={checkAnswer} >{curAnswers[3]}</Button></th>
-                    </tr>
-                    </tbody>
-                </table>
+                <Grid container spacing={3}>
+
+                    <Grid item xs={12} sm={6}>
+                        <AnswerButton label= {curAnswers[0]} handleClick = {checkAnswer}/>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <AnswerButton label= {curAnswers[1]} handleClick = {checkAnswer}/>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <AnswerButton label= {curAnswers[2]} handleClick = {checkAnswer}/>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <AnswerButton label= {curAnswers[3]} handleClick = {checkAnswer}/>
+                    </Grid>
+                </Grid>
             </div>
             )
     }
-    
+
     // Returns the questions if we are in a game. Once the game ends, return the score screen.
     const triviaBoard = () =>{
         if(gameStarted){
@@ -164,7 +169,6 @@ const TriviaSinglePlayer = () => {
 
     return (
         <FloatingSection>
-            <Button onClick={addTrivia("hello")}> </Button>
             <h1>Trivia Single Player</h1>
             <br></br>
             <br></br>
