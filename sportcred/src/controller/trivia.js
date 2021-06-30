@@ -4,7 +4,6 @@ import { getUser } from "./user";
 const fetch = require("node-fetch");
 
 export const addTrivia = async (players) => {
-
     const url = "http://localhost:5000/trivia/addSession"
     const request = {
       method: "post",

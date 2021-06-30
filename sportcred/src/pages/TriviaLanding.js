@@ -1,5 +1,4 @@
 import React from "react";
-import { Button } from "reactstrap";
 import FloatingSection from "../customComponents/FloatingSection";
 import "../App.css";
 import { useHistory } from "react-router-dom";

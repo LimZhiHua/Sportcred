@@ -3,9 +3,9 @@ import { Button } from "reactstrap";
 import FloatingSection from "../customComponents/FloatingSection";
 import "../App.css";
 import {DefaultButton, AnswerButton} from "../customComponents/buttons/Buttons"
-import {Grid, Paper} from '@material-ui/core/';
+import {Grid} from '@material-ui/core/';
 
- import  {addTrivia} from '../controller/trivia';
+ import  {addTrivia, getTrivia} from '../controller/trivia';
 
 
 
@@ -30,7 +30,30 @@ const TriviaSinglePlayer = () => {
 
 
     // Used to start a game (duh)
-    const startGame = () =>{
+    const startGame = async () =>{
+        // we pass the player info in and get a game ID
+        const gameID = (await addTrivia(player)).id
+        // We use that gameID to get our trivia session
+        const triviaSession = await getTrivia(gameID)
+        const quiz = triviaSession.trivia.questions
+        const questions = quiz.map(e => e.question)
+        const answers = quiz.map(e => e.answers)
+
+        // Loop through the answers and make an array of all the correct ones
+        const corAnswers = answers.map(answerArray =>{
+            for(var i = 0; i < answerArray.length; i++){
+                if(answerArray[i].isCorrect){
+                    return answerArray[i].answerBody
+                }
+            }
+        })
+
+        console.log("quiz is", quiz)
+        console.log("answers is", answers)
+        setQuestionList(questions)
+        setAnswerList(answers)
+        setCorrectAnswers(corAnswers)
+
         gameEnded = false;
         setGameStarted(true)
     }
@@ -46,7 +69,7 @@ const TriviaSinglePlayer = () => {
         if(e.target.textContent === correctAnswers[questNum]){
             setScore(score + 1)
         }
-        
+        console.log(e.target)
         nextQuestion()
     }
 
@@ -84,18 +107,17 @@ const TriviaSinglePlayer = () => {
                 <h1> {curQuestion}</h1>
                 <h2> {secondsLeft}</h2>
                 <Grid container spacing={3}>
-
                     <Grid item xs={12} sm={6}>
-                        <AnswerButton label= {curAnswers[0]} handleClick = {checkAnswer}/>
+                        <AnswerButton label= {curAnswers[0].answerBody} handleClick = {checkAnswer}/>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <AnswerButton label= {curAnswers[1]} handleClick = {checkAnswer}/>
+                        <AnswerButton label= {curAnswers[1].answerBody} handleClick = {checkAnswer}/>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <AnswerButton label= {curAnswers[2]} handleClick = {checkAnswer}/>
+                        <AnswerButton label= {curAnswers[2].answerBody} handleClick = {checkAnswer}/>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <AnswerButton label= {curAnswers[3]} handleClick = {checkAnswer}/>
+                        <AnswerButton label= {curAnswers[3].answerBody} handleClick = {checkAnswer}/>
                     </Grid>
                 </Grid>
             </div>
@@ -165,8 +187,19 @@ const TriviaSinglePlayer = () => {
         return () => clearInterval(interval);
       }, [secondsLeft]);
 
-    //------------------------------------------------------------------------
-
+    //-------------------------other hard coded testing stuff-----------------------------------------------
+      const playerID = "60dbcca868e7fb3598656a50"
+    const player = 
+        [
+            {
+              "userId": playerID,
+              "totalScore": 0,
+              "done": true,
+              "_id": "string"
+            }
+          ]
+    
+    //
     return (
         <FloatingSection>
             <h1>Trivia Single Player</h1>

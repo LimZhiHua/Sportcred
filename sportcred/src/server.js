@@ -19,13 +19,13 @@ function connect() {
       .then(() => {
         mongoose.connect(
           process.env.DB_CONNECT,
-          { useNewUrlParser: true }
+          { useUnifiedTopology: true, useNewUrlParser: true }
         );
       })
   } else {
     mongoose.connect(
       process.env.DB_CONNECT,
-      { useNewUrlParser: true },
+      { useUnifiedTopology: true,  useNewUrlParser: true },
       () => console.log('connected to db')
     );
   }
