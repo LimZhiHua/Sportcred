@@ -5,7 +5,7 @@ import "../App.css";
 import {DefaultButton, AnswerButton} from "../customComponents/buttons/Buttons"
 import {Grid} from '@material-ui/core/';
 
- import  {addTrivia, getTrivia} from '../controller/trivia';
+ import  {addTrivia, getTrivia, incrementScore, finishTrivia} from '../controller/trivia';
 
 
 
@@ -27,18 +27,35 @@ const TriviaSinglePlayer = () => {
     const [secondsLeft, setSecondsLeft] = useState(15)
 
     const [score, setScore] = useState(0)
+    const [sessionID, setSessionID] = useState()
 
+    //-------------------------request body formats for making the API calls-----------------------------------------------
+    
+    // Replace this with the actual playerID once we get that part implemented
+    // Dont just stick any random string when testing. it needs to be a valid mongoDB ID
+    const playerID = "60dbcca868e7fb3598656a50"
+    var player = {        
+        "players":  [
+        {
+          "userId": playerID,
+          "totalScore": 0,
+          "done": false,
+        }
+      ]
+    }
+    //-------------------------------------------------
 
     // Used to start a game (duh)
     const startGame = async () =>{
         // we pass the player info in and get a game ID
         const gameID = (await addTrivia(player)).id
-        // We use that gameID to get our trivia session
+        // We use that gameID to get our trivia session and set our gamePlayerInfo
         const triviaSession = await getTrivia(gameID)
         const quiz = triviaSession.trivia.questions
         const questions = quiz.map(e => e.question)
         const answers = quiz.map(e => e.answers)
 
+        setSessionID(gameID)
         // Loop through the answers and make an array of all the correct ones
         const corAnswers = answers.map(answerArray =>{
             for(var i = 0; i < answerArray.length; i++){
@@ -48,18 +65,25 @@ const TriviaSinglePlayer = () => {
             }
         })
 
+        // look man, i aint going through and remembering all the correct answers when testing. Just open console to see the answers
         console.log("quiz is", quiz)
         console.log("answers is", answers)
+
+        // We save the questions/answers in them states
         setQuestionList(questions)
         setAnswerList(answers)
         setCorrectAnswers(corAnswers)
 
+        // reason why i used gameEnded and gameStarted is for the end game screen. 
         gameEnded = false;
         setGameStarted(true)
     }
  
     // Once they finish answering, there is a play again button to bring them back to home.
     const endGame = () =>{
+
+        // Currently, cause we have no users, it crashes cause he tries to getUser. 
+        //finishTrivia(sessionID, playerID, score)
         setGameStarted(false)
         setQuestNum(0)
         setScore(0)
@@ -68,8 +92,8 @@ const TriviaSinglePlayer = () => {
     const checkAnswer = (e) => {
         if(e.target.textContent === correctAnswers[questNum]){
             setScore(score + 1)
+            incrementScore(sessionID, playerID)
         }
-        console.log(e.target)
         nextQuestion()
     }
 
@@ -147,31 +171,8 @@ const TriviaSinglePlayer = () => {
         {playAgainButton()}
         </div>
     }
-    //----------Lets put all the API calls in this section-------------
-    // (hardcoding them for now though)
-    const getQuestions=  () =>{
-        // i aint gonna bother with getting the questions from backend right now. gonna just make up some questions.
-        setQuestionList(["What is your name?", "What is your quest?", "What is your favourite colour?", "What is the airspeed velocity of an unladen swallow?"])
-    }
-
-    const getAnswers = () =>{
-        setAnswerList( [
-            [ "Bob", "Arthur", "John Cena", "John Wick"],
-            ["To Seek the holy grail", "To take a nap", "Revenge", "Fun"],
-            ["Red", "Orange", "Green", "Blue"],
-            ["20km/h", "30km/h", "40km/h", "50km/h"]
-    ])
-
-    setCorrectAnswers([
-        "Arthur", "To Seek the holy grail", "Blue", "40km/h"
-    ])
-    }
     //-------------lets group the useEffects together--------------------------------------------
-    useEffect( () => {
-        getQuestions()
-        getAnswers()
 
-    },[])
 
     useEffect( () => {
         setCurQuestion(questionList[questNum])
@@ -187,18 +188,6 @@ const TriviaSinglePlayer = () => {
         return () => clearInterval(interval);
       }, [secondsLeft]);
 
-    //-------------------------other hard coded testing stuff-----------------------------------------------
-      const playerID = "60dbcca868e7fb3598656a50"
-    const player = 
-        [
-            {
-              "userId": playerID,
-              "totalScore": 0,
-              "done": true,
-              "_id": "string"
-            }
-          ]
-    
     //
     return (
         <FloatingSection>
