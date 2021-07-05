@@ -11,6 +11,10 @@ const useDefaultStyles = makeStyles({
     height: '50%',
     width: '20%',
     padding: '1em',
+    '&:hover': {
+       background: '#909090',
+      opacity: 0.8
+    },
   },
 });
 
@@ -22,6 +26,10 @@ const useAnswerStyles = makeStyles({
     height: '50%',
     width: '20%',
     padding: '1em',
+    '&:hover': {
+      background: '#86C232',
+      opacity: 0.8
+    },
   },
 });
 
@@ -33,38 +41,42 @@ const useDangerStyles = makeStyles({
     height: '50%',
     width: '20%',
     padding: '1em',
+    '&:hover': {
+      background: '#FF652F',
+      opacity: 0.8
+    },
   },
 });
 
 export function DefaultButton(props) {
   const classes = useDefaultStyles();
     return (
-        <div>
           <Button 
+          variant="contained"
           className={classes.root}
-          onClick={props.handleClick}>{props.label}</Button>
-        </div>
+          onClick={props.handleClick}
+          style={props.style}>{props.label}</Button>
       )
 }
 
 export function AnswerButton(props) {
   const classes = useAnswerStyles();
     return (
-        <div>
           <Button 
+          variant="contained"
           className={classes.root}
-          onClick={props.handleClick}>{props.label}</Button>
-        </div>
+          onClick={props.handleClick}
+          style={props.style}>{props.label}</Button>
       )
 }
 
 export function DangerButton(props) {
   const classes = useDangerStyles();
     return (
-        <div>
           <Button 
+          variant="contained"
           className={classes.root}
-          onClick={props.handleClick}>{props.label}</Button>
-        </div>
+          onClick={props.handleClick}
+          style={props.style}>{props.label}</Button>
       )
 }
