@@ -9,6 +9,58 @@ const activationToken = require('../models/activationToken');
 const resetToken = require('../models/resetToken');
 const {registrationValidation, loginValidation, EditProfileValidation} = require('../validations/user_validations');
 
+/**
+ * DESIGN NOTES:
+ *  - maybe better to separate the table of pending registation vs registered accounts
+ * 
+ */
+
+
+// TODO: fix email verification service
+/* NOTES:
+    - storing unactivated list of users can lead to spam. Maybe should delete after X amount of minutes
+*/
+
+/**
+ * @swagger
+ * /user/register:
+ *   post:
+ *     summary: Register a new user. NOTE-> EMAIL VERIFICATION NEEDS FIXING.
+ *     description: Register a new user.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: Unique username.
+ *               email:
+ *                 type: string 
+ *                 description: The email.
+ *               password:
+ *                 type: string 
+ *                 description: The account password with min length 6.
+ *     tags:
+ *      - auth
+ *     responses:
+ *       400:
+ *         description: Username or email already exists.
+ *       500:
+ *         description: Server Error.
+ *       200:
+ *         description: Success.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: string 
+ *                   description: user's userId
+*/
 router.post('/register', async (req, res) => {
 
   // Front end validations
@@ -31,6 +83,7 @@ router.post('/register', async (req, res) => {
     username: req.body.username,
     email: req.body.email,
     password: hashed_password,
+    activated: true,                // TODO: temp
   });
 
   const origToken = crypto.randomBytes(16).toString('hex')
@@ -46,6 +99,9 @@ router.post('/register', async (req, res) => {
   }catch(err){
     res.status(400).send(err);
   }
+
+  // TODO: TEMP
+  return res.status(200).send({ user: user._id });
 
   var transporter = nodemailer.createTransport({
     service: 'Gmail',
@@ -64,12 +120,40 @@ router.post('/register', async (req, res) => {
   };
 
   transporter.sendMail(mailOptions, function (err) {
-    if (err) return res.status(500).send('Technical Issue!, Please click on resend to verify your Email.');
+    if (err) {
+      console.log(err);
+      return res.status(500).send('Technical Issue!, Please click on resend to verify your Email.')
+    };
 
     return res.status(200).send({ user: user._id });
   });
 });
 
+ /**
+ * @swagger
+ * /user/resend-activation:
+ *   post:
+ *     summary: Resends email activation.
+ *     description: Resends email activation.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *     tags:
+ *      - auth
+ *     responses:
+ *       400:
+ *         description: User not found.
+ *       500:
+ *         description: Server Error with emailer.
+ *       200:
+ *         description: Success.
+*/
 router.post('/resend-activation', async (req, res) => {
   const user = await User.findOne({_id: req.body.userId});
   if (!user) return res.status(400).send('User not found');
@@ -114,6 +198,33 @@ router.post('/resend-activation', async (req, res) => {
   return res.status(200).send('Activation email sent!');
 });
 
+ /**
+ * @swagger
+ * /user/confirm/{id}/{token}:
+ *   get:
+ *     summary: Activates user with token verification
+ *     description: Activates user with token verification
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the user.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         description: activation token
+ *         schema:
+ *           type: string
+ *     tags:
+ *      - auth
+ *     responses:
+ *       400:
+ *         description: Client error.
+ *       200:
+ *         description: Success.
+*/
 router.get('/confirm/:id/:token', async (req, res) => {
   const token = await activationToken.findOne({_userId: req.params.id});
   if(!token) return res.status(400).send('This verification link has expired. Please click on resend to verify your Email.');
@@ -129,6 +240,39 @@ router.get('/confirm/:id/:token', async (req, res) => {
   return res.status(200).send('Your account has been successfully verified');
 });
 
+/**
+ * @swagger
+ * /user/login:
+ *   post:
+ *     summary: Logins in the user
+ *     description: Logins in the user.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: Unique username.
+ *               password:
+ *                 type: string 
+ *                 description: The account password with min length 6.
+ *     tags:
+ *      - auth
+ *     responses:
+ *       200:
+ *         description: Success.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: string 
+ *                   description: user's userId
+*/
 router.post('/login', async (req, res) => {
 
   const {error} = loginValidation(req.body);
@@ -142,7 +286,10 @@ router.post('/login', async (req, res) => {
   const valid_password = await bcrypt.compare(req.body.password, user.password);
   if (!valid_password) return res.status(400).send('username or password is incorrect');
 
-  if(!user.activated){ //return res.status(400).send('Your Email has not been verified. Please verify.');
+  if(!user.activated){ 
+    return res.status(400).send('Your Email has not been verified. Please verify.');
+    
+    // TODO: Email verification shouldn't be here
     await activationToken.findOneAndDelete({_userId: user.id});
 
     const origToken = crypto.randomBytes(16).toString('hex')
@@ -155,7 +302,7 @@ router.post('/login', async (req, res) => {
     try{
       await token.save();
     }catch(err){
-      return res.status(400).send(err);
+      return res.status(500).send(err);
     }
 
     var transporter = nodemailer.createTransport({
@@ -178,7 +325,7 @@ router.post('/login', async (req, res) => {
       if (err) return res.status(500).send('Technical Issue!, Please click on resend to verify your Email.');
     });
 
-    return res.status(201).send({user: user.id});
+    return res.status(200).send({user: user.id});
   }
 
   // FOR NOW, JUST SEND THE USER ID. HOWEVER, CHANGE THIS TO THE BELOW TO SEND TOKEN
@@ -191,6 +338,32 @@ router.post('/login', async (req, res) => {
 
 });
 
+/**
+ * @swagger
+ * /user/forgot-password:
+ *   post:
+ *     summary: Send request to reset password.
+ *     description: Send request to reset password.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string 
+ *                 description: The email.
+ *     tags:
+ *      - auth
+ *     responses:
+ *       400:
+ *         description: Client Error.
+ *       500:
+ *         description: Server Error.
+ *       200:
+ *         description: Success.
+*/
 router.post('/forgot-password', async (req, res) => {
   const user = await User.findOne({email: req.body.email});
   if (!user) return res.status(400).send('This email is not registered');
@@ -235,6 +408,33 @@ router.post('/forgot-password', async (req, res) => {
   return res.status(200).send('Password Reset email has been sent to ' + req.body.email);
 })
 
+ /**
+ * @swagger
+ * /user/reset-password/{id}/{token}:
+ *   get:
+ *     summary: Send form to reset user password via token
+ *     description: Send form to reset user password via token
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the user.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         description: comfirmation token
+ *         schema:
+ *           type: string
+ *     tags:
+ *      - auth
+ *     responses:
+ *       400:
+ *         description: Client error.
+ *       200:
+ *         description: Success. Sends a form.
+*/
 router.get('/reset-password/:id/:token', async (req, res) => {
   const token = await resetToken.findOne({_userId: req.params.id});
   if(!token) return res.status(400).send('This password reset link has expired. Please resend.');
@@ -252,6 +452,32 @@ router.get('/reset-password/:id/:token', async (req, res) => {
   );
 })
 
+
+/**
+ * @swagger
+ * /user/authenticate-reset:
+ *   post:
+ *     summary: Authenticate password reset.
+ *     description: Authenticate password reset.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: User's id.
+ *               token:
+ *                 type: string 
+ *                 description: confirmation token.
+ *               password:
+ *                 type: string 
+ *                 description: The new password with min length 6.
+ *     tags:
+ *      - auth
+*/
 router.post('/authenticate-reset', async (req, res) => {
   const userId = req.body.id;
   const token = req.body.token;
@@ -277,18 +503,113 @@ router.post('/authenticate-reset', async (req, res) => {
   return res.status(200).send('Successfully updated password, return to app and login with new password!')
 })
 
+ /**
+ * @swagger
+ * /user/get-user/{id}:
+ *   get:
+ *     summary: Gets the user by ID.
+ *     description: Returns the user's info given it's ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the user to retrieve.
+ *         schema:
+ *           type: string
+ *     tags:
+ *      - auth
+ *     responses:
+ *       400:
+ *         description: Cannot find user.
+ *       200:
+ *         description: The user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/schemas/User'
+*/
 router.get('/get-user/:id', async (req, res) => {
   const user = await User.findOne({_id: req.params.id});
   if (!user) return res.status(400).send('user query failed');
   return res.status(200).send(user);
 })
 
+ /**
+ * @swagger
+ * /user/get-user-by-name/{username}:
+ *   get:
+ *     summary: Gets the user by username.
+ *     description: Returns the user's info given it's username.
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         required: true
+ *         description: The username of the user to retrieve.
+ *         schema:
+ *           type: string
+ *     tags:
+ *      - auth
+ *     responses:
+ *       400:
+ *         description: Cannot find user.
+ *       200:
+ *         description: The user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/schemas/User'
+*/
 router.get('/get-user-by-name/:username', async (req, res) => {
   const user = await User.findOne({username: req.params.username});
   if (!user) return res.status(400).send('user query failed');
   return res.status(200).send(user);
 })
 
+ /**
+ * @swagger
+ * /user/edit-prof:
+ *   post:
+ *     summary: Edit's the user's profile.
+ *     description: Edit's the user's profile.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: (optional) the new username.
+ *               email:
+ *                 type: string
+ *                 description: (optional) the new email.
+ *               status:
+ *                 type: string 
+ *                 description: (optional) the new status of the user.
+ *               description:
+ *                 type: string 
+ *                 description: (optional) the new description.
+ *     tags:
+ *      - auth
+ *      - profile
+ *     responses:
+ *       200:
+ *         description: status.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 action:
+ *                   type: boolean 
+ *                   description: whether the action succeeded
+ *                 response:
+ *                   type: string
+ *                   description: the error message if any
+*/
 router.post('/edit-prof', async (req, res) => {
   const {error} = EditProfileValidation(req.body);
   console.log(error);
