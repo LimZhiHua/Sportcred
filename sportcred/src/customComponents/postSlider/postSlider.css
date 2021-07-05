@@ -1,0 +1,4 @@
+.row-setup {
+    display: flex;
+    flex-direction:row;
+}
