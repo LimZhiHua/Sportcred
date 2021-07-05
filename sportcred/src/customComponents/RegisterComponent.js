@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
         flexWrap: 'wrap',
         width: '27ch',
         background: "white",
-        borderRadius: "10px",
+        borderRadius: "5px",
         margin: "auto"
 
     },
@@ -17,12 +17,13 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
         width: '25ch',
-        width: '25ch',
         paddingBottom: '1ch'
     },
     button: {
         width: '23ch',
-        margin: "auto"
+        margin: "auto",
+        marginTop: "10px",
+        marginBottom: "10px"
 
     },
     container: {
@@ -33,10 +34,12 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const Signin = () => {
+const RegisterComponent = () => {
     const styles = useStyles();
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
 
     function validateForm() {
         console.log("good stuff")
@@ -56,6 +59,13 @@ const Signin = () => {
                         id="filled-margin-none"
                         defaultValue=""
                         className={styles.textField}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                    <TextField
+                        label="Email"
+                        id="filled-margin-none"
+                        defaultValue=""
+                        className={styles.textField}
                         onChange={(e) => setEmail(e.target.value)}
                     />
                     <TextField
@@ -66,17 +76,25 @@ const Signin = () => {
                         className={styles.textField}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        className={styles.button}
-                        onClick={(e) => validateForm()}>
-                        Login
-                    </Button>
+                    <TextField
+                        label="Confirm Password"
+                        id="filled-password-input"
+                        type="password"
+                        autoComplete="current-password"
+                        className={styles.textField}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
                 </div>
             </div>
+            <Button
+                variant="contained"
+                color="primary"
+                className={styles.button}
+                onClick={(e) => validateForm()}>
+                Register
+            </Button>
         </div>
     );
 }
 
-export default Signin;
+export default RegisterComponent;

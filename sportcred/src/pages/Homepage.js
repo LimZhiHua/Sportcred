@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Button } from '@material-ui/core';
+
+import SigninComponent from "../customComponents/SigninComponent";
+import RegisterComponent from "../customComponents/RegisterComponent";
+
+import Button from '@material-ui/core/Button';
 
 // Stuff that should not be here
 import { getAllPosts } from '../controller/post';
@@ -8,17 +12,36 @@ import { getAllPosts } from '../controller/post';
 import {
     SIGNIN_URL,
     SIGNUP_URL
-  } from "../urls";
+} from "../urls";
 
 import FloatingSection from "../customComponents/FloatingSection";
 
+var counter = 0;
+
+
 const Homepage = () => {
+    const [loginOrRegister, setLoginOrRegister] = useState("Register");
+    const [loginOrRegisterComponent, setLoginOrRegisterComponent] = useState(<SigninComponent />);
+
+    const buttonPress = () => {
+        if (counter === 0) {
+            counter++;
+            setLoginOrRegister("Login")
+            setLoginOrRegisterComponent(<RegisterComponent />);
+        } else {
+            counter--;
+            setLoginOrRegister("Register")
+            setLoginOrRegisterComponent(<SigninComponent />);
+        }
+    }
     return (
         <div>
             <FloatingSection>
                 <h1>Sportscred App</h1>
-                <p>This is the initial landing page for when users are not logged in?</p>
                 {/* TODO: make navbar elsewhere */}
+                {loginOrRegisterComponent}
+                <a href="#" onClick={(e) => buttonPress()}>{loginOrRegister} </a>
+
                 <ul>
                     <li><Link to={SIGNIN_URL}>Sigin</Link></li>
                     <li><Link to={SIGNUP_URL}>Signup</Link></li>
