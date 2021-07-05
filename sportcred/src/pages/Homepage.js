@@ -35,6 +35,7 @@ const Homepage = () => {
             <FloatingSection>
                 <h2>Test Client API Calls<br></br>(Check Network Tab for Success)</h2>
                 <Button variant="contained" onClick={getAllPosts}>Get All Posts</Button>
+                <a href="http://localhost:5000/api-docs/"><Button variant="contained" color="primary">See API DOCS</Button></a>
             </FloatingSection>
         </div>
     )
