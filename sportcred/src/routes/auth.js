@@ -625,9 +625,9 @@ router.post('/edit-prof', async (req, res) => {
     const user = await User.findOne({email: req.body.email});
     if (!user) return res.status(400).send('cannot find the user');
     await User.update({email : req.body.email}, 
-      {$set: { "username" : req.body.username, 
-                "status": req.body.status,
-                "description": req.body.description,
+      {$set: { "username" : req.body.username || user.username, 
+               "status": req.body.status || user.status,
+               "description": req.body.description || user.description,
              }});
 
     res.send({ action: true });
