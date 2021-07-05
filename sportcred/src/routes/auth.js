@@ -585,7 +585,7 @@ router.get('/get-user-by-name/:username', async (req, res) => {
  *                 description: (optional) the new username.
  *               email:
  *                 type: string
- *                 description: (optional) the new email.
+ *                 description: (required) the user's email.
  *               status:
  *                 type: string 
  *                 description: (optional) the new status of the user.
@@ -623,7 +623,7 @@ router.post('/edit-prof', async (req, res) => {
       await User.update({email : req.body.email}, {$set: { "password" : hashed_password}});
     }
     const user = await User.findOne({email: req.body.email});
-    if (!user) return res.status(400).send('username or password is incorrect');
+    if (!user) return res.status(400).send('cannot find the user');
     await User.update({email : req.body.email}, 
       {$set: { "username" : req.body.username, 
                 "status": req.body.status,
