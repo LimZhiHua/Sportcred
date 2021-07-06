@@ -1,162 +1,237 @@
 const express = require('express');
 const router = express.Router();
-const Debate = require('../models/debate');
-const Option = require('../models/option');
-const Vote = require('../models/vote');
+
+const DebateQuestion = require('../models/debateQuestion');
+const DebateResponse = require('../models/debateResponse');
+const DebateVote = require('../models/debateVote');
+const DebateGroup = require('../models/debateGroup');
+
 const User = require('../models/user');
 
-router.post('/addDebate', async (req, res) => {
+// -------------------- UTILS ---------------------
 
-  // const winner = await User.findOne({_id: req.body.winner}).catch(error => console.log('invalid winner id'));
-  // if (!winner) return res.status(400).send('Could not find winner');
-
-  // for (const option in req.body.options) {
-  //   const opt = await Option.findOne({_id: req.body.options[option]}).catch(error => console.log('invalid option id'));
-  //   if (!opt) return res.status(400).send('Could not find option');
-  // }
-
-  for (const user in req.body.users) {
-    const usr = await User.findOne({_id: req.body.users[user]}).catch(error => console.log('invalid user id'));
-    if (!usr) return res.status(400).send('Could not find user');
-  }
-
-  // for (const vote in req.body.votes) {
-  //   const v = await Votes.findOne({_id: req.body.votes[vote]}).catch(error => console.log('invalid vote id'));
-  //   if (!v) return res.status(400).send('Could not find vote');
-  // }
-
-  var newDebate = new Debate({
-    topic: req.body.topic,
-    users: req.body.users,
-    public: false
-  });
-
-  var newOption = new Option({
-    debateId: newDebate._id,
-    option: req.body.option,
-  })
-
-  newDebate.options = [newOption._id]
-
-  try {
-    await newOption.save();
-    await newDebate.save();
-    res.status(200).send({id: newDebate._id});
-  } catch (err) {
-    console.log(err);
-    res.status(400).send('error adding debate');
-  }
-});
-
-router.post('/addOption', async (req, res) => {
-
-  const debate = await Debate.findOne({_id: req.body.debate}).catch(error => console.log('invalid debate id'));
-  if (!debate) return res.status(400).send('Could not find debate');
-
-  var newOption = new Option({
-    debateId: req.body.debate,
-    option: req.body.option,
-  });
-
-  try {
-    await newOption.save();
-    debate.options.push(newOption._id);
-    debate.public = true;
-    await debate.save();
-    res.status(200).send('option added');
-  } catch (err) {
-    console.log(err);
-    res.status(400).send('error adding option');
-  }
-
-});
-
-router.post('/addVote', async (req, res) => {
-
-  const opt = await Option.findOne({_id: req.body.option}).catch(error => console.log('invalid option id'));
-  if (!opt) return res.status(400).send('Could not find option');
-
-  const debate = await Debate.findOne({_id: opt.debateId}).catch(error => console.log('invalid debate id'));
-  if (!debate) return res.status(400).send('Could not find debate');
-
-  const user = await User.findOne({_id: req.body.user}).catch(error => console.log('invalid user id'));
-  if (!user) return res.status(400).send('Could not find user');
-
-  var newVote = new Vote({
-    debateId: opt.debateId,
-    optionId: req.body.option,
-    userId: req.body.user,
-    value: req.body.value
-  });
-
-  try {
-    await newVote.save();
-    debate.votes.push(newVote._id);
-    await debate.save();
-    res.status(200).send('Vote added');
-  } catch (err) {
-    console.log(err);
-    res.status(400).send('error adding Vote');
-  }
-});
-
-router.get('/getAllOptions/:debate', async (req, res) => {
-
-  const debate = await Debate.findOne({_id: req.params.debate}).catch(error => console.log('invalid debate id'));
-  if (!debate) return res.status(400).send('Could not find debate');
-
-  res.status(200).send({'options': debate.options});
-});
-
-router.get('/getAllOptionNames/:debate', async (req, res) => {
-
-  const debate = await Debate.findOne({_id: req.params.debate}).catch(error => console.log('invalid debate id'));
-  if (!debate) return res.status(400).send('Could not find debate');
-
-  let optList = [];
-  for (const optIndex in debate.options) {
-    const option = await Option.findOne({_id: debate.options[optIndex]}).catch(error => console.log('invalid debate id'));
-    if (!option) {
-      continue;
+function partition(input, spacing) {
+    var output = [];
+    for (var i = 0; i < input.length; i += spacing) {
+        output[output.length] = input.slice(i, i + spacing);
     }
-    optList.push(option.option);
-  }
+    return output;
+}
 
-  res.status(200).send({'options': optList});
-});
+// -------------------------------------------------
 
-router.get('/getDebate/:debate', async (req, res) => {
 
-  const debate = await Debate.findOne({_id: req.params.debate}).catch(error => console.log('invalid debate id'));
-  if (!debate) return res.status(400).send('Could not find debate');
+// TODO general validation to check fields exist
 
-  res.status(200).send({'debate': debate});
-});
-
-router.get('/optionVotes/:debate/:option', async (req, res) => {
-
-  const debate = await Debate.findOne({_id: req.params.debate}).catch(error => console.log('invalid debate id'));
-  if (!debate) return res.status(400).send('Could not find debate');
-
-  let optionVotes = [];
-  for (const vIndex in debate.votes) {
-    const v = await Vote.findOne({_id: debate.votes[vIndex]}).catch(error => console.log('invalid vote id'));
-    if (v.optionId == req.params.option) {
-      optionVotes.push(v);
-    }
-  }
-  res.status(200).send({'votes': optionVotes});
-});
-
-// Get all debates
-router.get('/', async (req, res) => {
-  const allDebates = await Debate.find({public: true}).catch((error) => {
-        return res.status(400).send("error getting all debates")
+/**
+ * @swagger
+ * /debate/addDebateQuestion:
+ *   post:
+ *     summary: Add a debate question.
+ *     description: Add a debate question.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               question:
+ *                 type: string
+ *                 description: The question
+ *               debateDay:
+ *                 type: string 
+ *                 description: The date in YYYY-MM-DD
+ *     tags:
+ *      - debate
+ *     responses:
+ *       200:
+ *         description: Success.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: string 
+ *                   description: The question ID
+*/
+router.post('/addDebateQuestion', async (req, res) => {
+    var debateQuestion = new DebateQuestion({
+      question: req.body.question,
+      debateDay: req.body.debateDay 
     });
+  
     try {
-        return res.status(200).send({allDebates: allDebates})
+      await debateQuestion.save();
+      res.status(200).send({id: debateQuestion._id});
     } catch (err) {
-        return res.status(400).send(err)
+      console.log(err);
+      res.status(500).send(err);
+    }
+});
+
+/**
+ * @swagger
+ * /debate/addDebateResponse:
+ *   post:
+ *     summary: Add a debate response.
+ *     description: Add a debate response.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               questionId:
+ *                 type: string
+ *                 description: The question
+ *               userId:
+ *                 type: string 
+ *                 description: The user's ID
+ *               response:
+ *                 type: string 
+ *                 description: The debate response
+ *     tags:
+ *      - debate
+ *     responses:
+ *       200:
+ *         description: Success.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: string 
+ *                   description: The response ID
+*/
+router.post('/addDebateResponse', async (req, res) => {
+
+    const response = await DebateResponse
+                        .findOne({questionId: req.body.questionId, userId: req.body.userId})
+                        .catch(() => console.log('invalid question or user id'));
+    
+    if (response) return res.status(400).send('Response already given!');  
+
+    var debateResponse = new DebateResponse({
+      questionId: req.body.questionId,
+      userId: req.body.userId,
+      response: req.body.response 
+    });
+
+    try {
+      await debateResponse.save();
+      res.status(200).send({id: debateResponse._id});
+    } catch (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+});
+
+/**
+ * @swagger
+ * /debate/createGroup:
+ *   post:
+ *     summary: Create debate group for question - FOR TESTING.
+ *     description: Create debate group for question.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               questionId:
+ *                 type: string
+ *                 description: The question ID
+ *     tags:
+ *      - debate
+ *     responses:
+ *       200:
+ *         description: Success.
+*/
+router.post('/createGroup', async (req, res) => {
+
+    const responses = await DebateResponse
+                        .find({questionId: req.body.questionId})
+                        .catch(() => console.log('invalid question id'));
+
+    let groupSize = 4;
+    if (responses.length % 4 === 1) {groupSize = 3};
+
+    const groups = partition(responses, groupSize);
+    try {
+        groups.forEach((group) => {
+            var debateGroup = new DebateGroup({
+                questionId: req.body.questionId,
+            });
+            debateGroup.save().then(() => {    
+                group.forEach((response) => {
+                    response.groupId = debateGroup._id;
+                    response.save();
+                })
+            });
+        })
+        res.status(200).send();
+    } catch (err) {
+        res.status(500).send(err);
+        console.log(err);
+    }
+});
+
+/**
+ * @swagger
+ * /debate/addDebateVotes:
+ *   post:
+ *     summary: Add a votes to debate responses.
+ *     description: Add a votes to debate responses.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId: 
+ *                 type: string
+ *               groupId: 
+ *                 type: string
+ *               votes:
+ *                 type: array
+ *                 description: 
+ *                 items: 
+ *                   type: object
+ *                   properties:
+ *                     responseId:
+ *                        type: string
+ *                     rating:
+ *                        type: number
+ *     tags:
+ *      - debate
+ *     responses:
+ *       200:
+ *         description: Success.
+*/
+router.post('/addDebateVotes', async (req, res) => {
+    
+    // TODO: Verification? or only on result scoring?
+
+    if (!req.body.votes) return res.status(400).send('Votes are required');
+    try {
+        req.body.votes.forEach((vote) => {
+            var debateVote = new DebateVote({
+                responseId: vote.responseId,
+                rating: vote.rating,
+                userId: req.body.userId
+            });
+            debateVote.save();
+        })
+      res.status(200).send();
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
     }
 });
 
