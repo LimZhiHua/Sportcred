@@ -49,11 +49,9 @@ const Homepage = () => {
             </FloatingSection>
             <FloatingSection>
                 <h2>Dev Notes</h2>
-                <pre>
+                <pre style={{overflow: "auto"}}>
                     - Auth stuff and reducers from Binary-1's project not imported (Just so its less confusing)
                 </pre>
-                <h3>If this button is nice and blue than Material UI is working</h3>
-                <Button variant="contained" color="primary">Test Button Primary</Button>
             </FloatingSection>
             <FloatingSection>
                 <h2>Test Client API Calls<br></br>(Check Network Tab for Success)</h2>

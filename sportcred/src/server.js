@@ -75,17 +75,24 @@ app.use('/trivia', trivia);
 
 // -- Auto convert all mongoDB schemas to swagger schemas 
 
+console.log("[Docs] Generating documentation...");
+
 const m2s = require('mongoose-to-swagger');
 
 let fs = require('fs');
 let files = fs.readdirSync('./models/');
 let schemas = {};
 
+console.log("[Docs] Auto generating schemas for exposed db models");
 files.forEach(file => {
-  const model = require('./models/' + file);
-  let swaggerSchema = m2s(model);
-  swaggerSchema["type"] = "object";
-  schemas[swaggerSchema.title] = swaggerSchema;
+  try {
+    const model = require('./models/' + file);
+    let swaggerSchema = m2s(model);
+    swaggerSchema["type"] = "object";
+    schemas[swaggerSchema.title] = swaggerSchema;
+  } catch (error) {
+    console.error("[Docs Error] Cannot find an exposed model in " + '/models/' + file + " skipping...");
+  }
 });
 
 // console.log(JSON.stringify(schemas, null, 2));
@@ -111,6 +118,7 @@ swaggerSpec.components = {
   schemas: schemas 
 }; 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+console.log("[Docs] Docs generated and avaliable on http://localhost:5000/api-docs");
 
 // -------------------------- START ---------------------------------
 
