@@ -129,6 +129,7 @@ router.post('/', async (req, res) => {
  *               $ref: '#/components/schemas/Post'
 */
 router.get("/:id", async (req, res) => {
+  console.log("hello there")
   const foundPost = await Post.findById(req.params.id)
     .populate("comments")
     .exec()

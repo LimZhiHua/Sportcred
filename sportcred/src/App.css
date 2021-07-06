@@ -157,3 +157,21 @@
 .flex-container>.flex-primary {
   flex-grow: 1;
 }
+
+
+.orangeButton {
+  color: "black";
+  border-radius: '5px';
+  text-align: 'center';
+  width: "75%";
+  background-color: "orange";
+
+}
+
+.greenButton {
+  color: "black";
+  border-radius: '5px';
+  text-align: 'center';
+  width: "75%";
+  background-color: "green";
+}
