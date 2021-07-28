@@ -73,6 +73,93 @@ router.post('/addDebateQuestion', async (req, res) => {
 
 /**
  * @swagger
+ * /debate/getQuestion:
+ *   get:
+ *     summary: Get today's debate question and know whether user has responsed.
+ *     description: Get today's debate question and know whether user has responsed.
+ *     tags:
+ *      - debate
+ *     parameters:
+ *      - in: query
+ *        name: userId
+ *        required: true
+ *        description: The userId of the user.
+ *        schema:
+ *          type: string
+ *     responses:
+ *       200:
+ *         description: The question of the day, empty if none.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 questionId:
+ *                   type: boolean 
+ *                   description: Today's question ID
+ *                 question:
+ *                   type: string
+ *                   description: The question statement
+ *                 answered:
+ *                   type: boolean
+ *                   description: Whether the user has answered for today
+*/
+router.get('/getQuestion', async (req, res) => {
+    // ignore the time in date
+    const a = new Date(Date.now()); 
+    const date = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    const question = await DebateQuestion.findOne({debateDay: {$gte: date}});
+    if (!question) return res.status(200).send({});
+
+    const response = await DebateResponse.findOne({questionId: question._id, userId: req.query.userId})
+    return res.status(200).send({
+        questionId: question._id,
+        question: question.question,
+        answered: response != null
+    });
+});
+
+/**
+ * @swagger
+ * /debate/getDebateQuestions:
+ *   get:
+ *     summary: Get a list of debate questions.
+ *     description: Get a list of debate questions.
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         default: 100
+ *         description: Get the most recent limit of responses
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: page
+ *         default: 1
+ *         description: The page of responses sized according to the limit
+ *         schema:
+ *           type: integer
+ *     tags:
+ *      - debate
+ *     responses:
+ *       200:
+ *         description: List of questions sorted from most to least recent.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items: 
+ *                $ref: '#/components/schemas/DebateQuestion'
+*/
+router.get('/getDebateQuestions', async (req, res) => {
+    const limit     = Math.abs(parseInt(req.query.limit)) || 100;
+    const page      = Math.abs(parseInt(req.query.page)) - 1 || 0;
+    const questions = await DebateQuestion.find({}).sort({debateDay: -1}).skip(page*limit).limit(limit);
+    return res.status(200).send(questions);
+});
+
+
+/**
+ * @swagger
  * /debate/addDebateResponse:
  *   post:
  *     summary: Add a debate response.
@@ -128,6 +215,56 @@ router.post('/addDebateResponse', async (req, res) => {
       console.log(err);
       res.status(500).send(err);
     }
+});
+
+/**
+ * @swagger
+ * /debate/getDebateResponses:
+ *   get:
+ *     summary: Get a list of debate responses.
+ *     description: Get a list of debate questions based on the questionId.
+ *     parameters:
+ *       - in: query
+ *         name: questionId
+ *         default: 100
+ *         description: The question ID
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: limit
+ *         default: 100
+ *         description: Get the most recent limit of responses
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: page
+ *         default: 1
+ *         description: The page of responses sized according to the limit
+ *         schema:
+ *           type: integer
+ *     tags:
+ *      - debate
+ *     responses:
+ *       200:
+ *         description: List of responses sorted from most to least recent.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items: 
+ *                $ref: '#/components/schemas/DebateResponse'
+*/
+router.get('/getDebateResponses', async (req, res) => {
+    // TODO: if use has not responsed to the debate, do not allow bypassing to responses
+    const limit = Math.abs(parseInt(req.query.limit)) || 100;
+    const page  = Math.abs(parseInt(req.query.page)) - 1 || 0;
+
+    const responses = await DebateResponse
+                                .find({questionId: req.query.questionId})
+                                .sort({_id: -1})
+                                .skip(page*limit)
+                                .limit(limit);
+    return res.status(200).send(responses);
 });
 
 /**
