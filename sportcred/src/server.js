@@ -47,7 +47,7 @@ const post = require("./routes/post")
 const postComment = require("./routes/postComment")
 const search = require('./routes/search')
 const radar = require('./routes/radarlist')
-const debate = require('./routes/debate')
+const analysis = require('./routes/analysis')
 const option = require('./routes/option')
 const vote = require('./routes/vote')
 const notif = require('./routes/notif')
@@ -62,7 +62,7 @@ app.use('/survey', survey);
 app.use('/post', post);
 app.use('/post/:id/postComment', postComment);
 app.use('/search', search);
-app.use('/debate', debate);
+app.use('/analysis', analysis);
 app.use('/option', option);
 app.use('/vote', vote);
 app.use('/radar', radar);
