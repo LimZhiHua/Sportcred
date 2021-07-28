@@ -27,8 +27,8 @@ function partition(input, spacing) {
  * @swagger
  * /analysis/addQuestion:
  *   post:
- *     summary: Add a debate question.
- *     description: Add a debate question.
+ *     summary: Add a analysis question.
+ *     description: Add a analysis question.
  *     requestBody:
  *       required: true
  *       content:
@@ -75,8 +75,8 @@ router.post('/addQuestion', async (req, res) => {
  * @swagger
  * /analysis/getQuestion:
  *   get:
- *     summary: Get today's debate question and know whether user has responsed.
- *     description: Get today's debate question and know whether user has responsed.
+ *     summary: Get today's analysis question and know whether user has responsed.
+ *     description: Get today's analysis question and know whether user has responsed.
  *     tags:
  *      - analysis
  *     parameters:
@@ -123,8 +123,8 @@ router.get('/getQuestion', async (req, res) => {
  * @swagger
  * /analysis/getQuestions:
  *   get:
- *     summary: Get a list of debate questions.
- *     description: Get a list of debate questions.
+ *     summary: Get a list of analysis questions.
+ *     description: Get a list of analysis questions.
  *     parameters:
  *       - in: query
  *         name: limit
@@ -162,8 +162,8 @@ router.get('/getQuestions', async (req, res) => {
  * @swagger
  * /analysis/addResponse:
  *   post:
- *     summary: Add a debate response.
- *     description: Add a debate response.
+ *     summary: Add a analysis response.
+ *     description: Add a analysis response.
  *     requestBody:
  *       required: true
  *       content:
@@ -179,7 +179,7 @@ router.get('/getQuestions', async (req, res) => {
  *                 description: The user's ID
  *               response:
  *                 type: string 
- *                 description: The debate response
+ *                 description: The analysis response
  *     tags:
  *      - analysis
  *     responses:
@@ -221,8 +221,8 @@ router.post('/addResponse', async (req, res) => {
  * @swagger
  * /analysis/getResponses:
  *   get:
- *     summary: Get a list of debate responses.
- *     description: Get a list of debate questions based on the questionId.
+ *     summary: Get a list of analysis responses.
+ *     description: Get a list of analysis questions based on the questionId.
  *     parameters:
  *       - in: query
  *         name: questionId
@@ -255,15 +255,17 @@ router.post('/addResponse', async (req, res) => {
  *                $ref: '#/components/schemas/AnalysisResponse'
 */
 router.get('/getResponses', async (req, res) => {
-    // TODO: if use has not responsed to the debate, do not allow bypassing to responses
+    // TODO: if use has not responsed to the analysis, do not allow bypassing to responses
     const limit = Math.abs(parseInt(req.query.limit)) || 100;
     const page  = Math.abs(parseInt(req.query.page)) - 1 || 0;
-
     const responses = await AnalysisResponse
                                 .find({questionId: req.query.questionId})
                                 .sort({_id: -1})
                                 .skip(page*limit)
-                                .limit(limit);
+                                .limit(limit)
+                                .catch(() => {
+                                  return res.status(400).send("Question does not exist");
+                                });
     return res.status(200).send(responses);
 });
 
@@ -271,8 +273,8 @@ router.get('/getResponses', async (req, res) => {
  * @swagger
  * /analysis/createGroup:
  *   post:
- *     summary: Create debate group for question - UNUSED.
- *     description: Create debate group for question.
+ *     summary: Create analysis group for question - UNUSED.
+ *     description: Create analysis group for question.
  *     requestBody:
  *       required: true
  *       content:
@@ -322,8 +324,8 @@ router.post('/createGroup', async (req, res) => {
  * @swagger
  * /analysis/addGroupVotes:
  *   post:
- *     summary: Add a votes to debate responses - UNUSED.
- *     description: Add a votes to debate responses.
+ *     summary: Add a votes to analysis responses - UNUSED.
+ *     description: Add a votes to analysis responses.
  *     requestBody:
  *       required: true
  *       content:
@@ -376,8 +378,8 @@ router.post('/addGroupVotes', async (req, res) => {
  * @swagger
  * /analysis/addVote:
  *   post:
- *     summary: Add a vote to a debate response.
- *     description: Add a vote to a debate response.
+ *     summary: Add a vote to a analysis response.
+ *     description: Add a vote to a analysis response.
  *     requestBody:
  *       required: true
  *       content:
