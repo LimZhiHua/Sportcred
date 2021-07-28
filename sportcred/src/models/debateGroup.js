@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+// NOTE: Unused
 const debateGroupSchema = new mongoose.Schema({
   questionId: {
     type: mongoose.Schema.Types.ObjectId,

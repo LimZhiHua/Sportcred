@@ -15,6 +15,7 @@ const debateResponseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  // NOTE: Unused
   groupId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'DebateGroup'

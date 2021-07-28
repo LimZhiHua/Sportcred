@@ -103,7 +103,7 @@ router.post('/addDebateQuestion', async (req, res) => {
  *             schema:
  *               type: object
  *               properties:
- *                 user:
+ *                 id:
  *                   type: string 
  *                   description: The response ID
 */
@@ -134,7 +134,7 @@ router.post('/addDebateResponse', async (req, res) => {
  * @swagger
  * /debate/createGroup:
  *   post:
- *     summary: Create debate group for question - FOR TESTING.
+ *     summary: Create debate group for question - UNUSED.
  *     description: Create debate group for question.
  *     requestBody:
  *       required: true
@@ -183,9 +183,9 @@ router.post('/createGroup', async (req, res) => {
 
 /**
  * @swagger
- * /debate/addDebateVotes:
+ * /debate/addDebateGroupVotes:
  *   post:
- *     summary: Add a votes to debate responses.
+ *     summary: Add a votes to debate responses - UNUSED.
  *     description: Add a votes to debate responses.
  *     requestBody:
  *       required: true
@@ -214,10 +214,10 @@ router.post('/createGroup', async (req, res) => {
  *       200:
  *         description: Success.
 */
-router.post('/addDebateVotes', async (req, res) => {
+router.post('/addDebateGroupVotes', async (req, res) => {
+    // NOTE: UNUSED ENDPOINT
     
     // TODO: Verification? or only on result scoring?
-
     if (!req.body.votes) return res.status(400).send('Votes are required');
     try {
         req.body.votes.forEach((vote) => {
@@ -233,6 +233,59 @@ router.post('/addDebateVotes', async (req, res) => {
         console.log(err);
         res.status(500).send(err);
     }
+});
+
+/**
+ * @swagger
+ * /debate/addDebateReponseVote:
+ *   post:
+ *     summary: Add a vote to a debate response.
+ *     description: Add a vote to a debate response.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId: 
+ *                 type: string
+ *               responseId:
+ *                 type: string
+ *               rating:
+ *                 type: number
+ *     tags:
+ *      - debate
+ *     responses:
+ *       200:
+ *         description: Success.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string 
+ *                   description: The vote ID
+*/
+router.post('/addDebateReponseVote', async (req, res) => {
+
+  const response = await DebateResponse.findOne({_id: req.body.responseId});
+  if (!response) return res.status(400).send("Response not found");
+  if (response.userId == req.body.userId) return res.status(200).send("Cannot vote on your own response");
+
+  try {
+    var debateVote = new DebateVote({
+      responseId: req.body.responseId,
+      rating: req.body.rating,
+      userId: req.body.userId
+    });
+    debateVote.save();
+    res.status(200).send({id: debateVote._id});
+  } catch (err) {
+      console.log(err);
+      res.status(500).send(err);
+  }
 });
 
 module.exports = router;
