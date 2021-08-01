@@ -535,38 +535,6 @@ router.get('/get-user/:id', async (req, res) => {
   return res.status(200).send(user);
 })
 
-//------------------------------------------------------------------------------testing------------------------------
-router.post('/testing', async (req, res) => {
-  console.log("running testing")
-  const {error} = EditProfileValidation(req.body);
-  console.log(error);
-  if (error) return res.status(400).send(error.details[0].message);
-
-  // Find the user in the database
-  try {
-    if (req.body.password) {
-      const salt = await bcrypt.genSalt(10);
-      const hashed_password = await bcrypt.hash(req.body.password, salt);
-      await User.update({email : req.body.email}, {$set: { "password" : hashed_password}});
-    }
-    const user = await User.findOne({email: req.body.email});
-    if (!user) return res.status(400).send('cannot find the user');
-    await User.update({email : req.body.email}, 
-      {$set: { "username" : req.body.username || user.username, 
-               "status": req.body.status || user.status,
-               "description": req.body.description || user.description,
-               "profilePic": req.body.profilePic || user.profilePic
-             }});
-
-    res.send({ action: true });
-
-  } catch (error) {
-    console.log(error);
-    res.send({ action: false, response: "you have some error in edit profile section check log for more information" });
-  }
-
-})
-
 
  /**
  * @swagger
