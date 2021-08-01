@@ -7,6 +7,7 @@ import { isOnRoute, getThisRoute } from './utils';
 
 import {
     HOME_URL,
+    PROFILE_URL,
     // SIGNIN_URL,
     // SIGNUP_URL,
     TRIVIA_LANDING_URL,
@@ -44,6 +45,7 @@ let Navbar = () => {
               <img src="Logo.png" className="App-logo"></img>
             </Link>
             <div>
+              <Navlink to={PROFILE_URL}>Profile</Navlink>
               <Navlink to={ZONE_LANDING_URL}>Open Court</Navlink>
               <Navlink to={TRIVIA_LANDING_URL}>Trivia</Navlink>
               <Navlink to={DEBATE_LANDING_URL}>Debates</Navlink>

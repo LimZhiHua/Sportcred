@@ -45,7 +45,11 @@ const userSchema = new mongoose.Schema({
   activated: {
     type: Boolean,
     default: false,
-  }
+  },
+
+  profilePic: {
+     data: Buffer, contentType: String
+    }
 
 })
 

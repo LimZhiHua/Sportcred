@@ -175,7 +175,6 @@ export const getUserByName = async (username) => {
 }
 
 export const editData = async (userData) => {
-
         const response = await fetch(
             "http://localhost:5000/user/edit-prof",
             {
@@ -192,6 +191,7 @@ export const editData = async (userData) => {
                     bio: userData.bio,
                     password: userData.password,
                     description: userData.description,
+                    profilePic: userData.profilePic
                 }),
             }
         );
@@ -210,3 +210,43 @@ export const editData = async (userData) => {
         }
         return result;
     }
+    
+
+
+    export const testing = async (userData) => {
+      const response = await fetch(
+          "http://localhost:5000/user/testing",
+          {
+              method: "POST",
+              headers: {
+                  Accept: "application/json, text/plain, */*",
+                  "Content-Type": "application/json",
+                  "auth-token": "jsonwebtoken",
+              },
+              body: JSON.stringify({
+                  username: userData.username,
+                  email: userData.email,
+                  status: userData.status,
+                  bio: userData.bio,
+                  password: userData.password,
+                  description: userData.description,
+                  profilePic: userData.profilePic
+              }),
+          }
+      );
+
+    
+      const result = {}
+      if (response.status === 200){
+        const msg = await response.json();
+        console.log(msg);
+        result.user = msg.user;
+        result.status = 200;
+      }else{
+        const msg = await response.text();
+        console.log(msg);
+        result.error = msg;
+      }
+      return result;
+  }
+  
