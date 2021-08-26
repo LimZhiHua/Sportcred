@@ -75,7 +75,7 @@ const EditProfile = () => {
 
         getUserInfo()
 
-    })
+    },[description, email])
 
     // For setting the default new info.
     useEffect ( () =>{
@@ -84,8 +84,9 @@ const EditProfile = () => {
         setNewEmail(email)
         setNewStatus(status)
         setNewUsername(username)
+        setNewProfilePicB64(profilePicB64)
 
-    },[username, description, email, status])
+    },[username, description, email, status, profilePicB64])
 
      async function fileSelectHandler (event){
         let file_size = event.target.files[0].size;
