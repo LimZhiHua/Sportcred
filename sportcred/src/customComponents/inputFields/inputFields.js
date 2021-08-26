@@ -4,11 +4,18 @@ import TextField from '@material-ui/core/TextField';
 
 const useStyleField = makeStyles({
   root: {
-    width: '50ch',
+    // width: '50ch',
     '& label.Mui-focused': {
       color: '#c4c4c4',
     },
+    '& .MuiInputLabel-root': {
+      color: '#b0b0b0',
+    },
     '& .MuiOutlinedInput-root': {
+      marginBottom: "0.75em",
+      '& input': {
+        color: '#c4c4c4',
+      },
       '& fieldset': {
         borderColor: '#c4c4c4',
       },
@@ -24,11 +31,15 @@ const useStyleField = makeStyles({
 
 const useStyleArea = makeStyles({
   root: {
-    width: '50ch',
+    // width: '50ch',
     '& label.Mui-focused': {
       color: '#c4c4c4',
     },
+    '& .MuiInputLabel-root': {
+      color: '#b0b0b0',
+    },
     '& .MuiOutlinedInput-root': {
+      marginBottom: "0.75em",
       '& fieldset': {
         borderColor: '#c4c4c4',
       },
@@ -45,7 +56,7 @@ const useStyleArea = makeStyles({
 export function BasicTextFields(props) {
   const classes = useStyleField();
    return (
-       <TextField className={classes.root}  label={props.label} variant="outlined" />
+       <TextField className={classes.root} label={props.label} variant="outlined" {...props} />
   );
 }
 
@@ -58,6 +69,7 @@ export function BasicTextArea(props) {
           onChange={props.handleChange}
           multiline
           variant="outlined"
-        />
+          {...props}
+      />
   );
 }

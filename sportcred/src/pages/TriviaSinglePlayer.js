@@ -109,7 +109,7 @@ const TriviaSinglePlayer = () => {
         if(! gameStarted){
             return <div>
             <br></br>
-            <DefaultButton label= {"Start Game"} handleClick = {startGame}/>
+            <DefaultButton label= {"Start Game"} onClick = {startGame}/>
                <br></br>
            </div>
         }
@@ -132,16 +132,16 @@ const TriviaSinglePlayer = () => {
                 <h2> {secondsLeft}</h2>
                 <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>
-                        <AnswerButton label= {curAnswers[0].answerBody} handleClick = {checkAnswer}/>
+                        <AnswerButton label= {curAnswers[0].answerBody} onClick = {checkAnswer}/>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <AnswerButton label= {curAnswers[1].answerBody} handleClick = {checkAnswer}/>
+                        <AnswerButton label= {curAnswers[1].answerBody} onClick = {checkAnswer}/>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <AnswerButton label= {curAnswers[2].answerBody} handleClick = {checkAnswer}/>
+                        <AnswerButton label= {curAnswers[2].answerBody} onClick = {checkAnswer}/>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <AnswerButton label= {curAnswers[3].answerBody} handleClick = {checkAnswer}/>
+                        <AnswerButton label= {curAnswers[3].answerBody} onClick = {checkAnswer}/>
                     </Grid>
                 </Grid>
             </div>

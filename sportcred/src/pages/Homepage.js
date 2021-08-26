@@ -8,8 +8,11 @@ import { AiOutlineMessage, AiOutlineMore, AiOutlineShareAlt } from "react-icons/
 import SigninComponent from "../customComponents/SigninComponent";
 import RegisterComponent from "../customComponents/RegisterComponent";
 import PostSlider from "../customComponents/postSlider/PostSlider";
+import {BasicTextFields} from "../customComponents/inputFields/inputFields"
+import {AnswerButton} from "../customComponents/buttons/Buttons"
 
 import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl'
 
 // Stuff that should not be here
 import { getAllPosts } from '../controller/post';
@@ -55,9 +58,14 @@ const PostHeader = ({displayname = "Unknown", score = 0, datetime = new Date(Dat
 const PostCreate = () => {
     return (
         <PostContainer className="postcontainer"
+            Header={()=><div className="post-header">
+                <p className="displayname">Have thoughts? Share them</p>
+            </div>}
             Body={()=>
-                <div>
-                    <div>Lala</div>
+                <div className="right">
+                    <BasicTextFields fullWidth label="Title"/>
+                    <BasicTextFields fullWidth label="Comment"/>
+                    <AnswerButton label="Post"/>
                 </div>
             }
         />
@@ -84,14 +92,16 @@ const Post = ({
                         <Grid item xs={12} sm={8}>
                             <PostSlider/>
                         </Grid>
-                        <Grid item xs={5} sm={2} className="center-center">
-                            <AiOutlineMessage/><span className="comment-count">{numComments}</span>
+                        <Grid item xs={5} sm={2}>
+                            <div className="center-center icon-button">
+                                <AiOutlineMessage/><span className="comment-count">{numComments}</span>
+                            </div>
                         </Grid>
                         <Grid item xs={4} sm={1} className="center-center">
-                            <AiOutlineShareAlt/>
+                            <AiOutlineShareAlt className="icon-button"/>
                         </Grid>
                         <Grid item xs={3} sm={1} alignItems="center" className="right">
-                            <AiOutlineMore/>
+                            <AiOutlineMore className="icon-button"/>
                         </Grid>
                     </Grid>
                 </div>
