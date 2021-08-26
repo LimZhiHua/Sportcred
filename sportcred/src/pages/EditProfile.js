@@ -137,8 +137,11 @@ const EditProfile = () => {
         const response = (await editData(data))
         if(response.status == 200){
             window.alert("Data Saved")
+            getUserInfo()
+
+        }else{
+            window.alert(response.error)
         }
-        getUserInfo()
     }
 
     return (
