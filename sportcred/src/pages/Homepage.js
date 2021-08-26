@@ -3,16 +3,19 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 
-import { AiOutlineMessage, AiOutlineMore, AiOutlineShareAlt } from "react-icons/ai";
+import { 
+    AiOutlineMessage, AiOutlineMore, AiOutlineShareAlt,
+    AiOutlineLeft, AiOutlineRight,
+
+} from "react-icons/ai";
 
 import SigninComponent from "../customComponents/SigninComponent";
 import RegisterComponent from "../customComponents/RegisterComponent";
 import PostSlider from "../customComponents/postSlider/PostSlider";
-import {BasicTextFields} from "../customComponents/inputFields/inputFields"
+import {BasicTextFields, BasicTextArea} from "../customComponents/inputFields/inputFields"
 import {AnswerButton} from "../customComponents/buttons/Buttons"
 
 import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl'
 
 // Stuff that should not be here
 import { getAllPosts } from '../controller/post';
@@ -27,11 +30,12 @@ import FloatingSection from "../customComponents/FloatingSection";
 var counter = 0;
 
 const PostContainer = ({
+        className = "",
         Header = () => <div></div>, 
         Body = () => <div></div>, 
         Footer = () => <div></div>}) => {
     return (
-        <FloatingSection>
+        <FloatingSection className={className}>
             <Header/>
             <Body/>
             <Footer/>
@@ -57,14 +61,14 @@ const PostHeader = ({displayname = "Unknown", score = 0, datetime = new Date(Dat
 
 const PostCreate = () => {
     return (
-        <PostContainer className="postcontainer"
+        <PostContainer
             Header={()=><div className="post-header">
                 <p className="displayname">Have thoughts? Share them</p>
             </div>}
             Body={()=>
                 <div className="right">
                     <BasicTextFields fullWidth label="Title"/>
-                    <BasicTextFields fullWidth label="Comment"/>
+                    <BasicTextArea fullWidth label="Comment"/>
                     <AnswerButton label="Post"/>
                 </div>
             }
@@ -75,39 +79,74 @@ const PostCreate = () => {
 const Post = ({
         title = "Unset title", 
         content = ".... ....... .... .... ... ....... ...",
-        numComments = 0    
+        numComments = 0,
+        CommentList = () => <div></div>
     }) => {
-    return (
-        <PostContainer 
-            Header={PostHeader}
-            Body={()=>
-                <div className="post-body">
-                    <div className="title">{title}</div>
-                    <div className="content">{content}</div>
-                </div>
-            }
-            Footer={()=>
-                <div className="post-footer lined-footer">
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} sm={8}>
-                            <PostSlider/>
+    
+        const [showComment, setShowComment] = useState(false);
+
+        return (
+            <PostContainer 
+                Header={PostHeader}
+                Body={()=>
+                    <div className="post-body">
+                        <div className="title">{title}</div>
+                        <div className="content">{content}</div>
+                    </div>
+                }
+                Footer={()=>
+                    <div className="post-footer lined-footer">
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} sm={8}>
+                                <PostSlider/>
+                            </Grid>
+                            <Grid item xs={5} sm={2}>
+                                <div className="center-center icon-button"
+                                     onClick={()=>setShowComment(!showComment)}>
+                                    <AiOutlineMessage/><span className="comment-count">{numComments}</span>
+                                </div>
+                            </Grid>
+                            <Grid item xs={4} sm={1} className="center-center">
+                                <AiOutlineShareAlt className="icon-button"/>
+                            </Grid>
+                            <Grid item xs={3} sm={1} alignItems="center" className="right">
+                                <AiOutlineMore className="icon-button"/>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={5} sm={2}>
-                            <div className="center-center icon-button">
-                                <AiOutlineMessage/><span className="comment-count">{numComments}</span>
-                            </div>
-                        </Grid>
-                        <Grid item xs={4} sm={1} className="center-center">
-                            <AiOutlineShareAlt className="icon-button"/>
-                        </Grid>
-                        <Grid item xs={3} sm={1} alignItems="center" className="right">
-                            <AiOutlineMore className="icon-button"/>
-                        </Grid>
-                    </Grid>
-                </div>
-            }
-        />
-    )
+                        {(showComment) ? <CommentList/> : <div></div>}
+                    </div>
+                }
+            />
+        )
+}
+
+const PostComment = ({comment = "Unfinished comment... ... . . ...."}) => {
+    return <PostContainer 
+        className="no-margins"
+        Header={PostHeader}
+        Body={()=>
+            <div className="post-body">
+                <div className="content">{comment}</div>
+            </div>
+        }
+    />
+}
+
+const CommentGroup = () => {
+    return <div className="comment-section">
+        <div className="flex-container">
+            <div className="flex-main"><BasicTextArea fullWidth label="Comment"/></div>
+            <AnswerButton label="Post" style={{margin: "1em"}}/>
+        </div>
+        <div className="comment-group">
+            <PostComment />
+            <PostComment />
+            <PostComment />
+            <PostComment />
+            <PostComment />
+        </div>
+        <div className="center-center"><AiOutlineLeft className="icon-button"/><span>Page #</span><AiOutlineRight className="icon-button"/></div>
+    </div>
 }
 
 const PostsPage = () => {
@@ -115,6 +154,7 @@ const PostsPage = () => {
     return (
         <>
             <PostCreate/>
+            <Post CommentList={()=><CommentGroup/>}/>
             <Post/>
         </>
     )

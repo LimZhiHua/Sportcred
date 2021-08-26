@@ -17,7 +17,7 @@ const useStyleField = makeStyles({
         color: '#c4c4c4',
       },
       '& fieldset': {
-        borderColor: '#c4c4c4',
+        borderColor: '#6B6E70',
       },
       '&:hover fieldset': {
         borderColor: '#ffff',
@@ -40,8 +40,11 @@ const useStyleArea = makeStyles({
     },
     '& .MuiOutlinedInput-root': {
       marginBottom: "0.75em",
+      '& textarea': {
+        color: '#c4c4c4',
+      },
       '& fieldset': {
-        borderColor: '#c4c4c4',
+        borderColor: '#6B6E70',
       },
       '&:hover fieldset': {
         borderColor: '#ffff',
