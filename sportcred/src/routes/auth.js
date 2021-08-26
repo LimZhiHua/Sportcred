@@ -477,6 +477,9 @@ router.get('/reset-password/:id/:token', async (req, res) => {
  *                 description: The new password with min length 6.
  *     tags:
  *      - auth
+ *     responses:
+ *       200:
+ *         description: Success.
 */
 router.post('/authenticate-reset', async (req, res) => {
   const userId = req.body.id;
