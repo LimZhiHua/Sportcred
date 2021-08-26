@@ -1,8 +1,13 @@
+import './Homepage.css'
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Grid from '@material-ui/core/Grid';
+
+import { AiOutlineMessage, AiOutlineMore, AiOutlineShareAlt } from "react-icons/ai";
 
 import SigninComponent from "../customComponents/SigninComponent";
 import RegisterComponent from "../customComponents/RegisterComponent";
+import PostSlider from "../customComponents/postSlider/PostSlider";
 
 import Button from '@material-ui/core/Button';
 
@@ -18,6 +23,92 @@ import FloatingSection from "../customComponents/FloatingSection";
 
 var counter = 0;
 
+const PostContainer = ({
+        Header = () => <div></div>, 
+        Body = () => <div></div>, 
+        Footer = () => <div></div>}) => {
+    return (
+        <FloatingSection>
+            <Header/>
+            <Body/>
+            <Footer/>
+        </FloatingSection>
+    )
+}
+
+const PostHeader = ({displayname = "Unknown", score = 0, datetime = new Date(Date.now()).toLocaleString()}) => {
+    return (
+        <div className="post-header">
+            <Grid container spacing={3}>
+                <Grid item xs={6} className="left">
+                    <span className="displayname">{displayname}</span>
+                    <span className="acs-score">{score}</span>
+                </Grid>
+                <Grid item xs={6} className="right">
+                    <span className="datetime">{datetime}</span>
+                </Grid>
+            </Grid>
+        </div>
+    )
+}
+
+const PostCreate = () => {
+    return (
+        <PostContainer className="postcontainer"
+            Body={()=>
+                <div>
+                    <div>Lala</div>
+                </div>
+            }
+        />
+    )
+}
+
+const Post = ({
+        title = "Unset title", 
+        content = ".... ....... .... .... ... ....... ...",
+        numComments = 0    
+    }) => {
+    return (
+        <PostContainer 
+            Header={PostHeader}
+            Body={()=>
+                <div className="post-body">
+                    <div className="title">{title}</div>
+                    <div className="content">{content}</div>
+                </div>
+            }
+            Footer={()=>
+                <div className="post-footer lined-footer">
+                    <Grid container spacing={3}>
+                        <Grid item xs={12} sm={8}>
+                            <PostSlider/>
+                        </Grid>
+                        <Grid item xs={5} sm={2} className="center-center">
+                            <AiOutlineMessage/><span className="comment-count">{numComments}</span>
+                        </Grid>
+                        <Grid item xs={4} sm={1} className="center-center">
+                            <AiOutlineShareAlt/>
+                        </Grid>
+                        <Grid item xs={3} sm={1} alignItems="center" className="right">
+                            <AiOutlineMore/>
+                        </Grid>
+                    </Grid>
+                </div>
+            }
+        />
+    )
+}
+
+const PostsPage = () => {
+
+    return (
+        <>
+            <PostCreate/>
+            <Post/>
+        </>
+    )
+}
 
 const Homepage = () => {
     const [loginOrRegister, setLoginOrRegister] = useState("Register");
@@ -58,6 +149,8 @@ const Homepage = () => {
                 <Button variant="contained" onClick={getAllPosts}>Get All Posts</Button>
                 <a href="http://localhost:5000/api-docs/"><Button variant="contained" color="primary">See API DOCS</Button></a>
             </FloatingSection>
+            <hr/>
+            <PostsPage></PostsPage>
         </div>
     )
 }

@@ -175,3 +175,21 @@
   width: "75%";
   background-color: "green";
 }
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
+.center {
+  text-align: center;
+}
+
+.center-center {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+}
