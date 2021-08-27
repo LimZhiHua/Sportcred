@@ -24,14 +24,12 @@ const postSchema = new mongoose.Schema({
         type: Date, 
         default: Date.now
     },
-    
-    comments: [
-        {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "PostComment",
-        }
-    ]
-    
+
+    numComments: {
+        type: Number,
+        default: 0
+    }
+
 })
 
 module.exports = mongoose.model("Post", postSchema)

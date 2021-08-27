@@ -46,12 +46,8 @@ router.get('/', async (req, res) => {
                     .catch((error) => {
                       return res.status(500).send("error getting all posts")
                   });
-  
-  let postsArray = [];
-  allPosts.forEach(post => { postsArray.push(post) });
-
   try {
-    return res.status(200).send({ postsArray: postsArray });
+    return res.status(200).send({ postsArray: allPosts });
   } catch (err) {
     return res.status(500).send(err)
   }
@@ -148,7 +144,6 @@ router.post('/', async (req, res) => {
  *               $ref: '#/components/schemas/Post'
 */
 router.get("/:id", async (req, res) => {
-  console.log("hello there " + req.params.id)
   const foundPost = await Post
     .findOne({_id: req.params.id})
     .catch((err) => {
