@@ -8,10 +8,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import  {getUser, editData, testing} from '../controller/user';
 
-
-
-
-
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -27,11 +23,8 @@ const useStyles = makeStyles((theme) => ({
     imgStyle:{
         width:'20%',
         height:'100%'
-
     }
   }));
-
-
 
 const EditProfile = () => {
 
@@ -51,11 +44,8 @@ const EditProfile = () => {
     const [newStatus, setNewStatus] = useState('')
     const [newUsername, setNewUsername] = useState('')
 
-
-
     const userID = "60e39a703a9e9634446d66e6"
     
-
     //-----------Use Effects and the functions made for it (cause you cant call await directly in useEffect)
     async function getUserInfo() {
         const info = await getUser(userID)
@@ -67,25 +57,19 @@ const EditProfile = () => {
         setUsername(user.username)
         setProfilePicB64(user.profilePic)
         //setDisplayImage(window.URL.createObjectURL(new Blob(base64StringToArrayBuffer(user.profilePicB64))))
-       
-
     }
 
     useEffect ( () =>{
-
         getUserInfo()
-
     },[description, email])
 
     // For setting the default new info.
     useEffect ( () =>{
-
         setNewDescription(description)
         setNewEmail(email)
         setNewStatus(status)
         setNewUsername(username)
         setNewProfilePicB64(profilePicB64)
-
     },[username, description, email, status, profilePicB64])
 
      async function fileSelectHandler (event){
@@ -98,7 +82,6 @@ const EditProfile = () => {
         }else{
             window.alert("Please selecta an image with size less than 100kb")
         }
-
     } 
 
     const toBase64 = file => new Promise((resolve, reject) => {
@@ -107,8 +90,6 @@ const EditProfile = () => {
         reader.onload = () => resolve(reader.result);
         reader.onerror = error => reject(error);
     });
-
-
 
     function changeUsername(e){
         setNewUsername(e.target.value)
@@ -152,7 +133,7 @@ const EditProfile = () => {
                     <h1> Hello {username}</h1>
                 </Grid>
                 <Grid item xs={4} container justify="flex-end">
-                    <DefaultButton label="save" handleClick={saveNewInfo}/>
+                    <DefaultButton label="save" onClick={saveNewInfo}/>
                 </Grid>
             </Grid>
             <Grid container spacing = {2} className={classes.greyBackground}>
@@ -189,10 +170,7 @@ const EditProfile = () => {
                     <input type="file" onChange={fileSelectHandler} accept=".jpg,.jpeg,.png"/><br></br>
                     <img src={newProfilePicB64? newProfilePicB64 : profilePicB64} alt={profilePicB64? profilePicB64.name : null} style={{maxWidth: "500px", maxHeight:"300px"}}/>
                 </Grid>
-
-                    
             </Grid>
-                
         </FloatingSection>
     )
 }

@@ -65,16 +65,14 @@ export function DangerButton(props) {
 }
 
 export function UploadButton(props) {
-  const classes = useDangerStyles();
     return (
       <div>
-
-      <label htmlFor="contained-button-file">
-        <Button variant="contained" color="primary" component="span" style={props.style} >
-          {props.label}
-        </Button>
-      </label>
-      <input accept="image/*" className={classes.input} id="icon-button-file" type="file" />
+        <label htmlFor="contained-button-file">
+          <Button variant="contained" color="primary" component="span" style={props.style} >
+            {props.label}
+          </Button>
+        </label>
+        <input accept="image/*" id="icon-button-file" type="file" />
       </div>
-      )
+    )
 }
