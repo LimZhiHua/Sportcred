@@ -55,7 +55,7 @@ const PostHeader = ({displayname = "Unknown", score = 0, datetime = new Date(Dat
     )
 }
 
-const PostCreate = ({onSubmit}) => {
+const PostCreate = ({onSubmit=()=>{}}) => {
     const [title, setTitle] = useState("");
     const [desc, setDesc] = useState("");
     return (
@@ -91,13 +91,13 @@ const Post = ({
     }) => {
     
         const [showComment, setShowComment] = useState(false);
-        const [commentsData, setCommentsData]  = useState([]);
+        // const [commentsData, setCommentsData]  = useState([]);
 
-        const refreshComments = () => getComments(postId).then((data)=>setCommentsData(data.commentsArray));
+        // const refreshComments = () => getComments(postId).then((data)=>setCommentsData(data.commentsArray));
 
-        useEffect(() => {
-            if (showComment) refreshComments();
-        }, [showComment])
+        // useEffect(() => {
+        //     if (showComment) refreshComments();
+        // }, [showComment])
 
         return (
             <PostContainer>
@@ -125,9 +125,7 @@ const Post = ({
                         </Grid>
                     </Grid>
                     {(showComment) 
-                        ? <CommentSection 
-                            postId={postId}
-                            commentsData={commentsData}/> 
+                        ? <CommentSection postId={postId}/> 
                         : <div></div>}
                 </div>
             </PostContainer>
@@ -143,13 +141,38 @@ const PostComment = ({commentId, comment = "Unfinished comment... ... . . ...."}
     </PostContainer>
 }
 
-const CommentSection = ({postId, commentsData=[]}) => {
+const CommentCreate = ({postId, onSubmit=()=>{}}) => {
+    const [desc, setDesc] = useState("");
+    return <div className="flex-container">
+        <div className="flex-main">
+            <BasicTextArea fullWidth label="Comment" value={desc} onChange={e => setDesc(e.target.value)}/>
+        </div>
+        <AnswerButton style={{margin: "1em"}}
+            label="Post" 
+            onClick={()=>
+                newPostComment(
+                    desc,
+                    postId
+                ).then(() => {
+                    setDesc("");
+                    onSubmit();
+                })
+            }/>
+    </div>
+}
+
+const CommentSection = ({postId}) => {
+
+    const [commentsData, setCommentsData]  = useState([]);
+    const refreshComments = () => getComments(postId).then((data)=>setCommentsData(data.commentsArray));
+
+    useEffect(() => {
+        refreshComments();
+    }, [])
+    
     console.log("comments", commentsData);
     return <div className="comment-section">
-        <div className="flex-container">
-            <div className="flex-main"><BasicTextArea fullWidth label="Comment"/></div>
-            <AnswerButton label="Post" style={{margin: "1em"}}/>
-        </div>
+        <CommentCreate postId={postId} onSubmit={refreshComments}/>
         <div className="comment-group">
             {/* <PostComment /> */}
             {
@@ -175,6 +198,7 @@ const PostsSection = ({postsData=[]}) => {
                 postId={post._id}
                 title={post.title}
                 content={post.description}
+                numComments={post.numComments}
                 CommentSection={CommentSection}
             />
         )

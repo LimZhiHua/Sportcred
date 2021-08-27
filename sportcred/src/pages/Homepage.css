@@ -30,6 +30,8 @@
 
 .post-body .content {
     color: #919191;
+    margin: 0 2em;
+    text-align: left;
     word-break: break-word;
 }
 

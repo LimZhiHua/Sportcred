@@ -122,6 +122,7 @@ router.get('/comments', async (req, res) => {
   const page      = Math.abs(parseInt(req.query.page)) - 1 || 0;
   const comments  = await PostComment
                     .find({postId: req.params.id})
+                    .sort({_id: -1})
                     .skip(page*limit)
                     .limit(limit)
                     .catch((error) => {
