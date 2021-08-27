@@ -538,6 +538,7 @@ router.get('/get-user/:id', async (req, res) => {
   return res.status(200).send(user);
 })
 
+
  /**
  * @swagger
  * /user/get-user-by-name/{username}:
@@ -631,6 +632,7 @@ router.post('/edit-prof', async (req, res) => {
       {$set: { "username" : req.body.username || user.username, 
                "status": req.body.status || user.status,
                "description": req.body.description || user.description,
+               "profilePic": req.body.profilePic || user.profilePic
              }});
 
     res.send({ action: true });

@@ -55,6 +55,7 @@ export function BasicTextArea(props) {
       <TextField
           className={classes.root}
           label={props.label}
+          onChange={props.handleChange}
           multiline
           variant="outlined"
         />
