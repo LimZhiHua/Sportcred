@@ -63,7 +63,7 @@ const PostCreate = ({onSubmit=()=>{}}) => {
             <div className="post-body right">
                 <p className="title center">Have thoughts? Share them</p>
                 <BasicTextFields fullWidth label="Title" value={title} onChange={e => setTitle(e.target.value)}/>
-                <BasicTextArea fullWidth label="Comment" value={desc} onChange={e => setDesc(e.target.value)}/>
+                <BasicTextArea fullWidth label="Description" value={desc} onChange={e => setDesc(e.target.value)}/>
                 <AnswerButton
                     label="Post"
                     onClick={()=>
