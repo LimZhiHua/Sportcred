@@ -80,7 +80,7 @@ const Post = ({
         title = "Unset title", 
         content = ".... ....... .... .... ... ....... ...",
         numComments = 0,
-        CommentList = () => <div></div>
+        CommentSection = () => <div></div>
     }) => {
     
         const [showComment, setShowComment] = useState(false);
@@ -113,7 +113,7 @@ const Post = ({
                                 <AiOutlineMore className="icon-button"/>
                             </Grid>
                         </Grid>
-                        {(showComment) ? <CommentList/> : <div></div>}
+                        {(showComment) ? <CommentSection/> : <div></div>}
                     </div>
                 }
             />
@@ -132,7 +132,7 @@ const PostComment = ({comment = "Unfinished comment... ... . . ...."}) => {
     />
 }
 
-const CommentGroup = () => {
+const CommentSection = () => {
     return <div className="comment-section">
         <div className="flex-container">
             <div className="flex-main"><BasicTextArea fullWidth label="Comment"/></div>
@@ -154,7 +154,7 @@ const PostsPage = () => {
     return (
         <>
             <PostCreate/>
-            <Post CommentList={()=><CommentGroup/>}/>
+            <Post CommentSection={()=><CommentSection/>}/>
             <Post/>
         </>
     )

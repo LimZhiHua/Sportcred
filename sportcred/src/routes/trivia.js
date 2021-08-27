@@ -101,7 +101,7 @@ router.post('/addSession', async (req, res) => {
 
  /**
  * @swagger
- * /trivia/{:id}:
+ * /trivia/{id}:
  *   get:
  *     summary: Get the trivia session info.
  *     description: Given an trivia session id, returns the game info.

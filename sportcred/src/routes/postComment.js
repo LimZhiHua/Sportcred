@@ -6,7 +6,7 @@ const {postCommentValidation} = require('../validations/postCommentValidations')
 
  /**
  * @swagger
- * /post/{:id}/postComment:
+ * /post/{id}/postComment:
  *   post:
  *     summary: Comment on post.
  *     description: Adds a comment to a post.
@@ -17,6 +17,16 @@ const {postCommentValidation} = require('../validations/postCommentValidations')
  *         description: ID of the post to comment on.
  *         schema:
  *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               text:
+ *                 type: string
+ *                 description: The comment
  *     tags:
  *      - post
  *     responses:
