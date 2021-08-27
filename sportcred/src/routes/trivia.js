@@ -166,7 +166,7 @@ router.post('/add-point', async (req, res) => {
     try {
         const game = await triviaSession.findById(req.body.sid)
         game.players.forEach(p => {
-            if (p.userId == req.body.pid) {
+            if (p.userId === req.body.pid) {
                 p.totalScore += 1
             }
         })
@@ -224,7 +224,7 @@ router.post('/finish-trivia', async (req, res) => {
         var otherPlayer
 
         game.players.forEach(p => {
-            if (p.userId == req.body.pid) {
+            if (p.userId === req.body.pid) {
                 p.done = true
                 currPlayer = p
             } else {

@@ -49,7 +49,7 @@ router.post('/postComment', async (req, res) => {
     .catch((err) => {
         return res.status(400).send(err)
     })
-  if (foundPost == null) {
+  if (foundPost === null) {
     return res.status(404).send("foundPost is null");  
   }
 
@@ -118,7 +118,7 @@ router.post('/postComment', async (req, res) => {
  *                $ref: '#/components/schemas/PostComment'
 */
 router.get('/comments', async (req, res) => {
-  const limit     = Math.abs(parseInt(req.query.limit)) || 100;
+  const limit     = Math.abs(parseInt(req.query.limit)) || 5;
   const page      = Math.abs(parseInt(req.query.page)) - 1 || 0;
   const comments  = await PostComment
                     .find({postId: req.params.id})

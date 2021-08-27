@@ -115,7 +115,7 @@ router.get('/getQuestion', async (req, res) => {
     return res.status(200).send({
         questionId: question._id,
         question: question.question,
-        answered: response != null
+        answered: response !== null
     });
 });
 
@@ -411,7 +411,7 @@ router.post('/addVote', async (req, res) => {
 
   const response = await AnalysisResponse.findOne({_id: req.body.responseId});
   if (!response) return res.status(400).send("Response not found");
-  if (response.userId == req.body.userId) return res.status(200).send("Cannot vote on your own response");
+  if (response.userId === req.body.userId) return res.status(200).send("Cannot vote on your own response");
 
   try {
     var analysisVote = new AnalysisVote({

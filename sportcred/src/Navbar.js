@@ -42,7 +42,7 @@ let Navbar = () => {
           <div className="flex-primary">
             {/* <h1>SportsCred</h1> */}
             <Link to={HOME_URL}>
-              <img src="Logo.png" className="App-logo"></img>
+              <img src="Logo.png" className="App-logo" alt=""></img>
             </Link>
             <div>
               <Navlink to={PROFILE_URL}>Profile</Navlink>
@@ -53,7 +53,7 @@ let Navbar = () => {
             </div>
           </div>
           <div>
-            <div className="menu-item"><Link><AiOutlineSetting/></Link><Link to={COMPONENTS_URL}> Components (TEMP)</Link></div>
+            <div className="menu-item"><Link to="/"><AiOutlineSetting/></Link><Link to={COMPONENTS_URL}> Components (TEMP)</Link></div>
             <Navlink to={HOME_URL}>Logout</Navlink>
             <div className="menu-item spacer"></div>  
           </div>

@@ -37,10 +37,11 @@ const { postValidation, getPostValidation } = require('../validations/postValida
  *                $ref: '#/components/schemas/Post'
 */
 router.get('/', async (req, res) => {
-  const limit     = Math.abs(parseInt(req.query.limit)) || 100;
+  const limit     = Math.abs(parseInt(req.query.limit)) || 25;
   const page      = Math.abs(parseInt(req.query.page)) - 1 || 0;
   const allPosts  = await Post
                     .find({})
+                    .sort({_id: -1})
                     .skip(page*limit)
                     .limit(limit)
                     .catch((error) => {

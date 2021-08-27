@@ -1,4 +1,4 @@
-const User = require('../models/user')
+// const User = require('../models/user')
 const fetch = require("node-fetch");
 
 export const PAYLOAD_TYPES = {

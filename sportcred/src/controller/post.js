@@ -1,4 +1,4 @@
-const Post = require('../models/post');
+// const Post = require('../models/post');
 const fetch = require("node-fetch");
 
 export const newPost = async (new_post) => {
@@ -62,7 +62,7 @@ export const getPost = async (post_id) => {
 
   const result = {}
 
-  if (post_id == "") {
+  if (post_id === "") {
     const msg = "Post id is required"
     result.status = 400
     result.error = msg

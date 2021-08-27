@@ -20,7 +20,7 @@ export const addTrivia = async (players) => {
   
     result.status = response.status;
 
-    if(result.status == 200){
+    if(result.status === 200){
         const json = await response.json()
         result.id = json.id
     } else {
@@ -48,7 +48,7 @@ export const getTrivia = async (id) => {
   
     result.status = response.status;
 
-    if(result.status == 200){
+    if(result.status === 200){
         const json = await response.json()
         result.trivia = json.foundSession
     } else {
@@ -99,7 +99,7 @@ export const finishTrivia = async (sid, pid, total) => {
     const response = await fetch(url, request);
   
     result.status = response.status;
-    if(result.status == 200){
+    if(result.status === 200){
         const json = await response.json()
         result.trivia = json.trivia
         result.currPlayer = json.currPlayer

@@ -1,12 +1,12 @@
-import React, { useState,useEffect, useRef} from "react";
+import React, { useState,useEffect} from "react";
 import FloatingSection from "../customComponents/FloatingSection";
-import {BasicTextFields, BasicTextArea} from "../customComponents/inputFields/inputFields";
+import {BasicTextArea} from "../customComponents/inputFields/inputFields";
 import {DefaultButton} from "../customComponents/buttons/Buttons"
 
-import {Button, Grid, Paper, Typography} from '@material-ui/core/';
+import {Grid} from '@material-ui/core/';
 import { makeStyles } from '@material-ui/core/styles';
 
-import  {getUser, editData, testing} from '../controller/user';
+import  {getUser, editData} from '../controller/user';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -107,6 +107,7 @@ const EditProfile = () => {
         setNewDescription(e.target.value)
     }
 
+    // TODO: move to controller
     async function saveNewInfo(){
         const data = {
             "username": newUsername,
@@ -116,7 +117,7 @@ const EditProfile = () => {
             "profilePic": newProfilePicB64
           }
         const response = (await editData(data))
-        if(response.status == 200){
+        if(response.status === 200){
             window.alert("Data Saved")
             getUserInfo()
 

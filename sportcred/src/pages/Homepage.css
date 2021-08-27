@@ -2,7 +2,7 @@
 
 .post-header {
     font-size: 90%;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.25em;
 }
 
 .post-header .displayname {
@@ -24,10 +24,13 @@
     color: #A4A71E;
     font-size: 120%;
     font-weight: bold;
+    margin: 0.5em 0em;
+    word-break: break-word;
 }
 
 .post-body .content {
-    color: #919191
+    color: #919191;
+    word-break: break-word;
 }
 
 .post-footer.lined-footer {
