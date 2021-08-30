@@ -67,6 +67,9 @@ const TriviaSinglePlayer = () => {
         const questions = quiz.map(e => e.question)
         const answers = quiz.map(e => e.answers)
 
+
+        // We subtract at the start of the game to prevent abuse
+        subtractTriviaCount(playerID)
         setSessionID(gameID)
         // Loop through the answers and make an array of all the correct ones
         const corAnswers = answers.map(answerArray =>{
@@ -190,7 +193,7 @@ const TriviaSinglePlayer = () => {
     }
 
     const getCount = async () =>{
-       const trivCount =  (await getTriviaCount(playerID)).triviaCount
+       const trivCount =  await getTriviaCount(playerID).triviaCount
        console.log("get trivia returend", trivCount)
      }
 
