@@ -29,6 +29,7 @@ const TriviaSinglePlayer = () => {
     const [score, setScore] = useState(0)
     const [sessionID, setSessionID] = useState()
 
+    const [triviaCount, setTriviaCount] = useState(0)
     //-------------------------request body formats for making the API calls-----------------------------------------------
     
     // Replace this with the actual playerID once we get that part implemented
@@ -69,7 +70,8 @@ const TriviaSinglePlayer = () => {
 
 
         // We subtract at the start of the game to prevent abuse
-        subtractTriviaCount(playerID)
+        subtractCount()
+        
         setSessionID(gameID)
         // Loop through the answers and make an array of all the correct ones
         const corAnswers = answers.map(answerArray =>{
@@ -187,23 +189,28 @@ const TriviaSinglePlayer = () => {
         </div>
     }
 
+    const getCount = async () =>{
+        const trivCount =  (await getTriviaCount(playerID)).triviaCount
+        setTriviaCount(trivCount)
+      }
+ 
+      const subtractCount = async () =>{
+        const trivCount =  await subtractTriviaCount(playerID)
+        getCount()
+      }
+    // --------------these are for testing. you can delete them later if you want
     const resetCount = async () =>{
        console.log("output of reset trivia count is", await resetTriviaCount(playerID))
 
     }
 
-    const getCount = async () =>{
-       const trivCount =  (await getTriviaCount(playerID)).triviaCount
-       console.log("get trivia returend", trivCount)
-     }
 
-     
-    const subtractCount = async () =>{
-        const trivCount =  await subtractTriviaCount(playerID)
-        console.log("subtract trivia returend", trivCount.triviaCount)
-      }
+
     //-------------lets group the useEffects together--------------------------------------------
 
+    useEffect ( () =>{
+       getCount()
+    },[triviaCount])
 
     useEffect( () => {
         setCurQuestion(questionList[questNum])
@@ -227,6 +234,7 @@ const TriviaSinglePlayer = () => {
             
             <button onClick={subtractCount}>testing subtract</button>
             <h1>Trivia Single Player</h1>
+            <p> {triviaCount}/10 games today</p>
             <br></br>
             <br></br>
             {startButton()}
