@@ -193,7 +193,7 @@ const TriviaSinglePlayer = () => {
     }
 
     const getCount = async () =>{
-       const trivCount =  await getTriviaCount(playerID).triviaCount
+       const trivCount =  (await getTriviaCount(playerID)).triviaCount
        console.log("get trivia returend", trivCount)
      }
 
