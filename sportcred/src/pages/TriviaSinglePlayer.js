@@ -5,7 +5,7 @@ import "../App.css";
 import {DefaultButton, AnswerButton} from "../customComponents/buttons/Buttons"
 import {Grid} from '@material-ui/core/';
 
- import  {addTrivia, getTrivia, incrementScore, finishTrivia} from '../controller/trivia';
+ import  {addTrivia, getTrivia, incrementScore, finishTrivia, resetTriviaCount, getTriviaCount, subtractTriviaCount} from '../controller/trivia';
 
 
 
@@ -24,7 +24,7 @@ const TriviaSinglePlayer = () => {
     const [correctAnswers, setCorrectAnswers] = useState([])
 
 
-    const [secondsLeft, setSecondsLeft] = useState(15)
+    const [secondsLeft, setSecondsLeft] = useState(17)
 
     const [score, setScore] = useState(0)
     const [sessionID, setSessionID] = useState()
@@ -33,20 +33,32 @@ const TriviaSinglePlayer = () => {
     
     // Replace this with the actual playerID once we get that part implemented
     // Dont just stick any random string when testing. it needs to be a valid mongoDB ID
-    const playerID = "60dbcca868e7fb3598656a50"
+    const playerID = "60e39a703a9e9634446d66e6"
     var player = {        
         "players":  [
         {
           "userId": playerID,
           "totalScore": 0,
           "done": false,
-        }
+        },
+        {
+            "userId": playerID,
+            "totalScore": 0,
+            "done": false,
+          }
       ]
     }
     //-------------------------------------------------
 
     // Used to start a game (duh)
     const startGame = async () =>{
+        // First, we need to make sure they have games they can play
+
+        const trivCount =  (await getTriviaCount(playerID)).triviaCount
+        if(trivCount < 0){
+            window.alert("You are out of trivia tries today!")
+            return;
+        }
         // we pass the player info in and get a game ID
         const gameID = (await addTrivia(player)).id
         // We use that gameID to get our trivia session and set our gamePlayerInfo
@@ -83,7 +95,7 @@ const TriviaSinglePlayer = () => {
     const endGame = () =>{
 
         // Currently, cause we have no users, it crashes cause he tries to getUser. 
-        //finishTrivia(sessionID, playerID, score)
+        finishTrivia(sessionID, playerID, score)
         setGameStarted(false)
         setQuestNum(0)
         setScore(0)
@@ -99,7 +111,7 @@ const TriviaSinglePlayer = () => {
 
     const nextQuestion = () =>{
         setQuestNum( questNum + 1)
-        setSecondsLeft(15)
+        setSecondsLeft(17)
     }
 
     let gameEnded = false;
@@ -171,6 +183,22 @@ const TriviaSinglePlayer = () => {
         {playAgainButton()}
         </div>
     }
+
+    const resetCount = async () =>{
+       console.log("output of reset trivia count is", await resetTriviaCount(playerID))
+
+    }
+
+    const getCount = async () =>{
+       const trivCount =  (await getTriviaCount(playerID)).triviaCount
+       console.log("get trivia returend", trivCount)
+     }
+
+     
+    const subtractCount = async () =>{
+        const trivCount =  await subtractTriviaCount(playerID)
+        console.log("subtract trivia returend", trivCount.triviaCount)
+      }
     //-------------lets group the useEffects together--------------------------------------------
 
 
@@ -191,6 +219,10 @@ const TriviaSinglePlayer = () => {
     //
     return (
         <FloatingSection>
+            <button onClick={resetCount}>testing reset</button>
+            <button onClick={getCount}>testing get</button>
+            
+            <button onClick={subtractCount}>testing subtract</button>
             <h1>Trivia Single Player</h1>
             <br></br>
             <br></br>

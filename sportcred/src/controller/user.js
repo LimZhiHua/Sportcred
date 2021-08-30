@@ -122,7 +122,7 @@ export const resetPassword = async (email) => {
 
 export const getUser = async (userId) => {
   const url = "http://localhost:5000/user/get-user/" + userId
-
+  console.log("getting user", userId)
   const request = {
     method: "get",
     headers: {
@@ -130,12 +130,11 @@ export const getUser = async (userId) => {
       "Content-Type": "application/json",
     }
   }
-
+  
   const result = {}
 
   const response = await fetch(url, request);
   result.status = response.status;
-
   if (response.status === 200){
     const msg = await response.json();
     result.user = msg;
