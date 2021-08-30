@@ -56,7 +56,7 @@ const TriviaSinglePlayer = () => {
         // First, we need to make sure they have games they can play
 
         const trivCount =  (await getTriviaCount(playerID)).triviaCount
-        if(trivCount < 0){
+        if(trivCount <= 0){
             window.alert("You are out of trivia tries today!")
             return;
         }
