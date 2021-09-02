@@ -33,6 +33,13 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
+// import React from "react";
+// import {DefaultButton, AnswerButton, DangerButton} from "../customComponents/buttons/Buttons";
+// import SliderComponent from "../customComponents/slider/SliderComponent.js";
+// import { BasicTextFields, BasicTextArea } from "../customComponents/inputFields/inputFields.js";
+// import PostSlider from "../customComponents/postSlider/PostSlider"
+
+
 const Signin = () => {
     const styles = useStyles();
     const [email, setEmail] = useState("");
@@ -75,6 +82,20 @@ const Signin = () => {
                     </Button>
                 </div>
             </div>
+
+            {/* <h1>Signin App TODO</h1>
+            <DefaultButton label="Default"/>
+            <AnswerButton label="Correct"/>
+            <DangerButton label="Incorrect"/>
+            <br></br>
+             <div>Text field</div>
+            <BasicTextFields label="Username"/>
+            <div>Text area</div>
+            <BasicTextArea label="Review"/>
+            <div><br></br>Post slider</div>
+            <PostSlider/>
+            <div><br></br>Default slider</div>
+            <SliderComponent/> */}
         </div>
     );
 }
