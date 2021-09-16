@@ -1,0 +1,37 @@
+.component {
+    /* display: 'contents'; */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-top: 40px;
+    /* overflow: 'hidden', */
+}
+
+
+.sub-component {
+    margin-top: 20px;
+    margin-left: 100px;
+    width:fit-content;
+    height:fit-content;
+    /* background-color: aqua; */
+}
+
+.sub-sub {
+    width:fit-content;
+    height:fit-content;
+}
+
+.img-holder {
+    margin-left:10%;
+    border-radius: 0.5cm;
+    height: 200px;
+    width: 300px;
+    border-color: #DCDCDC;
+    border-width: 0.1cm;
+    border-style: solid;
+}
+/* @media only screen and (max-width: 800px) {
+    .subHeader {
+        width: 88%;
+    }
+} */

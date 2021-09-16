@@ -1,0 +1,33 @@
+.subHeader {
+    background: #343434;
+    overflow: 'hidden';
+    display: 'inline-block';
+    border-radius: 5;
+}
+
+.date {
+    float: left;
+    /* width: 100%; */
+    /* padding:0px 0px 75px 100px; */
+}
+
+.voteGroup {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.vs-block {
+    /* overflow: 'hidden'; */
+    display: 'inline-block';
+}
+
+.inline {
+    display: inline;
+}
+
+/* @media only screen and (max-width: 800px) {
+    .subHeader {
+        width: 88%;
+    }
+} */
