@@ -72,7 +72,7 @@ const Profile = () => {
                 <Grid item xs={4}>
                 </Grid>
                 <Grid item xs={4}>
-                    <DefaultButton label= {"Edit"} handleClick={goToEditProfile} />
+                    <DefaultButton label= {"Edit"} onClick={goToEditProfile} />
                 </Grid>
                 <Grid item xs={4}>
                     <Paper className={classes.paperWhite}><b>ACS: </b>{acs} </Paper>

@@ -37,12 +37,12 @@ let Navbar = () => {
     }, [setThisRoute]);
     
     return (
-      <div id="navbar" key={thisRoute}>
-        <div className={"body flex-container flex-vertical" + ((opened)? " opened":"")}>
+      <div id="navbar" key={thisRoute} className={((opened)? "opened":"")}>
+        <div className={"body flex-container flex-vertical"}>
           <div className="flex-primary">
             {/* <h1>SportsCred</h1> */}
             <Link to={HOME_URL}>
-              <img src="Logo.png" className="App-logo"></img>
+              <img src="Logo.png" className="App-logo" alt=""></img>
             </Link>
             <div>
               <Navlink to={PROFILE_URL}>Profile</Navlink>
@@ -53,12 +53,12 @@ let Navbar = () => {
             </div>
           </div>
           <div>
-            <div className="menu-item"><Link><AiOutlineSetting/></Link><Link to={COMPONENTS_URL}> Components (TEMP)</Link></div>
+            <div className="menu-item"><Link to="/"><AiOutlineSetting/></Link><Link to={COMPONENTS_URL}> Components (TEMP)</Link></div>
             <Navlink to={HOME_URL}>Logout</Navlink>
             <div className="menu-item spacer"></div>  
           </div>
         </div>
-        <Button className={"burger-btn outline " + ((opened)? "opened":"")} 
+        <Button className={"burger-btn outline center-center"} 
                 color="secondary"
                 onClick={() => setOpened(!opened)}>
           {(opened === false) ? <AiOutlineMenu color="white"/> : <AiOutlineLeft color="white"/>}

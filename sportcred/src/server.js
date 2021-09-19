@@ -60,7 +60,7 @@ app.use('/testAPI', testAPI);
 app.use('/user', authRoutes);
 app.use('/survey', survey);
 app.use('/post', post);
-app.use('/post/:id/postComment', postComment);
+app.use('/post/:id', postComment);
 app.use('/search', search);
 app.use('/analysis', analysis);
 app.use('/option', option);

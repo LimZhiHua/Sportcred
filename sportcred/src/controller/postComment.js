@@ -31,3 +31,29 @@ export const newPostComment = async (new_post_comment, post_id) => {
   return result;
 
 }
+
+export const getComments = async (post_id) => {
+  const url = "http://localhost:5000/post/" + post_id + "/comments/";
+
+  const request = {
+    method: "get",
+  }
+
+  const result = {}
+
+  const response = await fetch(url, request);
+  if (response.status === 200) {
+    result.status = 200
+    const msg = await response.json()
+    // ADD:
+    /////////////////////////////////////
+    result.commentsArray = msg.commentsArray;
+    ////////////////////////////////////
+  } else {
+    const msg = await response.text();
+    result.status = response.status;
+    result.error = msg;
+  }
+
+  return result;
+}
