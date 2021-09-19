@@ -18,7 +18,7 @@ export const sendNotif = async (challenge) => {
   const response = await fetch(request);
   result.status = response.status;
 
-  if (response.status != 200){
+  if (response.status !== 200){
     const msg = await response.text();
     result.error = msg;
   }
@@ -42,7 +42,7 @@ export const getNotifs = async (user) => {
   const response = await fetch(request);
   result.status = response.status;
 
-  if (response.status == 200){
+  if (response.status === 200){
     const res = await response.json();
     result.notifs = res.notifs;
   }

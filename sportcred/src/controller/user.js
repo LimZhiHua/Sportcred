@@ -1,4 +1,4 @@
-const User = require('../models/user')
+// const User = require('../models/user')
 const fetch = require("node-fetch");
 
 export const PAYLOAD_TYPES = {
@@ -175,7 +175,6 @@ export const getUserByName = async (username) => {
 }
 
 export const editData = async (userData) => {
-
         const response = await fetch(
             "http://localhost:5000/user/edit-prof",
             {
@@ -192,6 +191,7 @@ export const editData = async (userData) => {
                     bio: userData.bio,
                     password: userData.password,
                     description: userData.description,
+                    profilePic: userData.profilePic
                 }),
             }
         );
@@ -210,3 +210,5 @@ export const editData = async (userData) => {
         }
         return result;
     }
+    
+

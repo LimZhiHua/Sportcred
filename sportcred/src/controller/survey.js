@@ -18,7 +18,7 @@ export const submitSurvey = async (body) => {
   const response = await fetch(request);
   result.status = response.status;
 
-  if (response.status != 200){
+  if (response.status !== 200){
     const msg = await response.text();
     result.error = msg;
   }

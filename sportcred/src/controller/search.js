@@ -11,7 +11,7 @@ export const searchUsers = async (name) => {
       result.status = 200
       const unfiltered = await response.json()
       result.result = unfiltered.filter(function(user){
-        return user.username != name.currUser
+        return user.username !== name.currUser
       })
     }else{
       const msg = await response.text();

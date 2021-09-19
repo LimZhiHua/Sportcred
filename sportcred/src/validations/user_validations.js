@@ -32,6 +32,7 @@ const EditProfileValidation = (data) => {
     bio: Joi.string().max(255),
     description: Joi.string().max(255),
     password: Joi.string().min(6),
+    profilePic: Joi.binary()
   })
   console.log(schema.validate(data))
   return schema.validate(data)

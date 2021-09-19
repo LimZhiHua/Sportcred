@@ -14,7 +14,7 @@ router.get('/json', (req, res, next) => {
 
 //request body must follow: {req: "myData"}
 router.get('/condition', (req, res, next) => {
-    if(req.body.req == 'first')
+    if(req.body.req === 'first')
       res.send('First response');
     else
       res.send('Other response');

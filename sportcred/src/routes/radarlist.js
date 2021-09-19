@@ -20,7 +20,7 @@ router.post('/addFollower', async (req, res) => {
   }
 
   for (const fol in radarList.followers) {
-    if (follower._id.toString() == radarList.followers[fol].toString()) {
+    if (follower._id.toString() === radarList.followers[fol].toString()) {
       return res.status(400).send('already following');
     }
   }
