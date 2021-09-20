@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const triviaSession = require('../models/triviaSession');
+const User = require('../models/user');
+
 
  /**
  * @swagger
@@ -222,7 +224,6 @@ router.post('/finish-trivia', async (req, res) => {
         const game = await triviaSession.findById(req.body.sid)
         var currPlayer
         var otherPlayer
-
         game.players.forEach(p => {
             if (p.userId === req.body.pid) {
                 p.done = true
@@ -240,4 +241,64 @@ router.post('/finish-trivia', async (req, res) => {
     }
 })
 
+router.post('/reset-trivia-count', async (req, res) => {
+    // Find the user in the database
+
+    try {
+        const user = await User.findById({_id: req.body.playerID});
+        if (!user) return res.status(400).send('cannot find the user');
+        
+        await User.update({email : user.email}, 
+            {$set: { 
+            "triviaCount": 10,
+                   }});  
+     res.send({ action: true });
+     
+    } catch (error) {
+      console.log(error);
+      res.send({ action: false, response: "you have some error in updating the user" });
+    }
+ 
+    return res.status(200);
+})
+
+
+router.get('/get-trivia-count/:id', async (req, res) => {
+
+    // Find the user in the database
+   
+    try {
+        const user = await User.findById({_id: req.params.id});
+        if (!user) return res.status(400).send('cannot find the user');  
+        console.log("user is", user.triviaCount)
+        res.status(200).send(user.triviaCount);
+     
+    } catch (error) {
+      console.log(error);
+      res.status(400).send("user query failed")
+    }
+    
+    return res.status(200);
+})
+
+router.post('/subtract-trivia-count/:id', async (req, res) => {
+
+    // Find the user in the database
+   
+    try {
+        const user = await User.findById({_id: req.params.id});
+        if (!user) return res.status(400).send('cannot find the user');  
+        await User.update({email : user.email}, 
+            {$set: { 
+            "triviaCount": user.triviaCount - 1,
+                   }});  
+        res.send({ action: true });
+     
+    } catch (error) {
+      console.log(error);
+      res.send({ action: false, response: "you have some error in updating the user" });
+    }
+    
+    return res.status(200);
+})
 module.exports = router;

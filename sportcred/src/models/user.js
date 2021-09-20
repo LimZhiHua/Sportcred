@@ -49,8 +49,10 @@ const userSchema = new mongoose.Schema({
 
   profilePic: {
      data: Buffer, contentType: String
-    }
-
+    },
+  triviaCount: {
+    data: Buffer, contentType: Number,
+    },
 })
 
 module.exports = mongoose.model('User', userSchema)
