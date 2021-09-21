@@ -14,5 +14,9 @@ export const DEBATE_LANDING_URL = "/debate";
 export const ZONE_LANDING_URL = "/zone";
 export const PICKSPREDICT_LANDING_URL = "/picks-and-predict";
 
+export const REGULAR_SEASON_URL = PICKSPREDICT_LANDING_URL + '/regular-season';
+export const PLAYOFFS_BRACKET_URL = PICKSPREDICT_LANDING_URL + '/playoffs-bracket';
+export const PRESEASON_URL =  PICKSPREDICT_LANDING_URL + '/preseason';
+
 // Dev
 export const COMPONENTS_URL = "/components"
