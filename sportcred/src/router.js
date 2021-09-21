@@ -19,6 +19,7 @@ import {
   PICKSPREDICT_LANDING_URL,
   REGULAR_SEASON_URL,
   PRESEASON_URL,
+  PLAYOFFS_BRACKET_URL,
   COMPONENTS_URL
 } from "./urls";
 
@@ -35,6 +36,7 @@ import DebateLanding from "./pages/DebateLanding";
 import ZoneLanding from "./pages/ZoneLanding";
 import PicksPredictLanding from "./pages/PicksPredictLanding";
 import RegularSeason from "./pages/PicksPredictionPages/RegularSeason";
+import PlayOffBrackets from "./pages/PicksPredictionPages/PlayOffBrackets";
 import PreSeason from "./pages/PicksPredictionPages/PreSeason";
 
 import ComponentPage from "./devPages/componentsPage";
@@ -56,6 +58,7 @@ const AppRouter = () => (
     <Route exact path={PICKSPREDICT_LANDING_URL} component={PicksPredictLanding} />
     <Route exact path={REGULAR_SEASON_URL} component={RegularSeason} />
     <Route exact path={PRESEASON_URL} component={PreSeason} />
+    <Route exact path={PLAYOFFS_BRACKET_URL} component={PlayOffBrackets} />
     
     {/* Dev */}
     <Route exact path={COMPONENTS_URL} component={ComponentPage} />
