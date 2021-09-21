@@ -5,7 +5,7 @@ import "../App.css";
 import {DefaultButton, AnswerButton} from "../customComponents/buttons/Buttons"
 import {Grid} from '@material-ui/core/';
 
- import  {addTrivia, getTrivia, incrementScore, finishTrivia} from '../controller/trivia';
+ import  {addTrivia, getTrivia, incrementScore, finishTrivia, resetTriviaCount, getTriviaCount, subtractTriviaCount} from '../controller/trivia';
 
 
 
@@ -24,29 +24,42 @@ const TriviaSinglePlayer = () => {
     const [correctAnswers, setCorrectAnswers] = useState([])
 
 
-    const [secondsLeft, setSecondsLeft] = useState(15)
+    const [secondsLeft, setSecondsLeft] = useState(17)
 
     const [score, setScore] = useState(0)
     const [sessionID, setSessionID] = useState()
 
+    const [triviaCount, setTriviaCount] = useState(0)
     //-------------------------request body formats for making the API calls-----------------------------------------------
     
     // Replace this with the actual playerID once we get that part implemented
     // Dont just stick any random string when testing. it needs to be a valid mongoDB ID
-    const playerID = "60dbcca868e7fb3598656a50"
+    const playerID = "60e39a703a9e9634446d66e6"
     var player = {        
         "players":  [
         {
           "userId": playerID,
           "totalScore": 0,
           "done": false,
-        }
+        },
+        {
+            "userId": playerID,
+            "totalScore": 0,
+            "done": false,
+          }
       ]
     }
     //-------------------------------------------------
 
     // Used to start a game (duh)
     const startGame = async () =>{
+        // First, we need to make sure they have games they can play
+
+        const trivCount =  (await getTriviaCount(playerID)).triviaCount
+        if(trivCount <= 0){
+            window.alert("You are out of trivia tries today!")
+            return;
+        }
         // we pass the player info in and get a game ID
         const gameID = (await addTrivia(player)).id
         // We use that gameID to get our trivia session and set our gamePlayerInfo
@@ -55,6 +68,10 @@ const TriviaSinglePlayer = () => {
         const questions = quiz.map(e => e.question)
         const answers = quiz.map(e => e.answers)
 
+
+        // We subtract at the start of the game to prevent abuse
+        subtractCount()
+        
         setSessionID(gameID)
         // Loop through the answers and make an array of all the correct ones
         const corAnswers = answers.map(answerArray =>{
@@ -83,7 +100,7 @@ const TriviaSinglePlayer = () => {
     const endGame = () =>{
 
         // Currently, cause we have no users, it crashes cause he tries to getUser. 
-        //finishTrivia(sessionID, playerID, score)
+        finishTrivia(sessionID, playerID, score)
         setGameStarted(false)
         setQuestNum(0)
         setScore(0)
@@ -99,7 +116,7 @@ const TriviaSinglePlayer = () => {
 
     const nextQuestion = () =>{
         setQuestNum( questNum + 1)
-        setSecondsLeft(15)
+        setSecondsLeft(17)
     }
 
     let gameEnded = false;
@@ -109,7 +126,7 @@ const TriviaSinglePlayer = () => {
         if(! gameStarted){
             return <div>
             <br></br>
-            <DefaultButton label= {"Start Game"} handleClick = {startGame}/>
+            <DefaultButton label= {"Start Game"} onClick = {startGame}/>
                <br></br>
            </div>
         }
@@ -132,16 +149,16 @@ const TriviaSinglePlayer = () => {
                 <h2> {secondsLeft}</h2>
                 <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>
-                        <AnswerButton label= {curAnswers[0].answerBody} handleClick = {checkAnswer}/>
+                        <AnswerButton label= {curAnswers[0].answerBody} onClick = {checkAnswer}/>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <AnswerButton label= {curAnswers[1].answerBody} handleClick = {checkAnswer}/>
+                        <AnswerButton label= {curAnswers[1].answerBody} onClick = {checkAnswer}/>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <AnswerButton label= {curAnswers[2].answerBody} handleClick = {checkAnswer}/>
+                        <AnswerButton label= {curAnswers[2].answerBody} onClick = {checkAnswer}/>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <AnswerButton label= {curAnswers[3].answerBody} handleClick = {checkAnswer}/>
+                        <AnswerButton label= {curAnswers[3].answerBody} onClick = {checkAnswer}/>
                     </Grid>
                 </Grid>
             </div>
@@ -171,8 +188,29 @@ const TriviaSinglePlayer = () => {
         {playAgainButton()}
         </div>
     }
+
+    const getCount = async () =>{
+        const trivCount =  (await getTriviaCount(playerID)).triviaCount
+        setTriviaCount(trivCount)
+      }
+ 
+      const subtractCount = async () =>{
+        const trivCount =  await subtractTriviaCount(playerID)
+        getCount()
+      }
+    // --------------these are for testing. you can delete them later if you want
+    const resetCount = async () =>{
+       console.log("output of reset trivia count is", await resetTriviaCount(playerID))
+
+    }
+
+
+
     //-------------lets group the useEffects together--------------------------------------------
 
+    useEffect ( () =>{
+       getCount()
+    },[triviaCount])
 
     useEffect( () => {
         setCurQuestion(questionList[questNum])
@@ -191,7 +229,12 @@ const TriviaSinglePlayer = () => {
     //
     return (
         <FloatingSection>
+            <button onClick={resetCount}>testing reset</button>
+            <button onClick={getCount}>testing get</button>
+            
+            <button onClick={subtractCount}>testing subtract</button>
             <h1>Trivia Single Player</h1>
+            <p> {triviaCount}/10 games today</p>
             <br></br>
             <br></br>
             {startButton()}

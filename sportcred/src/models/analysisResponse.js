@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 
-const debateResponseSchema = new mongoose.Schema({
+const analysisResponseSchema = new mongoose.Schema({
   questionId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'DebateQuestion',
+    ref: 'AnalysisQuestion',
     required: true
   },
   userId: {
@@ -15,9 +15,10 @@ const debateResponseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  // NOTE: Unused
   groupId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'DebateGroup'
+    ref: 'AnalysisGroup'
   },
   averageScore: {
     type: Number,
@@ -25,4 +26,4 @@ const debateResponseSchema = new mongoose.Schema({
   }
 })
 
-module.exports = mongoose.model('DebateResponse', debateResponseSchema)
+module.exports = mongoose.model('AnalysisResponse', analysisResponseSchema)

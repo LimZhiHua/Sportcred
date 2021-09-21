@@ -1,9 +1,10 @@
 const mongoose = require('mongoose')
 
-const debateGroupSchema = new mongoose.Schema({
+// NOTE: Unused
+const analysisGroupSchema = new mongoose.Schema({
   questionId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'DebateQuestion',
+    ref: 'AnalysisQuestion',
     required: true
   },
   winner: {
@@ -12,4 +13,4 @@ const debateGroupSchema = new mongoose.Schema({
   },
 })
 
-module.exports = mongoose.model('DebateGroup', debateGroupSchema)
+module.exports = mongoose.model('AnalysisGroup', analysisGroupSchema)

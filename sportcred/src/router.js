@@ -8,6 +8,8 @@ import {
 
 import {
   HOME_URL,
+  PROFILE_URL,
+  EDIT_PROFILE_URL,
   SIGNIN_URL,
   SIGNUP_URL,
   TRIVIA_LANDING_URL,
@@ -21,6 +23,9 @@ import {
 } from "./urls";
 
 import Homepage from "./pages/Homepage";
+import Profile from "./pages/Profile"
+import EditProfile from "./pages/EditProfile"
+
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import TriviaLanding from "./pages/TriviaLanding";
@@ -39,6 +44,9 @@ const AppRouter = () => (
     {/* Prod */}
     <Route exact path={SIGNIN_URL} component={Signin} />
     <Route exact path={SIGNUP_URL} component={Signup} />
+    <Route exact path={PROFILE_URL} component={Profile} />
+    <Route exact path={EDIT_PROFILE_URL} component={EditProfile} />
+
     <Route exact path={HOME_URL} component={Homepage} />
     <Route exact path={TRIVIA_LANDING_URL} component={TriviaLanding} />
     <Route exact path={TRIVIA_SINGLE_PLAYER_URL} component={TriviaSinglePlayer} />

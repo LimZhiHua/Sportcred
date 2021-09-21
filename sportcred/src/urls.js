@@ -1,6 +1,10 @@
 
 // Prod
 export const HOME_URL = "/";
+
+export const PROFILE_URL = "/profile";
+export const EDIT_PROFILE_URL = "/edit-profile";
+
 export const SIGNIN_URL = "/signin";
 export const SIGNUP_URL = "/signup";
 export const TRIVIA_LANDING_URL = "/trivia";

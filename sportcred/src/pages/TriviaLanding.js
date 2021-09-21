@@ -21,7 +21,7 @@ const TriviaLanding = () => {
         <FloatingSection>
             <h1>TriviaLanding TODO</h1>
             <br></br>
-            <DefaultButton label= {"Single Player"} handleClick = {goToSinglePlayer}/>
+            <DefaultButton label= {"Single Player"} onClick = {goToSinglePlayer}/>
             <br></br>
             <br></br>
             <DefaultButton label= {"Multiplayer"} />

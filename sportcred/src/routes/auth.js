@@ -477,6 +477,9 @@ router.get('/reset-password/:id/:token', async (req, res) => {
  *                 description: The new password with min length 6.
  *     tags:
  *      - auth
+ *     responses:
+ *       200:
+ *         description: Success.
 */
 router.post('/authenticate-reset', async (req, res) => {
   const userId = req.body.id;
@@ -534,6 +537,7 @@ router.get('/get-user/:id', async (req, res) => {
   if (!user) return res.status(400).send('user query failed');
   return res.status(200).send(user);
 })
+
 
  /**
  * @swagger
@@ -628,6 +632,7 @@ router.post('/edit-prof', async (req, res) => {
       {$set: { "username" : req.body.username || user.username, 
                "status": req.body.status || user.status,
                "description": req.body.description || user.description,
+               "profilePic": req.body.profilePic || user.profilePic
              }});
 
     res.send({ action: true });

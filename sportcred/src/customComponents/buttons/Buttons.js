@@ -7,43 +7,23 @@ const useDefaultStyles = makeStyles({
   root: {
     background: '#909090',
     border: 0,
-    borderRadius: 40,
-    height: '50%',
-    width: '20%',
-    padding: '1em',
+    borderRadius: "2em",
+    padding: '0.3em 1.5em',
     '&:hover': {
        background: '#909090',
       opacity: 0.8
     },
   },
-});
-
-const useAnswerStyles = makeStyles({
-  root: {
+  submitStyle: {
     background: '#86C232',
-    border: 0,
-    borderRadius: 40,
-    height: '50%',
-    width: '20%',
-    padding: '1em',
     '&:hover': {
       background: '#86C232',
-      opacity: 0.8
     },
   },
-});
-
-const useDangerStyles = makeStyles({
-  root: {
+  dangerStyle: {
     background: '#FF652F',
-    border: 0,
-    borderRadius: 40,
-    height: '50%',
-    width: '20%',
-    padding: '1em',
     '&:hover': {
       background: '#FF652F',
-      opacity: 0.8
     },
   },
 });
@@ -52,31 +32,47 @@ export function DefaultButton(props) {
   const classes = useDefaultStyles();
     return (
           <Button 
-          variant="contained"
-          className={classes.root}
-          onClick={props.handleClick}
-          style={props.style}>{props.label}</Button>
+            variant="contained"
+            className={classes.root + " " + props.className}
+            {...props}>
+              {props.label}
+          </Button>
       )
 }
 
 export function AnswerButton(props) {
-  const classes = useAnswerStyles();
+  const classes = useDefaultStyles();
     return (
           <Button 
-          variant="contained"
-          className={classes.root}
-          onClick={props.handleClick}
-          style={props.style}>{props.label}</Button>
+            variant="contained"
+            className={classes.root + " " + classes.submitStyle + " " + props.className}
+            {...props}>
+              {props.label}
+          </Button>
       )
 }
 
 export function DangerButton(props) {
-  const classes = useDangerStyles();
+  const classes = useDefaultStyles();
     return (
           <Button 
-          variant="contained"
-          className={classes.root}
-          onClick={props.handleClick}
-          style={props.style}>{props.label}</Button>
+            variant="contained"
+            className={classes.root + " " + classes.dangerStyle + " " + props.className}
+            {...props}>
+              {props.label}
+          </Button>
       )
+}
+
+export function UploadButton(props) {
+    return (
+      <div>
+        <label htmlFor="contained-button-file">
+          <Button variant="contained" color="primary" component="span" style={props.style} >
+            {props.label}
+          </Button>
+        </label>
+        <input accept="image/*" id="icon-button-file" type="file" />
+      </div>
+    )
 }

@@ -1,4 +1,4 @@
-const User = require('../models/user')
+// const User = require('../models/user')
 const fetch = require("node-fetch");
 
 export const PAYLOAD_TYPES = {
@@ -122,7 +122,7 @@ export const resetPassword = async (email) => {
 
 export const getUser = async (userId) => {
   const url = "http://localhost:5000/user/get-user/" + userId
-
+  console.log("getting user", userId)
   const request = {
     method: "get",
     headers: {
@@ -130,12 +130,11 @@ export const getUser = async (userId) => {
       "Content-Type": "application/json",
     }
   }
-
+  
   const result = {}
 
   const response = await fetch(url, request);
   result.status = response.status;
-
   if (response.status === 200){
     const msg = await response.json();
     result.user = msg;
@@ -175,7 +174,6 @@ export const getUserByName = async (username) => {
 }
 
 export const editData = async (userData) => {
-
         const response = await fetch(
             "http://localhost:5000/user/edit-prof",
             {
@@ -192,6 +190,7 @@ export const editData = async (userData) => {
                     bio: userData.bio,
                     password: userData.password,
                     description: userData.description,
+                    profilePic: userData.profilePic
                 }),
             }
         );
@@ -210,3 +209,5 @@ export const editData = async (userData) => {
         }
         return result;
     }
+    
+

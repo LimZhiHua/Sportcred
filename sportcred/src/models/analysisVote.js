@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 
-const debateVoteSchema = new mongoose.Schema({
+const analysisVoteSchema = new mongoose.Schema({
   responseId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'DebateResponse',
+    ref: 'AnalysisResponse',
     required: true
   },
   rating: {
@@ -17,4 +17,4 @@ const debateVoteSchema = new mongoose.Schema({
   },
 })
 
-module.exports = mongoose.model('DebateVote', debateVoteSchema)
+module.exports = mongoose.model('AnalysisVote', analysisVoteSchema)

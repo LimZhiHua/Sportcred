@@ -11,6 +11,19 @@ const { postValidation, getPostValidation } = require('../validations/postValida
  *     description: Gets all posts.
  *     tags:
  *      - post
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         default: 100
+ *         description: Get the most recent limit of responses
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: page
+ *         default: 1
+ *         description: The page of responses sized according to the limit
+ *         schema:
+ *           type: integer
  *     responses:
  *       500:
  *         description: Error getting posts.
@@ -24,15 +37,18 @@ const { postValidation, getPostValidation } = require('../validations/postValida
  *                $ref: '#/components/schemas/Post'
 */
 router.get('/', async (req, res) => {
-  const allPosts = await Post.find({}).catch((error) => {
-    return res.status(500).send("error getting all posts")
-  });
-  let postsArray = [];
-  allPosts.forEach(post => {
-    postsArray.push(post);
-  });
+  const limit     = Math.abs(parseInt(req.query.limit)) || 25;
+  const page      = Math.abs(parseInt(req.query.page)) - 1 || 0;
+  const allPosts  = await Post
+                    .find({})
+                    .sort({_id: -1})
+                    .skip(page*limit)
+                    .limit(limit)
+                    .catch((error) => {
+                      return res.status(500).send("error getting all posts")
+                  });
   try {
-    return res.status(200).send({ postsArray: postsArray });
+    return res.status(200).send({ postsArray: allPosts });
   } catch (err) {
     return res.status(500).send(err)
   }
@@ -104,8 +120,8 @@ router.post('/', async (req, res) => {
 
  /**
  * @swagger
- * /post/{:id}:
- *   post:
+ * /post/{id}:
+ *   get:
  *     summary: Get a post.
  *     description: Returns a post based on ID.
  *     parameters:
@@ -129,15 +145,16 @@ router.post('/', async (req, res) => {
  *               $ref: '#/components/schemas/Post'
 */
 router.get("/:id", async (req, res) => {
-  console.log("hello there")
-  const foundPost = await Post.findById(req.params.id)
-    .populate("comments")
-    .exec()
+  const foundPost = await Post
+    .findOne({_id: req.params.id})
     .catch((err) => {
-      return res.status(500).send(err)
+      return res.status(400).send(err)
     })
-  return res.status(200).send({ foundPost: foundPost })
-})
 
+  if (!foundPost) 
+    return res.status(500).send(err)
+  else
+    return res.status(200).send(foundPost)
+})
 
 module.exports = router;

@@ -35,12 +35,17 @@ const styles = theme => ({
     },
   },
   bar : {
-    width: '30%',
+    width: '100%',
     borderRadius: 13,
     backgroundColor: '#909090',
-    height: 17,
+    height: 20,
     marginRight: '5px',
     marginTop: '4px'
+  },
+  percentage : {
+    position: "relative",
+    top: "-20px",
+    marginBottom: "-20px",
   }
 });
 
@@ -73,16 +78,14 @@ class PostSlider extends Component {
     const { classes } = this.props;
 
     return (
+      <div>
         <div className="row-setup">
-        <Button className={classes.agree}variant="contained" onClick={this.onClickAgree}>Agree</Button>
-        <LinearProgress className={classes.bar} variant="determinate"  label={`${this.state.progress}%`} value={this.state.progress} />
-        <Box minWidth={35}>
-        <Typography variant="body2">{`${Math.round(
-          this.state.progress,
-        )}%`}</Typography>
-      </Box>
-        <Button variant="contained" className={classes.disagree} onClick={this.onClickDisagree}>Disagree</Button>
+          <Button className={classes.agree}variant="contained" onClick={this.onClickAgree}>Agree</Button>
+          <LinearProgress className={classes.bar} variant="determinate"  label={`${this.state.progress}%`} value={this.state.progress} />
+          <Button variant="contained" className={classes.disagree} onClick={this.onClickDisagree}>Disagree</Button>
         </div>
+        <Typography className={classes.percentage} variant="body2">{`${Math.round(this.state.progress)}%`}</Typography>
+      </div>
     );
   }
 }
