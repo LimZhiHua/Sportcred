@@ -1,9 +1,10 @@
+import { SERVER_ROOT } from "../urls";
 // const Post = require('../models/post');
 const fetch = require("node-fetch");
 
 export const newPost = async (new_post) => {
 
-  const url = "http://localhost:5000/post/"
+  const url = SERVER_ROOT + "/post/"
 
   const request = {
     method: "post",
@@ -33,7 +34,7 @@ export const newPost = async (new_post) => {
 }
 
 export const getAllPosts = async () => {
-  const url = "http://localhost:5000/post/"
+  const url = SERVER_ROOT + "/post/"
 
   const request = {
     method: "get",
@@ -69,7 +70,7 @@ export const getPost = async (post_id) => {
     return result
   }
 
-  const url = "http://localhost:5000/post/" + post_id
+  const url = SERVER_ROOT + "/post/" + post_id
 
   const request = {
     method: "get",

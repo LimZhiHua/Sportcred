@@ -1,8 +1,9 @@
+import { SERVER_ROOT } from "../urls";
 const Radar = require('../models/radar')
 
 export const addFollower = async (body) => {
 
-  const url = "http://localhost:5000/radar/addFollower"
+  const url = SERVER_ROOT + "/radar/addFollower"
 
   const request = new Request(url, {
     method: "post",
@@ -31,7 +32,7 @@ export const addFollower = async (body) => {
 
 export const getFollowers = async (req) => {
 
-  const url = "http://localhost:5000/radar/getFollowers/" + req.user
+  const url = SERVER_ROOT + "/radar/getFollowers/" + req.user
 
   const request = new Request(url, {
     method: "get",

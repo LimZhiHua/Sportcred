@@ -1,8 +1,9 @@
+import { SERVER_ROOT } from "../urls";
 const fetch = require("node-fetch");
 
 export const sendNotif = async (challenge) => {
 
-  const url = "http://localhost:5000/notif/send-notif"
+  const url = SERVER_ROOT + "/notif/send-notif"
 
   const request = new Request(url, {
     method: "post",
@@ -27,7 +28,7 @@ export const sendNotif = async (challenge) => {
 }
 
 export const getNotifs = async (user) => {
-  const url = "http://localhost:5000/notif/get-notifs/" + user
+  const url = SERVER_ROOT + "/notif/get-notifs/" + user
 
   const request = new Request(url, {
     method: "get",

@@ -1,8 +1,9 @@
+import { SERVER_ROOT } from "../urls";
 const Vote = require('../models/vote')
 
 export const getVote = async (voteId) => {
 
-  const url = "http://localhost:5000/vote/getVote/" + voteId;
+  const url = SERVER_ROOT + "/vote/getVote/" + voteId;
 
   const result = {}
 

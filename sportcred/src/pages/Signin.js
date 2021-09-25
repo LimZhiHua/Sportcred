@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
         width: '25ch',
-        width: '25ch',
         paddingBottom: '1ch'
     },
     button: {

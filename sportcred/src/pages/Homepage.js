@@ -27,7 +27,8 @@ import { getComments, newPostComment } from '../controller/postComment';
 // TODO: move
 import {
     SIGNIN_URL,
-    SIGNUP_URL
+    SIGNUP_URL,
+    SERVER_ROOT
 } from "../urls";
 var counter = 0;
 
@@ -261,7 +262,7 @@ const Homepage = () => {
             <FloatingSection>
                 <h2>Test Client API Calls<br></br>(Check Network Tab for Success)</h2>
                 <Button variant="contained" onClick={getAllPosts}>Get All Posts</Button>
-                <a href="http://localhost:5000/api-docs/"><Button variant="contained" color="primary">See API DOCS</Button></a>
+                <a href={SERVER_ROOT + "/api-docs/"}><Button variant="contained" color="primary">See API DOCS</Button></a>
             </FloatingSection>
             <hr/>
             <PostsPage></PostsPage>

@@ -1,13 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose')
-const dotenv = require('dotenv')
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const cors = require('cors');
 
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.SERVER_PORT || 5000;
 
 function connect() {
   if (process.env.NODE_ENV === 'test') {
@@ -118,7 +118,7 @@ swaggerSpec.components = {
   schemas: schemas 
 }; 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-console.log("[Docs] Docs generated and avaliable on http://localhost:5000/api-docs");
+console.log("[Docs] Docs generated and avaliable on /api-docs");
 
 // -------------------------- START ---------------------------------
 

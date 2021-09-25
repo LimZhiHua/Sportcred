@@ -1,3 +1,4 @@
+import { SERVER_ROOT } from "../urls";
 import { sendNotif } from "./notif";
 import { getUser } from "./user";
 
@@ -5,7 +6,7 @@ const fetch = require("node-fetch");
 
 export const resetTriviaCount = async (playerID) => {
   const response = await fetch(
-    "http://localhost:5000/trivia/reset-trivia-count",
+    SERVER_ROOT + "/trivia/reset-trivia-count",
     {
         method: "POST",
         headers: {
@@ -37,7 +38,7 @@ return result;
 
 export const subtractTriviaCount = async (playerID) => {
   const response = await fetch(
-    "http://localhost:5000/trivia/subtract-trivia-count/" + playerID,
+    SERVER_ROOT + "/trivia/subtract-trivia-count/" + playerID,
     {
         method: "POST",
         headers: {
@@ -64,7 +65,7 @@ return result;
 }
 
 export const getTriviaCount = async (playerID) => {
-  const url = "http://localhost:5000/trivia/get-trivia-count/" + playerID
+  const url = SERVER_ROOT + "/trivia/get-trivia-count/" + playerID
   console.log("running get triviacount")
   const request = {
     method: "get",
@@ -92,7 +93,7 @@ export const getTriviaCount = async (playerID) => {
 
 export const addTrivia = async (players) => {
 
-    const url = "http://localhost:5000/trivia/addSession"
+    const url = SERVER_ROOT + "/trivia/addSession"
     const request = {
       method: "post",
       body: JSON.stringify(players),
@@ -120,7 +121,7 @@ export const addTrivia = async (players) => {
 }
 
 export const getTrivia = async (id) => {
-    const url = "http://localhost:5000/trivia/" + id
+    const url = SERVER_ROOT + "/trivia/" + id
   
     const request = {
       method: "get",
@@ -148,7 +149,7 @@ export const getTrivia = async (id) => {
 }
 
 export const incrementScore = async (sid, pid) => {
-    const url = "http://localhost:5000/trivia/add-point";
+    const url = SERVER_ROOT + "/trivia/add-point";
   
     const request = {
       method: "post",
@@ -171,7 +172,7 @@ export const incrementScore = async (sid, pid) => {
 }
 
 export const finishTrivia = async (sid, pid, total) => {
-    const url = "http://localhost:5000/trivia/finish-trivia";
+    const url = SERVER_ROOT + "/trivia/finish-trivia";
     const request = {
       method: "post",
       body: JSON.stringify({sid: sid, pid: pid}),

@@ -1,5 +1,9 @@
+// 
+
+export const SERVER_ROOT = "http://localhost:5000";
 
 // Prod
+
 export const HOME_URL = "/";
 
 export const PROFILE_URL = "/profile";

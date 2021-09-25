@@ -1,8 +1,9 @@
+import { SERVER_ROOT } from "../urls";
 const Debate = require('../models/debate')
 
 export const getDebate = async (debateId) => {
 
-  const url = "http://localhost:5000/debate/getDebate/" + debateId;
+  const url = SERVER_ROOT + "/debate/getDebate/" + debateId;
 
   const result = {}
 
@@ -22,7 +23,7 @@ export const getDebate = async (debateId) => {
 
 export const getOptions = async (debateId) => {
 
-  const url = "http://localhost:5000/debate/getAllOptions/" + debateId + "/";
+  const url = SERVER_ROOT + "/debate/getAllOptions/" + debateId + "/";
 
   const result = {}
 
@@ -42,7 +43,7 @@ export const getOptions = async (debateId) => {
 
 export const getOptionNames = async (debateId) => {
 
-  const url = "http://localhost:5000/debate/getAllOptionNames/" + debateId + "/";
+  const url = SERVER_ROOT + "/debate/getAllOptionNames/" + debateId + "/";
 
   const result = {}
 
@@ -62,7 +63,7 @@ export const getOptionNames = async (debateId) => {
 
 export const getOptionVotes = async (debateId, optionId) => {
 
-  const url = "http://localhost:5000/debate/optionVotes/" + debateId + "/" + optionId;
+  const url = SERVER_ROOT + "/debate/optionVotes/" + debateId + "/" + optionId;
 
   const result = {}
 
@@ -83,7 +84,7 @@ export const getOptionVotes = async (debateId, optionId) => {
 
 export const addDebate = async (body) => {
 
-  const url = "http://localhost:5000/debate/addDebate";
+  const url = SERVER_ROOT + "/debate/addDebate";
 
   const request = new Request(url, {
     method: "post",
@@ -114,7 +115,7 @@ export const addDebate = async (body) => {
 
 export const addVote = async (body) => {
 
-  const url = "http://localhost:5000/debate/addVote";
+  const url = SERVER_ROOT + "/debate/addVote";
 
   const request = new Request(url, {
     method: "post",
@@ -143,7 +144,7 @@ export const addVote = async (body) => {
 
 export const addOption = async (body) => {
 
-  const url = "http://localhost:5000/debate/addOption";
+  const url = SERVER_ROOT + "/debate/addOption";
 
   const request = new Request(url, {
     method: "post",
@@ -171,7 +172,7 @@ export const addOption = async (body) => {
 }
 
 export const getAllDebates = async () => {
-  const url = "http://localhost:5000/debate/"
+  const url = SERVER_ROOT + "/debate/"
 
   const request = new Request(url, {
     method: "get",

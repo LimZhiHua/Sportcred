@@ -1,8 +1,9 @@
+import { SERVER_ROOT } from "../urls";
 const option = require('../models/option')
 
 export const getOption = async (optionId) => {
 
-  const url = "http://localhost:5000/option/getOption/" + optionId;
+  const url = SERVER_ROOT + "/option/getOption/" + optionId;
 
   const result = {}
 
