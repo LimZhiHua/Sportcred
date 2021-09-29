@@ -1,8 +1,12 @@
 import { SERVER_ROOT } from "../urls";
 import { sendNotif } from "./notif";
 import { getUser } from "./user";
+import {useAuth0} from "@auth0/auth0-react"
+import React,{userState} from 'react'; // import useState
 
 const fetch = require("node-fetch");
+
+
 
 export const resetTriviaCount = async (playerID) => {
   const response = await fetch(
@@ -36,58 +40,70 @@ return result;
   
 }
 
-export const subtractTriviaCount = async (playerID) => {
-  const response = await fetch(
-    SERVER_ROOT + "/trivia/subtract-trivia-count/" + playerID,
-    {
-        method: "POST",
-        headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-            "auth-token": "jsonwebtoken",
-        },
-    }
-);
-
-const result = {}
-if (response.status === 200){
-  const msg = await response.json();
-  console.log(msg);
-  result.user = msg.user;
-  result.status = 200;
-}else{
-  const msg = await response.text();
-  console.log(msg);
-  result.error = msg;
-}
-return result;
+export const SubtractTriviaCount =  async (playerID) => {
+  try{
+    const response = await fetch(
+      SERVER_ROOT + "/trivia/subtract-trivia-count/" + playerID,
+      {
+          method: "POST",
+          headers: {
+              Accept: "application/json, text/plain, */*",
+              "Content-Type": "application/json",
+              "auth-token": "jsonwebtoken",
+  
+          },
+      }
+  );
+  
+  const result = {}
+  if (response.status === 200){
+    const msg = await response.json();
+    console.log(msg);
+    result.user = msg.user;
+    result.status = 200;
+  }else{
+    const msg = await response.text();
+    console.log(msg);
+    result.error = msg;
+  }
+  return result;
+  } catch(error){
+    console.log(error)
+  }
+ 
   
 }
 
-export const getTriviaCount = async (playerID) => {
+export const getTriviaCount = async (playerID, token) => {
   const url = SERVER_ROOT + "/trivia/get-trivia-count/" + playerID
-  console.log("running get triviacount")
-  const request = {
-    method: "get",
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
-  }
-
   const result = {}
 
-  const response = await fetch(url, request);
-
-  result.status = response.status;
-
-  if(result.status === 200){
+  try{
+    const request = {
+      method: "get",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    }
+  
+  
+    const response = await fetch(url, request);
+  
+    result.status = response.status;
+    if(result.status === 200){
       const json = await response.json()
       result.triviaCount = json
   } else {
       const msg = await response.text()
       result.error = msg
   }
+  }catch(error){
+      result.error = error
+  }
+
+ 
   return result;
 }
 
