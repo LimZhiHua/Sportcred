@@ -8,7 +8,7 @@ const fetch = require("node-fetch");
 
 
 
-export const resetTriviaCount = async (playerID) => {
+export const resetTriviaCount = async (playerID, token) => {
   const response = await fetch(
     SERVER_ROOT + "/trivia/reset-trivia-count",
     {
@@ -17,6 +17,7 @@ export const resetTriviaCount = async (playerID) => {
             Accept: "application/json, text/plain, */*",
             "Content-Type": "application/json",
             "auth-token": "jsonwebtoken",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
             playerID: playerID

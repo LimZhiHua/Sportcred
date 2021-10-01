@@ -243,7 +243,7 @@ router.post('/finish-trivia', async (req, res) => {
     }
 })
 
-router.post('/reset-trivia-count', async (req, res) => {
+router.post('/reset-trivia-count',  checkJwt, async (req, res) => {
     // Find the user in the database
 
     try {
