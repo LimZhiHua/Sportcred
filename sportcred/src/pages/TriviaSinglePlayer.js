@@ -5,7 +5,7 @@ import "../App.css";
 import {DefaultButton, AnswerButton} from "../customComponents/buttons/Buttons"
 import {Grid} from '@material-ui/core/';
 
- import  {addTrivia, getTrivia, incrementScore, finishTrivia, resetTriviaCount, getTriviaCount, SubtractTriviaCount} from '../controller/Trivia';
+ import  {addTrivia, getTrivia, incrementScore, finishTrivia, resetTriviaCount, getTriviaCount, SubtractTriviaCount} from '../controller/trivia';
 
  import {useAuth0} from "@auth0/auth0-react"
 
