@@ -3,6 +3,8 @@ const router = express.Router();
 const triviaSession = require('../models/triviaSession');
 const User = require('../models/user');
 
+const { checkJwt } = require("../authz/checkJwt")
+
 
  /**
  * @swagger
@@ -130,7 +132,7 @@ router.post('/addSession', async (req, res) => {
  *                  type: object
  *                  $ref: '#/components/schemas/triviaSession'
 */
-router.get('/:id', async (req, res) => {
+router.get('/:id',  async (req, res) => {
     const foundSession = await triviaSession.findById(req.params.id).catch((err) => {
         return res.status(404).send(err)
     })
@@ -241,7 +243,7 @@ router.post('/finish-trivia', async (req, res) => {
     }
 })
 
-router.post('/reset-trivia-count', async (req, res) => {
+router.post('/reset-trivia-count',  checkJwt, async (req, res) => {
     // Find the user in the database
 
     try {
@@ -263,14 +265,13 @@ router.post('/reset-trivia-count', async (req, res) => {
 })
 
 
-router.get('/get-trivia-count/:id', async (req, res) => {
+router.get('/get-trivia-count/:id', checkJwt, async (req, res) => {
 
     // Find the user in the database
    
     try {
         const user = await User.findById({_id: req.params.id});
         if (!user) return res.status(400).send('cannot find the user');  
-        console.log("user is", user.triviaCount)
         res.status(200).send(user.triviaCount);
      
     } catch (error) {

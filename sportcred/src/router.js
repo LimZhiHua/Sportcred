@@ -41,24 +41,37 @@ import PreSeason from "./pages/PicksPredictionPages/PreSeason";
 
 import ComponentPage from "./devPages/componentsPage";
 
+import { withAuthenticationRequired} from "@auth0/auth0-react"
+import Loading from "../src/pages/Loading"
+
+const ProtectedRoute = ({ component, ...args }) => (
+  <Route
+    component={withAuthenticationRequired(component, {
+      onRedirecting: () => <Loading />,
+    })}
+    {...args}
+  />
+);
+
+
 const AppRouter = () => (
   <Switch>
     {/* Prod */}
     <Route exact path={SIGNIN_URL} component={Signin} />
     <Route exact path={SIGNUP_URL} component={Signup} />
-    <Route exact path={PROFILE_URL} component={Profile} />
-    <Route exact path={EDIT_PROFILE_URL} component={EditProfile} />
+    <ProtectedRoute exact path={PROFILE_URL} component={Profile} />
+    <ProtectedRoute exact path={EDIT_PROFILE_URL} component={EditProfile} />
 
     <Route exact path={HOME_URL} component={Homepage} />
-    <Route exact path={TRIVIA_LANDING_URL} component={TriviaLanding} />
-    <Route exact path={TRIVIA_SINGLE_PLAYER_URL} component={TriviaSinglePlayer} />
+    <ProtectedRoute exact path={TRIVIA_LANDING_URL} component={TriviaLanding} />
+    <ProtectedRoute exact path={TRIVIA_SINGLE_PLAYER_URL} component={TriviaSinglePlayer} />
 
-    <Route exact path={DEBATE_LANDING_URL} component={DebateLanding} />
-    <Route exact path={ZONE_LANDING_URL} component={ZoneLanding} />
-    <Route exact path={PICKSPREDICT_LANDING_URL} component={PicksPredictLanding} />
-    <Route exact path={REGULAR_SEASON_URL} component={RegularSeason} />
-    <Route exact path={PRESEASON_URL} component={PreSeason} />
-    <Route exact path={PLAYOFFS_BRACKET_URL} component={PlayOffBrackets} />
+    <ProtectedRoute exact path={DEBATE_LANDING_URL} component={DebateLanding} />
+    <ProtectedRoute exact path={ZONE_LANDING_URL} component={ZoneLanding} />
+    <ProtectedRoute exact path={PICKSPREDICT_LANDING_URL} component={PicksPredictLanding} />
+    <ProtectedRoute exact path={REGULAR_SEASON_URL} component={RegularSeason} />
+    <ProtectedRoute exact path={PRESEASON_URL} component={PreSeason} />
+    <ProtectedRoute exact path={PLAYOFFS_BRACKET_URL} component={PlayOffBrackets} />
     
     {/* Dev */}
     <Route exact path={COMPONENTS_URL} component={ComponentPage} />

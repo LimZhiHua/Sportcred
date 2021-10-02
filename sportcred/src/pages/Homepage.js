@@ -30,6 +30,15 @@ import {
     SIGNUP_URL,
     SERVER_ROOT
 } from "../urls";
+
+// for Auth0 Signin
+import {useAuth0} from "@auth0/auth0-react"
+import LoginButton from '../customComponents/buttons/LoginButton';
+import LogoutButton from '../customComponents/buttons/LogoutButton';
+
+
+//--------------------
+
 var counter = 0;
 
 const PostContainer = (props) => {
@@ -225,9 +234,12 @@ const PostsPage = () => {
     )
 }
 
+
 const Homepage = () => {
     const [loginOrRegister, setLoginOrRegister] = useState("Register");
     const [loginOrRegisterComponent, setLoginOrRegisterComponent] = useState(<SigninComponent />);
+
+    const { user } = useAuth0()
 
     const buttonPress = () => {
         if (counter === 0) {
@@ -242,6 +254,17 @@ const Homepage = () => {
     }
     return (
         <div>
+            <FloatingSection>
+                <FloatingSection>
+                    <LoginButton/>
+                    <LogoutButton/>
+                </FloatingSection>
+
+                <FloatingSection>
+                    {JSON.stringify(user, null, 2)}
+                </FloatingSection>
+
+            </FloatingSection>
             <FloatingSection>
                 <h1>Sportscred App</h1>
                 {/* TODO: make navbar elsewhere */}

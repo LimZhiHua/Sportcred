@@ -5,8 +5,9 @@ import "../App.css";
 import {DefaultButton, AnswerButton} from "../customComponents/buttons/Buttons"
 import {Grid} from '@material-ui/core/';
 
- import  {addTrivia, getTrivia, incrementScore, finishTrivia, resetTriviaCount, getTriviaCount, subtractTriviaCount} from '../controller/trivia';
+ import  {addTrivia, getTrivia, incrementScore, finishTrivia, resetTriviaCount, getTriviaCount, SubtractTriviaCount} from '../controller/trivia';
 
+ import {useAuth0} from "@auth0/auth0-react"
 
 
 
@@ -30,6 +31,8 @@ const TriviaSinglePlayer = () => {
     const [sessionID, setSessionID] = useState()
 
     const [triviaCount, setTriviaCount] = useState(0)
+
+    const {getAccessTokenSilently} = useAuth0();
     //-------------------------request body formats for making the API calls-----------------------------------------------
     
     // Replace this with the actual playerID once we get that part implemented
@@ -54,46 +57,51 @@ const TriviaSinglePlayer = () => {
     // Used to start a game (duh)
     const startGame = async () =>{
         // First, we need to make sure they have games they can play
-
-        const trivCount =  (await getTriviaCount(playerID)).triviaCount
-        if(trivCount <= 0){
-            window.alert("You are out of trivia tries today!")
-            return;
-        }
-        // we pass the player info in and get a game ID
-        const gameID = (await addTrivia(player)).id
-        // We use that gameID to get our trivia session and set our gamePlayerInfo
-        const triviaSession = await getTrivia(gameID)
-        const quiz = triviaSession.trivia.questions
-        const questions = quiz.map(e => e.question)
-        const answers = quiz.map(e => e.answers)
-
-
-        // We subtract at the start of the game to prevent abuse
-        subtractCount()
-        
-        setSessionID(gameID)
-        // Loop through the answers and make an array of all the correct ones
-        const corAnswers = answers.map(answerArray =>{
-            for(var i = 0; i < answerArray.length; i++){
-                if(answerArray[i].isCorrect){
-                    return answerArray[i].answerBody
-                }
+        const token = await getAccessTokenSilently()
+        try{
+            const trivCount =  (await getTriviaCount(playerID, token)).triviaCount
+            if(trivCount <= 0){
+                window.alert("You are out of trivia tries today!")
+                return;
             }
-        })
-
-        // look man, i aint going through and remembering all the correct answers when testing. Just open console to see the answers
-        console.log("quiz is", quiz)
-        console.log("answers is", answers)
-
-        // We save the questions/answers in them states
-        setQuestionList(questions)
-        setAnswerList(answers)
-        setCorrectAnswers(corAnswers)
-
-        // reason why i used gameEnded and gameStarted is for the end game screen. 
-        gameEnded = false;
-        setGameStarted(true)
+            // we pass the player info in and get a game ID
+            const gameID = (await addTrivia(player)).id
+            // We use that gameID to get our trivia session and set our gamePlayerInfo
+            const triviaSession = await getTrivia(gameID)
+            const quiz = triviaSession.trivia.questions
+            const questions = quiz.map(e => e.question)
+            const answers = quiz.map(e => e.answers)
+    
+    
+            // We subtract at the start of the game to prevent abuse
+            subtractCount()
+            
+            setSessionID(gameID)
+            // Loop through the answers and make an array of all the correct ones
+            const corAnswers = answers.map(answerArray =>{
+                for(var i = 0; i < answerArray.length; i++){
+                    if(answerArray[i].isCorrect){
+                        return answerArray[i].answerBody
+                    }
+                }
+            })
+    
+            // look man, i aint going through and remembering all the correct answers when testing. Just open console to see the answers
+            console.log("quiz is", quiz)
+            console.log("answers is", answers)
+    
+            // We save the questions/answers in them states
+            setQuestionList(questions)
+            setAnswerList(answers)
+            setCorrectAnswers(corAnswers)
+    
+            // reason why i used gameEnded and gameStarted is for the end game screen. 
+            gameEnded = false;
+            setGameStarted(true)
+        }catch(error){
+            console.log(error)
+        }
+        
     }
  
     // Once they finish answering, there is a play again button to bring them back to home.
@@ -190,17 +198,23 @@ const TriviaSinglePlayer = () => {
     }
 
     const getCount = async () =>{
-        const trivCount =  (await getTriviaCount(playerID)).triviaCount
-        setTriviaCount(trivCount)
+        const token = await getAccessTokenSilently()
+        try{
+            const trivCount =  (await getTriviaCount(playerID, token)).triviaCount
+            setTriviaCount(trivCount)
+        }catch(error){
+            console.log(error)
+        }       
       }
  
       const subtractCount = async () =>{
-        const trivCount =  await subtractTriviaCount(playerID)
+        const trivCount =  await SubtractTriviaCount(playerID)
         getCount()
       }
     // --------------these are for testing. you can delete them later if you want
     const resetCount = async () =>{
-       console.log("output of reset trivia count is", await resetTriviaCount(playerID))
+        const token = await getAccessTokenSilently()
+       console.log("output of reset trivia count is", await resetTriviaCount(playerID, token))
 
     }
 
