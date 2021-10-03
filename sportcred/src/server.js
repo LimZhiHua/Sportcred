@@ -7,7 +7,7 @@ const cors = require('cors');
 dotenv.config();
 
 const app = express();
-const port = process.env.SERVER_PORT || 5000;
+const port = process.env.SERVER_PORT;
 
 function connect() {
   if (process.env.NODE_ENV === 'test') {

@@ -1,6 +1,13 @@
-// 
+// require('dotenv').config();
+
+////////////////////////////////////////////////
+// TODO: Why is it not working ?????
+////////////////////////////////////////////////
 
 export const SERVER_ROOT = "http://localhost:5000";
+// export const SERVER_ROOT = process.env.SERVER_ROOT + ":" + process.env.SERVER_PORT;
+// console.log("urls: ", SERVER_ROOT);
+
 
 // Prod
 
