@@ -1,4 +1,4 @@
-import { SERVER_ROOT } from "../urls";
+import { SERVER_ROOT,  DEFAULT_HEADER } from "../urls";
 // const Post = require('../models/post');
 const fetch = require("node-fetch");
 
@@ -9,10 +9,7 @@ export const newPost = async (new_post) => {
   const request = {
     method: "post",
     body: JSON.stringify(new_post),
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
+    headers:  DEFAULT_HEADER(),
   }
 
   const result = {}

@@ -1,3 +1,5 @@
+
+import { useAuth0 } from "@auth0/auth0-react";
 // require('dotenv').config();
 
 ////////////////////////////////////////////////
@@ -8,6 +10,16 @@ export const SERVER_ROOT = "http://localhost:5000";
 // export const SERVER_ROOT = process.env.SERVER_ROOT + ":" + process.env.SERVER_PORT;
 // console.log("urls: ", SERVER_ROOT);
 
+export const DEFAULT_HEADER = () => {
+    return {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+        "auth-token": "jsonwebtoken",
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`
+    }
+};
+
+// export const DEFAULT_HEADER = {}
 
 // Prod
 

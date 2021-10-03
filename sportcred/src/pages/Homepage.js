@@ -239,8 +239,12 @@ const Homepage = () => {
     const [loginOrRegister, setLoginOrRegister] = useState("Register");
     const [loginOrRegisterComponent, setLoginOrRegisterComponent] = useState(<SigninComponent />);
 
-    const { user } = useAuth0()
+    const { user, getAccessTokenSilently, isAuthenticated } = useAuth0();
 
+    if (isAuthenticated) {
+        getAccessTokenSilently().then((value) => sessionStorage.setItem('token', value));
+    } 
+  
     const buttonPress = () => {
         if (counter === 0) {
             counter++;
@@ -256,8 +260,9 @@ const Homepage = () => {
         <div>
             <FloatingSection>
                 <FloatingSection>
-                    <LoginButton/>
-                    <LogoutButton/>
+                    {(isAuthenticated) 
+                        ? <LogoutButton/>
+                        : <LoginButton/>}
                 </FloatingSection>
 
                 <FloatingSection>

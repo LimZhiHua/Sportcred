@@ -1,4 +1,4 @@
-import { SERVER_ROOT } from "../urls";
+import { SERVER_ROOT,  DEFAULT_HEADER } from "../urls";
 const PostComment = require('../models/post');
 const fetch = require("node-fetch");
 
@@ -9,10 +9,7 @@ export const newPostComment = async (new_post_comment, post_id) => {
   const request = {
     method: "post",
     body: JSON.stringify({text: new_post_comment}),
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
+    headers:  DEFAULT_HEADER(),
   }
 
   const result = {}

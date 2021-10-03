@@ -1,4 +1,4 @@
-import { SERVER_ROOT } from "../urls";
+import { SERVER_ROOT,  DEFAULT_HEADER } from "../urls";
 const SurveyQuestion = require('../models/surveyQuestion')
 
 export const submitSurvey = async (body) => {
@@ -8,10 +8,7 @@ export const submitSurvey = async (body) => {
   const request = new Request(url, {
     method: "post",
     body: JSON.stringify(body),
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
+    headers:  DEFAULT_HEADER(),
   })
 
   const result = {}

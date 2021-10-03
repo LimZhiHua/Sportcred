@@ -1,8 +1,8 @@
 const fetch = require("node-fetch");
-
+import { SERVER_ROOT,  DEFAULT_HEADER } from "../urls";
 
 export const searchUsers = async (name) => {
-  const url = 'http://localhost:5000/search/searchName?username='+name.username
+  const url = SERVER_ROOT+'/search/searchName?username='+name.username
 
     const result = {}
   
