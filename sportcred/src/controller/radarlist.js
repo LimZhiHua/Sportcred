@@ -1,4 +1,4 @@
-import { SERVER_ROOT } from "../urls";
+import { SERVER_ROOT,  DEFAULT_HEADER } from "../urls";
 const Radar = require('../models/radar')
 
 export const addFollower = async (body) => {
@@ -8,10 +8,7 @@ export const addFollower = async (body) => {
   const request = new Request(url, {
     method: "post",
     body: JSON.stringify(body),
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
+    headers:  DEFAULT_HEADER(),
   });
 
   const result = {}
@@ -36,10 +33,7 @@ export const getFollowers = async (req) => {
 
   const request = new Request(url, {
     method: "get",
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
+    headers:  DEFAULT_HEADER(),
   });
 
   const result = {}

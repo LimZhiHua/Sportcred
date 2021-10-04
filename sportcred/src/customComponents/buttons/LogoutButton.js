@@ -3,18 +3,15 @@ import { useAuth0} from "@auth0/auth0-react"
 
 const LogoutButton =() =>{
     const {logout, isAuthenticated} = useAuth0();
-
     
-    const returnValue = ()=>{
-        let retVal = null;
-        if( isAuthenticated){
-             retVal =    <button onClick={() => logout()}> Log out</button>  
-        }
-        return retVal
-    }
-    return  returnValue()
-
-
+    return (
+        <button onClick={() => {
+            sessionStorage.removeItem('token');
+            if (isAuthenticated) {
+                logout();
+            }    
+        }}>Log out</button> 
+    )
 }
 
 export default LogoutButton

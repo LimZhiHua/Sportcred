@@ -1,4 +1,4 @@
-import { SERVER_ROOT } from "../urls";
+import { SERVER_ROOT,  DEFAULT_HEADER } from "../urls";
 import { sendNotif } from "./notif";
 import { getUser } from "./user";
 import {useAuth0} from "@auth0/auth0-react"
@@ -13,12 +13,7 @@ export const resetTriviaCount = async (playerID, token) => {
     SERVER_ROOT + "/trivia/reset-trivia-count",
     {
         method: "POST",
-        headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-            "auth-token": "jsonwebtoken",
-            Authorization: `Bearer ${token}`
-        },
+        headers:  DEFAULT_HEADER(),
         body: JSON.stringify({
             playerID: playerID
 
@@ -47,12 +42,7 @@ export const SubtractTriviaCount =  async (playerID) => {
       SERVER_ROOT + "/trivia/subtract-trivia-count/" + playerID,
       {
           method: "POST",
-          headers: {
-              Accept: "application/json, text/plain, */*",
-              "Content-Type": "application/json",
-              "auth-token": "jsonwebtoken",
-  
-          },
+          headers:  DEFAULT_HEADER(),
       }
   );
   
@@ -82,11 +72,7 @@ export const getTriviaCount = async (playerID, token) => {
   try{
     const request = {
       method: "get",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
+      headers:  DEFAULT_HEADER(),
     }
   
   
@@ -114,10 +100,7 @@ export const addTrivia = async (players) => {
     const request = {
       method: "post",
       body: JSON.stringify(players),
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      }
+      headers:  DEFAULT_HEADER(),
     }
   
     const result = {}
@@ -142,10 +125,7 @@ export const getTrivia = async (id) => {
   
     const request = {
       method: "get",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      }
+      headers:  DEFAULT_HEADER(),
     }
   
     const result = {}
@@ -171,10 +151,7 @@ export const incrementScore = async (sid, pid) => {
     const request = {
       method: "post",
       body: JSON.stringify({sid: sid, pid: pid}),
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      }
+      headers:  DEFAULT_HEADER(),
     }
   
     const result = {}
@@ -193,10 +170,7 @@ export const finishTrivia = async (sid, pid, total) => {
     const request = {
       method: "post",
       body: JSON.stringify({sid: sid, pid: pid}),
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      }
+      headers:  DEFAULT_HEADER(),
     }
   
     const result = {}

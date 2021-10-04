@@ -1,4 +1,4 @@
-import { SERVER_ROOT } from "../urls";
+import { SERVER_ROOT,  DEFAULT_HEADER } from "../urls";
 const Debate = require('../models/debate')
 
 export const getDebate = async (debateId) => {
@@ -89,10 +89,7 @@ export const addDebate = async (body) => {
   const request = new Request(url, {
     method: "post",
     body: JSON.stringify(body),
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
+    headers:  DEFAULT_HEADER(),
   });
 
   const result = {}
@@ -120,10 +117,7 @@ export const addVote = async (body) => {
   const request = new Request(url, {
     method: "post",
     body: JSON.stringify(body),
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
+    headers:  DEFAULT_HEADER(),
   });
 
   const result = {}
@@ -149,10 +143,7 @@ export const addOption = async (body) => {
   const request = new Request(url, {
     method: "post",
     body: JSON.stringify(body),
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
+    headers:  DEFAULT_HEADER(),
   });
 
   const result = {}

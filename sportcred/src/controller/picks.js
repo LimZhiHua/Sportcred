@@ -1,4 +1,4 @@
-import { SERVER_ROOT } from "../urls";
+import { SERVER_ROOT,  DEFAULT_HEADER } from "../urls";
 const Preseason = require('../models/preseason')
 const PickTopic = require('../models/pickTopic')
 const Pick = require('../models/pick')
@@ -69,10 +69,7 @@ export const assignPick = async (userId, topicId, pick) => {
 	const request = new Request(url, {
 	  method: "post",
 	  body: JSON.stringify({userId: userId, topicId: topicId, pick: pick}),
-	  headers: {
-	    Accept: "application/json, text/plain, */*",
-	    "Content-Type": "application/json",
-	  }
+	  headers:  DEFAULT_HEADER(),
 	});
 
 	const result = {}
@@ -89,10 +86,7 @@ export const getCurrentPick = async (userId, topicId) => {
 	const request = new Request(url, {
 	  method: "post",
 	  body: JSON.stringify({userId: userId, topicId: topicId}),
-	  headers: {
-	    Accept: "application/json, text/plain, */*",
-	    "Content-Type": "application/json",
-	  }
+	  headers:  DEFAULT_HEADER(),
 	});
 
 	const result = {}

@@ -214,8 +214,7 @@ const TriviaSinglePlayer = () => {
     // --------------these are for testing. you can delete them later if you want
     const resetCount = async () =>{
         const token = await getAccessTokenSilently()
-       console.log("output of reset trivia count is", await resetTriviaCount(playerID, token))
-
+        console.log("output of reset trivia count is", await resetTriviaCount(playerID, token))
     }
 
 
