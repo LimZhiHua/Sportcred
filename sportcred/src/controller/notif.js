@@ -1,4 +1,4 @@
-import { SERVER_ROOT } from "../urls";
+import { SERVER_ROOT,  DEFAULT_HEADER } from "../urls";
 const fetch = require("node-fetch");
 
 export const sendNotif = async (challenge) => {
@@ -8,10 +8,7 @@ export const sendNotif = async (challenge) => {
   const request = new Request(url, {
     method: "post",
     body: JSON.stringify(challenge),
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
+    headers:  DEFAULT_HEADER(),
   })
 
   const result = {}
@@ -32,10 +29,7 @@ export const getNotifs = async (user) => {
 
   const request = new Request(url, {
     method: "get",
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
+    headers:  DEFAULT_HEADER(),
   })
 
   const result = {}

@@ -1,4 +1,4 @@
-import { SERVER_ROOT } from "../urls";
+import { SERVER_ROOT,  DEFAULT_HEADER } from "../urls";
 const Vote = require('../models/vote')
 
 export const getVote = async (voteId) => {

@@ -1,4 +1,4 @@
-import { SERVER_ROOT } from "../urls";
+import { SERVER_ROOT,  DEFAULT_HEADER } from "../urls";
 // const User = require('../models/user')
 const fetch = require("node-fetch");
 
@@ -16,10 +16,7 @@ export const register = (new_user) => {
     const request = {
       method: "post",
       body: JSON.stringify(new_user),
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      }
+      headers:  DEFAULT_HEADER(),
     }
 
     const result = {}
@@ -47,10 +44,7 @@ export const resendActivation = async (userId) => {
   const request = {
     method: "post",
     body: JSON.stringify({userId: userId}),
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
+    headers:  DEFAULT_HEADER(),
   }
 
   const result = {}
@@ -72,10 +66,7 @@ export const login = (user) => {
     const request = {
       method: "post",
       body: JSON.stringify(user),
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      }
+      headers:  DEFAULT_HEADER(),
     }
 
     const result = {}
@@ -104,10 +95,7 @@ export const resetPassword = async (email) => {
   const request = {
     method: "post",
     body: JSON.stringify(email),
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
+    headers:  DEFAULT_HEADER(),
   }
 
   const result = {}
@@ -126,10 +114,7 @@ export const getUser = async (userId) => {
   console.log("getting user", userId)
   const request = {
     method: "get",
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
+    headers:  DEFAULT_HEADER(),
   }
   
   const result = {}
@@ -152,10 +137,7 @@ export const getUserByName = async (username) => {
 
   const request = {
     method: "get",
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
+    headers:  DEFAULT_HEADER(),
   }
 
   const result = {}
@@ -179,11 +161,7 @@ export const editData = async (userData) => {
             SERVER_ROOT + "/user/edit-prof",
             {
                 method: "POST",
-                headers: {
-                    Accept: "application/json, text/plain, */*",
-                    "Content-Type": "application/json",
-                    "auth-token": "jsonwebtoken",
-                },
+                headers:  DEFAULT_HEADER(),
                 body: JSON.stringify({
                     username: userData.username,
                     email: userData.email,
