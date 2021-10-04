@@ -1,6 +1,42 @@
 const Preseason = require('../models/preseason')
 const PickTopic = require('../models/pickTopic')
-const Pick = require('../models/pick')
+const Picks = require('../models/picks')
+const fetch = require("node-fetch");
+
+export const getPicksData = async () => {
+  const url = "http://localhost:5000/picks/getPicksData"
+
+  const request = new Request(url, {
+    method: "get",
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+    }
+  });
+
+  const result = {}
+
+  const response = await fetch(request);
+  if (response.status === 200) {
+    result.status = 200
+    let msg = await response.json()
+    console.log(msg);
+    if (msg.playersByTeams.length === 0) { // if the current db has no data for players by teams
+      msg = await getAllPlayers();
+    }
+    // ADD:
+    /////////////////////////////////////
+    result.playersByTeams = msg.playersByTeams;
+    ////////////////////////////////////
+  } else {
+    const msg = await response.text();
+    result.status = response.status;
+    result.error = msg;
+  }
+
+  return result;
+}
+
 
 export const getPreseasonTopics = async () => {
 
