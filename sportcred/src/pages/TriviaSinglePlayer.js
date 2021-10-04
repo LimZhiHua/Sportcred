@@ -221,13 +221,6 @@ const TriviaSinglePlayer = () => {
         console.log("output of reset trivia count is", await resetTriviaCount(playerID, token))
     }
 
- 
-    const testing = async () =>{
-        console.log(user)
-        console.log(user.sub)
-        const test = user.sub.split("|")
-        console.log(test[1])
-      }
 
     //-------------lets group the useEffects together--------------------------------------------
 
@@ -257,7 +250,6 @@ const TriviaSinglePlayer = () => {
             <button onClick={resetCount}>testing reset</button>
             <button onClick={getCount}>testing get</button>
             <button onClick={subtractCount}>testing subtract</button>
-            <button onClick={testing}>print user</button>
 
             <h1>Trivia Single Player</h1>
             <p> {triviaCount}/10 games today</p>
