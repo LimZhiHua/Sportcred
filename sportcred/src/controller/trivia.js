@@ -1,17 +1,23 @@
+import { SERVER_ROOT } from "../urls";
 import { sendNotif } from "./notif";
 import { getUser } from "./user";
+import {useAuth0} from "@auth0/auth0-react"
+import React,{userState} from 'react'; // import useState
 
 const fetch = require("node-fetch");
 
-export const resetTriviaCount = async (playerID) => {
+
+
+export const resetTriviaCount = async (playerID, token) => {
   const response = await fetch(
-    "http://localhost:5000/trivia/reset-trivia-count",
+    SERVER_ROOT + "/trivia/reset-trivia-count",
     {
         method: "POST",
         headers: {
             Accept: "application/json, text/plain, */*",
             "Content-Type": "application/json",
             "auth-token": "jsonwebtoken",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
             playerID: playerID
@@ -35,64 +41,76 @@ return result;
   
 }
 
-export const subtractTriviaCount = async (playerID) => {
-  const response = await fetch(
-    "http://localhost:5000/trivia/subtract-trivia-count/" + playerID,
-    {
-        method: "POST",
-        headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-            "auth-token": "jsonwebtoken",
-        },
-    }
-);
-
-const result = {}
-if (response.status === 200){
-  const msg = await response.json();
-  console.log(msg);
-  result.user = msg.user;
-  result.status = 200;
-}else{
-  const msg = await response.text();
-  console.log(msg);
-  result.error = msg;
-}
-return result;
+export const SubtractTriviaCount =  async (playerID) => {
+  try{
+    const response = await fetch(
+      SERVER_ROOT + "/trivia/subtract-trivia-count/" + playerID,
+      {
+          method: "POST",
+          headers: {
+              Accept: "application/json, text/plain, */*",
+              "Content-Type": "application/json",
+              "auth-token": "jsonwebtoken",
+  
+          },
+      }
+  );
+  
+  const result = {}
+  if (response.status === 200){
+    const msg = await response.json();
+    console.log(msg);
+    result.user = msg.user;
+    result.status = 200;
+  }else{
+    const msg = await response.text();
+    console.log(msg);
+    result.error = msg;
+  }
+  return result;
+  } catch(error){
+    console.log(error)
+  }
+ 
   
 }
 
-export const getTriviaCount = async (playerID) => {
-  const url = "http://localhost:5000/trivia/get-trivia-count/" + playerID
-  console.log("running get triviacount")
-  const request = {
-    method: "get",
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
-  }
-
+export const getTriviaCount = async (playerID, token) => {
+  const url = SERVER_ROOT + "/trivia/get-trivia-count/" + playerID
   const result = {}
 
-  const response = await fetch(url, request);
-
-  result.status = response.status;
-
-  if(result.status === 200){
+  try{
+    const request = {
+      method: "get",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    }
+  
+  
+    const response = await fetch(url, request);
+  
+    result.status = response.status;
+    if(result.status === 200){
       const json = await response.json()
       result.triviaCount = json
   } else {
       const msg = await response.text()
       result.error = msg
   }
+  }catch(error){
+      result.error = error
+  }
+
+ 
   return result;
 }
 
 export const addTrivia = async (players) => {
 
-    const url = "http://localhost:5000/trivia/addSession"
+    const url = SERVER_ROOT + "/trivia/addSession"
     const request = {
       method: "post",
       body: JSON.stringify(players),
@@ -120,7 +138,7 @@ export const addTrivia = async (players) => {
 }
 
 export const getTrivia = async (id) => {
-    const url = "http://localhost:5000/trivia/" + id
+    const url = SERVER_ROOT + "/trivia/" + id
   
     const request = {
       method: "get",
@@ -148,7 +166,7 @@ export const getTrivia = async (id) => {
 }
 
 export const incrementScore = async (sid, pid) => {
-    const url = "http://localhost:5000/trivia/add-point";
+    const url = SERVER_ROOT + "/trivia/add-point";
   
     const request = {
       method: "post",
@@ -171,7 +189,7 @@ export const incrementScore = async (sid, pid) => {
 }
 
 export const finishTrivia = async (sid, pid, total) => {
-    const url = "http://localhost:5000/trivia/finish-trivia";
+    const url = SERVER_ROOT + "/trivia/finish-trivia";
     const request = {
       method: "post",
       body: JSON.stringify({sid: sid, pid: pid}),

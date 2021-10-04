@@ -2,6 +2,11 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Requirements
+
+    npm version 6
+    `npm install -g npm@6`
+
 ## Available Scripts
 
 In the project directory, you can run:

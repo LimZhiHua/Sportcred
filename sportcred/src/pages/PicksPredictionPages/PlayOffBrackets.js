@@ -4,8 +4,10 @@ import FloatingSection from "../../customComponents/FloatingSection";
 import { Bracket, RoundProps } from 'react-brackets';
 import { makeStyles } from '@material-ui/core/styles';
 import SwipeableViews from 'react-swipeable-views';
+import {Grid} from '@material-ui/core/';
 
-//import { Bracket } from 'react-tournament-bracket';
+
+//import { Bracket } from 'react-tournament-bracket';1
 const useDefaultStyles = makeStyles({
   root: {
     background: '#909090',
@@ -137,7 +139,17 @@ const PlayOffBrackets = () => {
     return (
         <div>
             <h1>PlayOffBrackets TODO</h1>
-            <Bracket rounds={rounds} roundTitleComponent={title}/>
+            <div >
+            <Grid container spacing = {1}>
+              <Grid item xs={6}>
+               <Bracket rounds={rounds} roundTitleComponent={title}  />
+              </Grid>
+              <Grid item xs={6}>
+              <Bracket rounds={rounds} roundTitleComponent={title} rtl={"LTR"} />
+              </Grid>
+            </Grid>
+            </div>
+
             <FloatingSection>
             {swiper}
             </FloatingSection>

@@ -1,8 +1,9 @@
+import { SERVER_ROOT } from "../urls";
 const SurveyQuestion = require('../models/surveyQuestion')
 
 export const submitSurvey = async (body) => {
 
-  const url = "http://localhost:5000/survey/new"
+  const url = SERVER_ROOT + "/survey/new"
 
   const request = new Request(url, {
     method: "post",

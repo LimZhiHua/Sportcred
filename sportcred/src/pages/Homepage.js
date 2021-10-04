@@ -27,8 +27,18 @@ import { getComments, newPostComment } from '../controller/postComment';
 // TODO: move
 import {
     SIGNIN_URL,
-    SIGNUP_URL
+    SIGNUP_URL,
+    SERVER_ROOT
 } from "../urls";
+
+// for Auth0 Signin
+import {useAuth0} from "@auth0/auth0-react"
+import LoginButton from '../customComponents/buttons/LoginButton';
+import LogoutButton from '../customComponents/buttons/LogoutButton';
+
+
+//--------------------
+
 var counter = 0;
 
 const PostContainer = (props) => {
@@ -224,9 +234,12 @@ const PostsPage = () => {
     )
 }
 
+
 const Homepage = () => {
     const [loginOrRegister, setLoginOrRegister] = useState("Register");
     const [loginOrRegisterComponent, setLoginOrRegisterComponent] = useState(<SigninComponent />);
+
+    const { user } = useAuth0()
 
     const buttonPress = () => {
         if (counter === 0) {
@@ -241,6 +254,17 @@ const Homepage = () => {
     }
     return (
         <div>
+            <FloatingSection>
+                <FloatingSection>
+                    <LoginButton/>
+                    <LogoutButton/>
+                </FloatingSection>
+
+                <FloatingSection>
+                    {JSON.stringify(user, null, 2)}
+                </FloatingSection>
+
+            </FloatingSection>
             <FloatingSection>
                 <h1>Sportscred App</h1>
                 {/* TODO: make navbar elsewhere */}
@@ -261,7 +285,7 @@ const Homepage = () => {
             <FloatingSection>
                 <h2>Test Client API Calls<br></br>(Check Network Tab for Success)</h2>
                 <Button variant="contained" onClick={getAllPosts}>Get All Posts</Button>
-                <a href="http://localhost:5000/api-docs/"><Button variant="contained" color="primary">See API DOCS</Button></a>
+                <a href={SERVER_ROOT + "/api-docs/"}><Button variant="contained" color="primary">See API DOCS</Button></a>
             </FloatingSection>
             <hr/>
             <PostsPage></PostsPage>

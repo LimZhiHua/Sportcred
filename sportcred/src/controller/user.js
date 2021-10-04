@@ -1,3 +1,4 @@
+import { SERVER_ROOT } from "../urls";
 // const User = require('../models/user')
 const fetch = require("node-fetch");
 
@@ -10,7 +11,7 @@ export const register = (new_user) => {
 
   return async (dispatch) => {
 
-    const url = "http://localhost:5000/user/register"
+    const url = SERVER_ROOT + "/user/register"
 
     const request = {
       method: "post",
@@ -41,7 +42,7 @@ export const register = (new_user) => {
 
 export const resendActivation = async (userId) => {
 
-  const url = "http://localhost:5000/user/resend-activation"
+  const url = SERVER_ROOT + "/user/resend-activation"
 
   const request = {
     method: "post",
@@ -66,7 +67,7 @@ export const resendActivation = async (userId) => {
 export const login = (user) => {
 
   return async (dispatch) => {
-    const url = "http://localhost:5000/user/login"
+    const url = SERVER_ROOT + "/user/login"
 
     const request = {
       method: "post",
@@ -98,7 +99,7 @@ export const login = (user) => {
 
 export const resetPassword = async (email) => {
 
-  const url = "http://localhost:5000/user/forgot-password"
+  const url = SERVER_ROOT + "/user/forgot-password"
 
   const request = {
     method: "post",
@@ -121,7 +122,7 @@ export const resetPassword = async (email) => {
 }
 
 export const getUser = async (userId) => {
-  const url = "http://localhost:5000/user/get-user/" + userId
+  const url = SERVER_ROOT + "/user/get-user/" + userId
   console.log("getting user", userId)
   const request = {
     method: "get",
@@ -147,7 +148,7 @@ export const getUser = async (userId) => {
 }
 
 export const getUserByName = async (username) => {
-  const url = "http://localhost:5000/user/get-user-by-name/" + username
+  const url = SERVER_ROOT + "/user/get-user-by-name/" + username
 
   const request = {
     method: "get",
@@ -175,7 +176,7 @@ export const getUserByName = async (username) => {
 
 export const editData = async (userData) => {
         const response = await fetch(
-            "http://localhost:5000/user/edit-prof",
+            SERVER_ROOT + "/user/edit-prof",
             {
                 method: "POST",
                 headers: {

@@ -1,9 +1,10 @@
+import { SERVER_ROOT } from "../urls";
 const PostComment = require('../models/post');
 const fetch = require("node-fetch");
 
 export const newPostComment = async (new_post_comment, post_id) => {
 
-  const url = "http://localhost:5000/post/" + post_id + "/postComment/"
+  const url = SERVER_ROOT + "/post/" + post_id + "/postComment/"
 
   const request = {
     method: "post",
@@ -33,7 +34,7 @@ export const newPostComment = async (new_post_comment, post_id) => {
 }
 
 export const getComments = async (post_id) => {
-  const url = "http://localhost:5000/post/" + post_id + "/comments/";
+  const url = SERVER_ROOT + "/post/" + post_id + "/comments/";
 
   const request = {
     method: "get",

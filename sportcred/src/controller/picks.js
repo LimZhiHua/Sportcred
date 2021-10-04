@@ -1,3 +1,4 @@
+import { SERVER_ROOT } from "../urls";
 const Preseason = require('../models/preseason')
 const PickTopic = require('../models/pickTopic')
 const Picks = require('../models/picks')
@@ -77,7 +78,7 @@ export const getAllPlayers = async () => {
 
 export const getPreseasonTopics = async () => {
 
-  const url = "http://localhost:5000/picks/preseasonTopics"
+  const url = SERVER_ROOT + "/picks/preseasonTopics"
 
   const result = {}
 
@@ -97,7 +98,7 @@ export const getPreseasonTopics = async () => {
 
 export const getRegularSeasonTopics = async () => {
 
-  const url = "http://localhost:5000/picks/regularSeasonTopics"
+  const url = SERVER_ROOT + "/picks/regularSeasonTopics"
 
   const result = {}
 
@@ -117,7 +118,7 @@ export const getRegularSeasonTopics = async () => {
 
 export const getPlayoffsTopics = async () => {
 
-  const url = "http://localhost:5000/picks/playoffsTopics"
+  const url = SERVER_ROOT + "/picks/playoffsTopics"
 
   const result = {}
 
@@ -136,7 +137,7 @@ export const getPlayoffsTopics = async () => {
 }
 
 export const assignPick = async (userId, topicId, pick) => {
-	const url = "http://localhost:5000/picks/assignPick/"
+	const url = SERVER_ROOT + "/picks/assignPick/"
 
 	const request = new Request(url, {
 	  method: "post",
@@ -156,7 +157,7 @@ export const assignPick = async (userId, topicId, pick) => {
 }
 
 export const getCurrentPick = async (userId, topicId) => {
-	const url = "http://localhost:5000/picks/currentPick/"
+	const url = SERVER_ROOT + "/picks/currentPick/"
 
 	const request = new Request(url, {
 	  method: "post",
