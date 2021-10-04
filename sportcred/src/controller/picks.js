@@ -38,6 +38,43 @@ export const getPicksData = async () => {
 }
 
 
+/**
+ * 
+ * ONLY CALL THIS API WHEN THE playersByTeams schema does not have stored data i.e
+ *  Run getPicksData Api and if it returns empty list then run getAllPlayers API
+ */
+
+export const getAllPlayers = async () => {
+  console.log("calling fantsay api");
+  const url = "http://localhost:5000/picks/getAllPlayers"
+
+  const request = new Request(url, {
+    method: "get",
+    headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+    }
+  });
+
+  const result = {}
+
+  const response = await fetch(request);
+  if (response.status === 200) {
+    result.status = 200
+    const msg = await response.json()
+    // ADD:
+    /////////////////////////////////////
+    result.playersByTeam = msg.playersByTeam;
+    ////////////////////////////////////
+  } else {
+    const msg = await response.text();
+    result.status = response.status;
+    result.error = msg;
+  }
+
+  return result;
+}
+
 export const getPreseasonTopics = async () => {
 
   const url = "http://localhost:5000/picks/preseasonTopics"
