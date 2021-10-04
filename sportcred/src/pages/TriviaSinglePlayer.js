@@ -33,11 +33,14 @@ const TriviaSinglePlayer = () => {
     const [triviaCount, setTriviaCount] = useState(0)
 
     const {getAccessTokenSilently} = useAuth0();
+    const { user } = useAuth0();
+
     //-------------------------request body formats for making the API calls-----------------------------------------------
     
     // Replace this with the actual playerID once we get that part implemented
     // Dont just stick any random string when testing. it needs to be a valid mongoDB ID
-    const playerID = "60e39a703a9e9634446d66e6"
+    const playerID = user.sub.split("|")[1]
+    
     var player = {        
         "players":  [
         {
@@ -201,6 +204,7 @@ const TriviaSinglePlayer = () => {
         const token = await getAccessTokenSilently()
         try{
             const trivCount =  (await getTriviaCount(playerID, token)).triviaCount
+            console.log("triv cont is", trivCount)
             setTriviaCount(trivCount)
         }catch(error){
             console.log(error)
@@ -218,9 +222,10 @@ const TriviaSinglePlayer = () => {
     }
 
 
-
     //-------------lets group the useEffects together--------------------------------------------
 
+   useEffect ( () =>{})
+   
     useEffect ( () =>{
        getCount()
     },[triviaCount])
@@ -244,8 +249,8 @@ const TriviaSinglePlayer = () => {
         <FloatingSection>
             <button onClick={resetCount}>testing reset</button>
             <button onClick={getCount}>testing get</button>
-            
             <button onClick={subtractCount}>testing subtract</button>
+
             <h1>Trivia Single Player</h1>
             <p> {triviaCount}/10 games today</p>
             <br></br>

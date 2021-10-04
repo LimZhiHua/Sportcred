@@ -10,6 +10,8 @@ import {
     EDIT_PROFILE_URL,
   } from "../urls";
   
+import {useAuth0} from "@auth0/auth0-react"
+
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -25,8 +27,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Profile = () => {
     // im hardcoding a userID for now 
-    const userID = "60e39a703a9e9634446d66e6"
 
+    const { user } = useAuth0();
 
     const classes = useStyles();
 
@@ -42,6 +44,7 @@ const Profile = () => {
       history.push(EDIT_PROFILE_URL);
     }
     
+    const userID = user.sub.split("|")[1]
 
 
     async function getUserInfo() {

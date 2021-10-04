@@ -7,6 +7,7 @@ import {Grid} from '@material-ui/core/';
 import { makeStyles } from '@material-ui/core/styles';
 
 import  {getUser, editData} from '../controller/user';
+import {useAuth0} from "@auth0/auth0-react"
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 const EditProfile = () => {
 
     const classes = useStyles();
+    const { user } = useAuth0();
 
     const [acs, setACS] = useState(0)
     const [description, setDescription] = useState('')
@@ -44,7 +46,7 @@ const EditProfile = () => {
     const [newStatus, setNewStatus] = useState('')
     const [newUsername, setNewUsername] = useState('')
 
-    const userID = "60e39a703a9e9634446d66e6"
+    const userID = user.sub.split("|")[1]
     
     //-----------Use Effects and the functions made for it (cause you cant call await directly in useEffect)
     async function getUserInfo() {

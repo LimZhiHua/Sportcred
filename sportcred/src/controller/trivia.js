@@ -77,7 +77,6 @@ export const getTriviaCount = async (playerID, token) => {
   
   
     const response = await fetch(url, request);
-  
     result.status = response.status;
     if(result.status === 200){
       const json = await response.json()
