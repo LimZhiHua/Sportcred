@@ -6,7 +6,8 @@ const RegularSeason = require('../models/regularSeason')
 const Playoffs = require('../models/playoffs')
 
 const PickTopic = require('../models/pickTopic')
-const Pick = require('../models/pick')
+const Pick = require('../models/picks')
+const PlayersByTeams = require('../models/playersByTeams')
 
 //https://www.npmjs.com/package/fantasydata-node-client
 const fdClientModule = require('fantasydata-node-client');
@@ -21,7 +22,7 @@ const FantasyDataClient = new fdClientModule(keys);
 * @swagger
 * /picks/getAllPlayers:
 *   get:
-*     summary: Get all players by active teams in the current season.
+*     summary: Get all players by active teams in the current season from the fantasy API
 *     description: Gets all players.
 *     tags:
 *      - players by teams
@@ -35,8 +36,25 @@ const FantasyDataClient = new fdClientModule(keys);
 router.get('/getAllPlayers', async (req, res) => {
 	const playersByTeam = {};
 	const allTeams = [];
+
+	currentYear = new Date().getFullYear()
+
+
+    // check if teh fantasy a[pi call needs to be made. 
+	// Tbh this is another is a validation call in case any developer calls this api from swagger
+	const allData  = await PlayersByTeams
+                    .find({})
+                    // .sort({_id: -1})
+                    .catch((error) => {
+                      return res.status(500).send("error getting the players by Team from the db")
+                  });
+	if(allData.length !== 0) {
+		return res.status(200).send({playersByTeam: "We already have data!"});
+	}
 	
-	let allTeamsRaw = await FantasyDataClient.NBAv3ScoresClient.getTeamSeasonStatsPromise('2021')
+
+	//following logic should only run if the db has n data for the current season
+	let allTeamsRaw = await FantasyDataClient.NBAv3ScoresClient.getTeamSeasonStatsPromise(currentYear)
 		.then((resp) => JSON.parse(resp))
 		.then(data => obj = data)
 		.catch((err) => {
@@ -56,21 +74,60 @@ router.get('/getAllPlayers', async (req, res) => {
 					return res.status(500).send("error on retrieving players by team")
 				});
 				data.then(function(result){
-					//console.log(result);
 					result.forEach(player => {
 						playersByTeam[team].push(player.FirstName + " " + player.LastName);
 							});
 				})
 		});
 		setTimeout(() => {
-			console.log(playersByTeam);
-			return res.status(200).send({playersByTeam: playersByTeam });
+			for (const [key, value] of Object.entries(playersByTeam)) {
+				const newTeam = {
+					team: key,
+					players: value
+				  }
+				  const finalResult = new PlayersByTeams(newTeam);
+
+				  finalResult.save();
+			  }
+			return res.status(200).send({playersByTeam: playersByTeam});
 		}, 2000);
 	} catch (err) {
 		return res.status(500).send(err)
 	}
 		
 		
+	
+})
+
+
+/**
+* @swagger
+* /picks/getPicksData:
+*   get:
+*     summary: Get all players by active teams in the current season.
+*     description: Gets all players.
+*     tags:
+*      - players by teams
+*     responses:
+*       500:
+*         description: Error getting players by teams.
+*       200:
+*         description: Dictionary of Teams mapped to players.
+*  
+*/
+router.get('/getPicksData', async (req, res) => {
+	console.log("Inissde the right api");
+	
+	const allData  = await PlayersByTeams
+                    .find({})
+                    .catch((error) => {
+                      return res.status(500).send("error getting the players by Team from the db")
+                  });
+  try {
+    return res.status(200).send({ playersByTeams: allData });
+  } catch (err) {
+    return res.status(500).send(err)
+  }
 	
 })
 

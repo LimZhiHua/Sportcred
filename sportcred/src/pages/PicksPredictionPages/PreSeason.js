@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import FloatingSection from "../../customComponents/FloatingSection";
 import Button from '@material-ui/core/Button';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
@@ -10,6 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputBase from '@material-ui/core/InputBase';
 import './PreSeason.css';
 import {AnswerButton,} from "../../customComponents/buttons/Buttons";
+import * as APIs from "../../controller/picks";
 
 const useStyles = makeStyles((theme) => ({
     regular: {
@@ -115,11 +116,16 @@ const PreSeason = () => {
          setDate(event.target.value);
      };
 
+     const [result, setData] = React.useState([]);
+     const refreshData = () => APIs.getPicksData().then((data)=>setData(data.playersByTeams));
+     console.log("playersByTeamData: ",result); // result has the data from the backend
+     
      var dateLength = ["03-03-2021", '04-08-2021', '05-08-2021'];
 
     return (
         <div>
          <h1 className={styles.h1}>Pre-Season Predictions</h1>
+         <Button variant="contained" onClick={refreshData}>Get All Players</Button>
          <FloatingSection>
             <div>
             <div> Defense Player of the Year</div>
