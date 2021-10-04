@@ -5,19 +5,20 @@ const Picks = require('../models/picks')
 const fetch = require("node-fetch");
 
 export const getPicksData = async () => {
-  const url = "http://localhost:5000/picks/getPicksData"
+  //const url = "http://localhost:5000/picks/getPicksData"
+  const url = SERVER_ROOT + "/picks/getPicksData"
 
-  const request = new Request(url, {
-    method: "get",
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
-  });
+  // const request = new Request(url, {
+  //   method: "get",
+  //   headers: {
+  //     Accept: "application/json, text/plain, */*",
+  //     "Content-Type": "application/json",
+  //   }
+  // });
 
   const result = {}
 
-  const response = await fetch(request);
+  const response = await fetch(url);
   if (response.status === 200) {
     result.status = 200
     let msg = await response.json()
@@ -46,20 +47,21 @@ export const getPicksData = async () => {
  */
 
 export const getAllPlayers = async () => {
-  console.log("calling fantsay api");
-  const url = "http://localhost:5000/picks/getAllPlayers"
+  //const url = "http://localhost:5000/picks/getAllPlayers"
+  const url = SERVER_ROOT + "/picks/getAllPlayers"
+  
 
-  const request = new Request(url, {
-    method: "get",
-    headers: {
-      Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
-    }
-  });
+  // const request = new Request(url, {
+  //   method: "get",
+  //   headers: {
+  //     Accept: "application/json, text/plain, */*",
+  //     "Content-Type": "application/json",
+  //   }
+  // });
 
   const result = {}
 
-  const response = await fetch(request);
+  const response = await fetch(url);
   if (response.status === 200) {
     result.status = 200
     const msg = await response.json()
