@@ -155,7 +155,7 @@ const PreSeason = () => {
          // then i take the player (players)
          // append the team name for each
          return curTeam.players.map( player => {
-            return teamName + " " + player
+            return teamName + "-" + player
          })
        })
       // convert all the teams into one.
