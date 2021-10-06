@@ -368,7 +368,6 @@ router.post('/currentPick', async (req, res) => {
 	const topicName = req.body.topicName;
 	const userId = req.body.userId;
 	const year = req.body.year;
-	console.log("topic name is", topicName)
 	try {
 		const existing_pick = await Pick.findOne({ topicName: topicName, userId: userId, year: year });
 		if (existing_pick) {

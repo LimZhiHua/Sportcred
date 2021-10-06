@@ -13,7 +13,7 @@ import {AnswerButton,} from "../../customComponents/buttons/Buttons";
 import * as APIs from "../../controller/picks";
 
 import {useAuth0} from "@auth0/auth0-react"
-
+import { SinglePlayerDropdown } from "../../customComponents/dropdown/singleSelect";
 
 const useStyles = makeStyles((theme) => ({
     regular: {
@@ -123,18 +123,29 @@ const PreSeason = () => {
     const { user } = useAuth0();
 
 
-     const [date, setDate] = React.useState('');
      const playerID = user.sub.split("|")[1]
+     // Its annoying to display the menu, so im making a function to flatten the array
+     const toSingleArray = (resultArray) =>{
+      const appendTeam =  resultArray.map(curTeam => {
+        // each item is a dictionary with an array. 
 
+        // for each item, I take the team name (team)
+        const teamName = curTeam.team
+        // then i take the player (players)
+        // append the team name for each
+        return curTeam.players.map( player => {
+           return teamName + "-" + player
+        })
+      })
+     // convert all the teams into one.
+      const playerList = appendTeam.flat()
+      return playerList
+    }
 
-     const handleChangeDefense = (event) => {
-         //setDate(event.target.value);
-         setSelectedDefensePlayer(event.target.value)
-     };
-     const handleChangeRookie = (event) => {
-      //setDate(event.target.value);
-      setSelectedRookiePlayer(event.target.value)
-  };
+    const refreshData = () => {
+      console.log("refreshing data")
+     APIs.getPicksData().then((data)=>setData(data.playersByTeams));  
+    }   
 
      const [playerList, setPlayerList] = useState([])
      
@@ -144,34 +155,39 @@ const PreSeason = () => {
      const [selectedDefensePlayer, setSelectedDefensePlayer] = useState('')
      const [defaultRookiePlayer, setDefaultRookiePlayer] = useState('')
      const [selectedRookiePlayer, setSelectedRookiePlayer] = useState('')
+     const [defaultMVPPlayer, setDefaultMVPPlayer] = useState('')
+     const [selectedMVPPlayer, setSelectedMVPPlayer] = useState('')
+     const [default6thPlayer, setDefault6thPlayer] = useState('')
+     const [selected6thPlayer, setSelected6thPlayer] = useState('')
+     const [defaultImprovedPlayer, setDefaultImprovedPlayer] = useState('')
+     const [selectedImprovedPlayer, setSelectedImprovedPlayer] = useState('')
+     const curYear = 2021
 
-     // Its annoying to display the menu, so im making a function to flatten the array
-     const toSingleArray = (resultArray) =>{
-       const appendTeam =  resultArray.map(curTeam => {
-         // each item is a dictionary with an array. 
 
-         // for each item, I take the team name (team)
-         const teamName = curTeam.team
-         // then i take the player (players)
-         // append the team name for each
-         return curTeam.players.map( player => {
-            return teamName + "-" + player
-         })
-       })
-      // convert all the teams into one.
-       const playerList = appendTeam.flat()
-       return playerList
-     }
+     //------ to handle the changing of selections
+     const handleChangeDefense = (event) => {
+        //setDate(event.target.value);
+        setSelectedDefensePlayer(event.target.value)
+    };
+    const handleChangeRookie = (event) => {
+      setSelectedRookiePlayer(event.target.value)
+    };
 
-     
-     const refreshData = () => {
-       console.log("refreshing data")
-      APIs.getPicksData().then((data)=>setData(data.playersByTeams));  
-     }   
+    const handleChangeMVP = (event) => {
+      setSelectedMVPPlayer(event.target.value)
+    };
+    
+    const handleChange6th = (event) => {
+      setSelected6thPlayer(event.target.value)
+    };
   
+    const handleChangeImproved = (event) => {
+      setSelectedImprovedPlayer(event.target.value)
+    };
+     //---------saving the selected player----------------
      const saveDefensePlayer = async () => {
       if(selectedDefensePlayer != "Please Select a Player"){
-        const response = await APIs.assignPick(playerID, "Defense Player", selectedDefensePlayer, 2021)
+        const response = await APIs.assignPick(playerID, "Defense Player", selectedDefensePlayer, curYear)
         if(response.status == 200){
           window.alert(selectedDefensePlayer + " has been saved as your defense player pick")
         }else{
@@ -182,17 +198,50 @@ const PreSeason = () => {
 
      const saveRookiePlayer = async () => {
       if(selectedRookiePlayer != "Please Select a Player"){
-        const response = await APIs.assignPick(playerID, "Rookie Player", selectedRookiePlayer, 2021)
+        const response = await APIs.assignPick(playerID, "Rookie Player", selectedRookiePlayer, curYear)
         if(response.status == 200){
           window.alert(selectedRookiePlayer + " has been saved as your rookie player pick")
         }else{
           window.alert("Something went wrong when trying to save your pick")
         }
       }
-     }
+     }   
+
+     const saveMVPPlayer = async () => {
+      if(selectedMVPPlayer !== "Please Select a Player"){
+        const response = await APIs.assignPick(playerID, "MVP Player", selectedMVPPlayer, curYear)
+        if(response.status == 200){
+          window.alert(selectedMVPPlayer + " has been saved as your MVP pick")
+        }else{
+          window.alert("Something went wrong when trying to save your pick")
+        }
+      }
+     }   
     
+     const save6thPlayer = async () => {
+      if(selected6thPlayer != "Please Select a Player"){
+        const response = await APIs.assignPick(playerID, "6th Player", selected6thPlayer, curYear)
+        if(response.status == 200){
+          window.alert(selected6thPlayer + " has been saved as your 6th player pick")
+        }else{
+          window.alert("Something went wrong when trying to save your pick")
+        }
+      }
+     }   
+
+     const saveImprovedPlayer = async () => {
+      if(selectedImprovedPlayer != "Please Select a Player"){
+        const response = await APIs.assignPick(playerID, "Improved Player", selectedImprovedPlayer, curYear)
+        if(response.status == 200){
+          window.alert(selectedImprovedPlayer + " has been saved as your most improved pick")
+        }else{
+          window.alert("Something went wrong when trying to save your pick")
+        }
+      }
+     }   
+     //---------setting the default players for the dropdowns------------
      const setDefaultDefense = async () => {
-      let player = (await APIs.getCurrentPick(playerID, "Defense Player", 2021))
+      let player = (await APIs.getCurrentPick(playerID, "Defense Player", curYear))
       if(player.status !== 400){
         player = player.pick.pick
       }else{
@@ -201,7 +250,7 @@ const PreSeason = () => {
       setDefaultDefensePlayer(player)
      } 
      const setDefaultRookie = async () => {
-      let player = (await APIs.getCurrentPick(playerID, "Rookie Player", 2021))
+      let player = (await APIs.getCurrentPick(playerID, "Rookie Player", curYear))
       if(player.status !== 400){
         player = player.pick.pick
       }else{
@@ -209,15 +258,48 @@ const PreSeason = () => {
       }
       setDefaultRookiePlayer(player)
      } 
+
+     const setDefaultMVP = async () => {
+      let player = (await APIs.getCurrentPick(playerID, "MVP Player", curYear))
+      if(player.status !== 400){
+        player = player.pick.pick
+      }else{
+        player = "Please Select a Player"
+      }
+      setDefaultMVPPlayer(player)
+     }
+
+     const setDefault6th = async () => {
+      let player = (await APIs.getCurrentPick(playerID, "6th Player", curYear))
+      if(player.status !== 400){
+        player = player.pick.pick
+      }else{
+        player = "Please Select a Player"
+      }
+      setDefault6thPlayer(player)
+     } 
+
+     const setDefaultImproved = async () => {
+      let player = (await APIs.getCurrentPick(playerID, "Improved Player", curYear))
+      if(player.status !== 400){
+        player = player.pick.pick
+      }else{
+        player = "Please Select a Player"
+      }
+      setDefaultImprovedPlayer(player)
+     } 
      
-     // first time we open the page, lets get the players
+     // first time we open the page, lets get the default players based on their last saved selection
     useEffect(() => {
       refreshData();
       setDefaultDefense();
       setDefaultRookie();
+      setDefaultMVP();
+      setDefault6th();
+      setDefaultImproved();
     }, []);
 
-
+    // this is to convert the players from our API call to a flat array (to stick in our menuitems)
      useEffect ( () =>{
       setPlayerList(toSingleArray(result))
    },[result])
@@ -228,83 +310,21 @@ const PreSeason = () => {
        <h1 className={styles.h1}>Pre-Season Predictions</h1>
        <Button variant="contained" onClick={refreshData}>Get All Players</Button>
        <FloatingSection>
-          <div>
-          <div> Defense Player of the Year</div>
-          <div className='component'>
-             <div className='sub-component'>
-               <div className='sub-sub'>
-                  <div>Defense Players</div>
-                  <FormControl variant="outlined" className={styles.formControl}>
-                    <Select
-                      id="demo-customized-select"
-                      onChange={handleChangeDefense}
-                      defaultValue={defaultDefensePlayer}
-                      input={<BootstrapInput />}
-                    >
-                       <MenuItem  value={"Please Select a Player"} style={{backgroundColor: 'grey', color: "white"}} >
-                            <p style={{ color: 'white' }}>Please Select a Player</p> 
-                        </MenuItem>
-                      {
-                       playerList.map((item, index) => (
-                        <MenuItem  key={item} value={item} style={{backgroundColor: 'grey', color: "white"}} >
-                            <p style={{ color: 'white' }}> {item}</p> 
-                        </MenuItem>
-                      ))
-                      }                       
-
-                    </Select>
-                </FormControl>
-                <div>
-                <AnswerButton style={{width: '100px', height: '10px'}} label='Save' onClick={saveDefensePlayer}></AnswerButton>
-                </div>
-              </div>
-             </div>
-
-             <div className='img-holder'>
-             </div>
-             
-          </div>
-          </div>
+          <SinglePlayerDropdown title={"MVP of the Year"} boxTitle={"Season MVPs"} selected={handleChangeMVP} default={defaultMVPPlayer} styles = {styles} values={playerList}    onSelect={saveMVPPlayer} ></SinglePlayerDropdown>
+       </FloatingSection>
+       <FloatingSection>
+          <SinglePlayerDropdown title={"Defense Player of the Year"} boxTitle={"Season Defense Player"} selected={handleChangeDefense} default={defaultDefensePlayer} styles = {styles} values={playerList}    onSelect={saveDefensePlayer} ></SinglePlayerDropdown>
        </FloatingSection>
         <FloatingSection>
-          <div>
-          <div> Rookie of the Year</div>
-          <div className='component'>
-             <div className='sub-component'>
-               <div className='sub-sub'>
-                  <div>Rookies</div>
-                  <FormControl variant="outlined" className={styles.formControl}>
-                    <Select
-                      id="demo-customized-select"
-                      onChange={handleChangeRookie}
-                      defaultValue={defaultRookiePlayer}
-                      input={<BootstrapInput />}
-                    >
-                       <MenuItem  value={"Please Select a Player"} style={{backgroundColor: 'grey', color: "white"}} >
-                            <p style={{ color: 'white' }}>Please Select a Player</p> 
-                        </MenuItem>
-                      {
-                       playerList.map((item, index) => (
-                        <MenuItem  key={item} value={item} style={{backgroundColor: 'grey', color: "white"}} >
-                            <p style={{ color: 'white' }}> {item}</p> 
-                        </MenuItem>
-                      ))
-                      }                       
-
-                    </Select>
-                </FormControl>
-                <div>
-                <AnswerButton style={{width: '100px', height: '10px'}} label='Save' onClick={saveRookiePlayer}></AnswerButton>
-                </div>
-              </div>
-             </div>
-
-             <div className='img-holder'>
-             </div>
-             
-          </div>
-          </div>
+          <SinglePlayerDropdown title={"Rookie of the Year"} boxTitle={"Season Rookie"} selected={handleChangeRookie} default={defaultRookiePlayer} styles = {styles} values={playerList}    onSelect={saveRookiePlayer} ></SinglePlayerDropdown>
        </FloatingSection>
+       <FloatingSection>
+          <SinglePlayerDropdown title={"6th Player of the Year"} boxTitle={"Season 6th Player"} selected={handleChange6th} default={default6thPlayer} styles = {styles} values={playerList}    onSelect={save6thPlayer} ></SinglePlayerDropdown>
+       </FloatingSection>
+       <FloatingSection>
+          <SinglePlayerDropdown title={"Most Improved Player of the Year"} boxTitle={"Season Most Improved Player Player"} selected={handleChangeImproved} default={defaultImprovedPlayer} styles = {styles} values={playerList}    onSelect={saveImprovedPlayer} ></SinglePlayerDropdown>
+       </FloatingSection>
+
        </div>
   );
    }else{
