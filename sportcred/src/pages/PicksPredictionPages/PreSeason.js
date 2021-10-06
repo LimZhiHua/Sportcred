@@ -12,6 +12,9 @@ import './PreSeason.css';
 import {AnswerButton,} from "../../customComponents/buttons/Buttons";
 import * as APIs from "../../controller/picks";
 
+import {useAuth0} from "@auth0/auth0-react"
+
+
 const useStyles = makeStyles((theme) => ({
     regular: {
         background: '#FF0000',
@@ -66,6 +69,13 @@ const useStyles = makeStyles((theme) => ({
         overflow: 'hidden',
         display: 'inline-block',
         borderRadius: 5,
+    },
+    menuItem: {
+      color: 'red',
+        backgroundColor: "pink", // updated backgroundColor
+    },
+    whiteBackground:{
+      backgroundColor: "white"
     }
 }));
 
@@ -110,94 +120,197 @@ const BootstrapInput = withStyles((theme) => ({
 
 const PreSeason = () => {
     const styles = useStyles();
+    const { user } = useAuth0();
+
 
      const [date, setDate] = React.useState('');
-     const handleChange = (event) => {
-         setDate(event.target.value);
+     const playerID = user.sub.split("|")[1]
+
+
+     const handleChangeDefense = (event) => {
+         //setDate(event.target.value);
+         setSelectedDefensePlayer(event.target.value)
      };
+     const handleChangeRookie = (event) => {
+      //setDate(event.target.value);
+      setSelectedRookiePlayer(event.target.value)
+  };
 
-     const [result, setData] = React.useState([]);
-     const refreshData = () => APIs.getPicksData().then((data)=>setData(data.playersByTeams));
-     console.log("playersByTeamData: ",result); // result has the data from the backend
+     const [playerList, setPlayerList] = useState([])
      
-     var dateLength = ["03-03-2021", '04-08-2021', '05-08-2021'];
+     const [result, setData] = React.useState([]);
 
+     const [defaultDefensePlayer, setDefaultDefensePlayer] = useState('')
+     const [selectedDefensePlayer, setSelectedDefensePlayer] = useState('')
+     const [defaultRookiePlayer, setDefaultRookiePlayer] = useState('')
+     const [selectedRookiePlayer, setSelectedRookiePlayer] = useState('')
+
+     // Its annoying to display the menu, so im making a function to flatten the array
+     const toSingleArray = (resultArray) =>{
+       const appendTeam =  resultArray.map(curTeam => {
+         // each item is a dictionary with an array. 
+
+         // for each item, I take the team name (team)
+         const teamName = curTeam.team
+         // then i take the player (players)
+         // append the team name for each
+         return curTeam.players.map( player => {
+            return teamName + " " + player
+         })
+       })
+      // convert all the teams into one.
+       const playerList = appendTeam.flat()
+       return playerList
+     }
+
+     
+     const refreshData = () => {
+       console.log("refreshing data")
+      APIs.getPicksData().then((data)=>setData(data.playersByTeams));  
+     }   
+  
+     const saveDefensePlayer = async () => {
+      if(selectedDefensePlayer != "Please Select a Player"){
+        const response = await APIs.assignPick(playerID, "Defense Player", selectedDefensePlayer, 2021)
+        if(response.status == 200){
+          window.alert(selectedDefensePlayer + " has been saved as your defense player pick")
+        }else{
+          window.alert("Something went wrong when trying to save your pick")
+        }
+      }
+     }
+
+     const saveRookiePlayer = async () => {
+      if(selectedRookiePlayer != "Please Select a Player"){
+        const response = await APIs.assignPick(playerID, "Rookie Player", selectedRookiePlayer, 2021)
+        if(response.status == 200){
+          window.alert(selectedRookiePlayer + " has been saved as your rookie player pick")
+        }else{
+          window.alert("Something went wrong when trying to save your pick")
+        }
+      }
+     }
+    
+     const setDefaultDefense = async () => {
+      let player = (await APIs.getCurrentPick(playerID, "Defense Player", 2021))
+      if(player.status !== 400){
+        player = player.pick.pick
+      }else{
+        player = "Please Select a Player"
+      }
+      setDefaultDefensePlayer(player)
+     } 
+     const setDefaultRookie = async () => {
+      let player = (await APIs.getCurrentPick(playerID, "Rookie Player", 2021))
+      if(player.status !== 400){
+        player = player.pick.pick
+      }else{
+        player = "Please Select a Player"
+      }
+      setDefaultRookiePlayer(player)
+     } 
+     
+     // first time we open the page, lets get the players
+    useEffect(() => {
+      refreshData();
+      setDefaultDefense();
+      setDefaultRookie();
+    }, []);
+
+
+     useEffect ( () =>{
+      setPlayerList(toSingleArray(result))
+   },[result])
+
+   if(defaultDefensePlayer!== "" && defaultRookiePlayer !== "" && playerList.length !== 0 ){
     return (
-        <div>
-         <h1 className={styles.h1}>Pre-Season Predictions</h1>
-         <Button variant="contained" onClick={refreshData}>Get All Players</Button>
-         <FloatingSection>
-            <div>
-            <div> Defense Player of the Year</div>
-            <div className='component'>
-               <div className='sub-component'>
-                 <div className='sub-sub'>
-                    <div>Defense Players</div>
-                    <FormControl variant="outlined" className={styles.formControl}>
-                      <Select
-                        id="demo-customized-select"
-                        value={date}
-                        placeholder="Choose a date"
-                        onChange={handleChange}
-                        input={<BootstrapInput />}
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
+      <div>
+       <h1 className={styles.h1}>Pre-Season Predictions</h1>
+       <Button variant="contained" onClick={refreshData}>Get All Players</Button>
+       <FloatingSection>
+          <div>
+          <div> Defense Player of the Year</div>
+          <div className='component'>
+             <div className='sub-component'>
+               <div className='sub-sub'>
+                  <div>Defense Players</div>
+                  <FormControl variant="outlined" className={styles.formControl}>
+                    <Select
+                      id="demo-customized-select"
+                      onChange={handleChangeDefense}
+                      defaultValue={defaultDefensePlayer}
+                      input={<BootstrapInput />}
+                    >
+                       <MenuItem  value={"Please Select a Player"} style={{backgroundColor: 'grey', color: "white"}} >
+                            <p style={{ color: 'white' }}>Please Select a Player</p> 
                         </MenuItem>
-                        <MenuItem value={"Player 1"}>Player 1</MenuItem>
-                        <MenuItem  value={"Player 2"}>Player 2</MenuItem>
-                        <MenuItem value={"Player 3"}>Player 3</MenuItem>
-                      </Select>
-                  </FormControl>
-                  <div>
-                  <AnswerButton style={{width: '100px', height: '10px'}} label='Save'></AnswerButton>
-                  </div>
-                </div>
-               </div>
-
-               <div className='img-holder'>
-               </div>
-               
-            </div>
-            </div>
-         </FloatingSection>
-          <FloatingSection>
-            <div>
-            <div> Rookie of the Year</div>
-            <div className='component'>
-               <div className='sub-component'>
-                 <div className='sub-sub'>
-                    <div>Rookies</div>
-                    <FormControl variant="outlined" className={styles.formControl}>
-                      <Select
-                        id="demo-customized-select"
-                        value={date}
-                        placeholder="Choose a date"
-                        onChange={handleChange}
-                        input={<BootstrapInput />}
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
+                      {
+                       playerList.map((item, index) => (
+                        <MenuItem  key={item} value={item} style={{backgroundColor: 'grey', color: "white"}} >
+                            <p style={{ color: 'white' }}> {item}</p> 
                         </MenuItem>
-                        <MenuItem value={"Player 1"}>Rookie 1</MenuItem>
-                        <MenuItem  value={"Player 2"}>Rookie 2</MenuItem>
-                        <MenuItem value={"Player 3"}>Rookie 3</MenuItem>
-                      </Select>
-                  </FormControl>
-                  <div>
-                  <AnswerButton style={{width: '100px', height: '10px'}} label='Save'></AnswerButton>
-                  </div>
-                </div>
-               </div>
+                      ))
+                      }                       
 
-               <div className='img-holder'>
-               </div>
-               
-            </div>
-            </div>
-         </FloatingSection>
-         </div>
-    );
+                    </Select>
+                </FormControl>
+                <div>
+                <AnswerButton style={{width: '100px', height: '10px'}} label='Save' onClick={saveDefensePlayer}></AnswerButton>
+                </div>
+              </div>
+             </div>
+
+             <div className='img-holder'>
+             </div>
+             
+          </div>
+          </div>
+       </FloatingSection>
+        <FloatingSection>
+          <div>
+          <div> Rookie of the Year</div>
+          <div className='component'>
+             <div className='sub-component'>
+               <div className='sub-sub'>
+                  <div>Rookies</div>
+                  <FormControl variant="outlined" className={styles.formControl}>
+                    <Select
+                      id="demo-customized-select"
+                      onChange={handleChangeRookie}
+                      defaultValue={defaultRookiePlayer}
+                      input={<BootstrapInput />}
+                    >
+                       <MenuItem  value={"Please Select a Player"} style={{backgroundColor: 'grey', color: "white"}} >
+                            <p style={{ color: 'white' }}>Please Select a Player</p> 
+                        </MenuItem>
+                      {
+                       playerList.map((item, index) => (
+                        <MenuItem  key={item} value={item} style={{backgroundColor: 'grey', color: "white"}} >
+                            <p style={{ color: 'white' }}> {item}</p> 
+                        </MenuItem>
+                      ))
+                      }                       
+
+                    </Select>
+                </FormControl>
+                <div>
+                <AnswerButton style={{width: '100px', height: '10px'}} label='Save' onClick={saveRookiePlayer}></AnswerButton>
+                </div>
+              </div>
+             </div>
+
+             <div className='img-holder'>
+             </div>
+             
+          </div>
+          </div>
+       </FloatingSection>
+       </div>
+  );
+   }else{
+     return <div></div>
+   }
+    
 }
 
 export default PreSeason;

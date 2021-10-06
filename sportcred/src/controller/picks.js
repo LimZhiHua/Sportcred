@@ -138,12 +138,13 @@ export const getPlayoffsTopics = async () => {
   return result;
 }
 
-export const assignPick = async (userId, topicId, pick) => {
-	const url = SERVER_ROOT + "/picks/assignPick/"
+export const assignPick = async (userId, topicName, pick, year) => {
+  console.log("assigning pick lol")
+  const url = SERVER_ROOT + "/picks/assignPick/"
 
 	const request = new Request(url, {
 	  method: "post",
-	  body: JSON.stringify({userId: userId, topicId: topicId, pick: pick}),
+	  body: JSON.stringify({userId: userId, topicName: topicName, pick: pick, year:year}),
 	  headers:  DEFAULT_HEADER(),
 	});
 
@@ -155,12 +156,12 @@ export const assignPick = async (userId, topicId, pick) => {
 	return result;
 }
 
-export const getCurrentPick = async (userId, topicId) => {
+export const getCurrentPick = async (userId, topicName, year) => {
 	const url = SERVER_ROOT + "/picks/currentPick/"
-
+  console.log("getting current pick")
 	const request = new Request(url, {
 	  method: "post",
-	  body: JSON.stringify({userId: userId, topicId: topicId}),
+	  body: JSON.stringify({userId: userId, topicName: topicName, year: year}),
 	  headers:  DEFAULT_HEADER(),
 	});
 
@@ -175,5 +176,5 @@ export const getCurrentPick = async (userId, topicId) => {
 	}
 
 	return result;
-
 }
+
