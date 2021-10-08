@@ -4,6 +4,65 @@ const PickTopic = require('../models/pickTopic')
 const Picks = require('../models/picks')
 const fetch = require("node-fetch");
 
+
+export const getRegularSeasonData = async () => {
+  const url = SERVER_ROOT + "/picks/getRegularSeasonData"
+
+
+  const result = {}
+
+  const response = await fetch(url);
+  if (response.status === 200) {
+    result.status = 200
+    let msg = await response.json()
+    console.log(msg);
+    if (msg.gamesByDate.length === 0) { // if the current db has no data for games by ate
+      msg = await getGamesByDate();
+    }
+    // ADD:
+    /////////////////////////////////////
+    result.gamesByDate = msg.gamesByDate;
+    ////////////////////////////////////
+  } else {
+    const msg = await response.text();
+    result.status = response.status;
+    result.error = msg;
+  }
+
+  return result;
+}
+
+
+/**
+ * 
+ * ONLY CALL THIS API WHEN THE gamesByDate schema does not have stored data i.e
+ *  Run getRegularSeasonData Api and if it returns empty list then run getGamesByDate API
+ */
+
+export const getGamesByDate = async () => {
+  const url = SERVER_ROOT + "/picks/getRegularSeasonData"
+
+  const result = {}
+
+  const response = await fetch(url);
+  if (response.status === 200) {
+    result.status = 200
+    const msg = await response.json()
+    // ADD:
+    /////////////////////////////////////
+    result.gamesByDate = msg.gamesByDate;
+    ////////////////////////////////////
+  } else {
+    const msg = await response.text();
+    result.status = response.status;
+    result.error = msg;
+  }
+
+  return result;
+}
+
+
+
 export const getPicksData = async () => {
   //const url = "http://localhost:5000/picks/getPicksData"
   const url = SERVER_ROOT + "/picks/getPicksData"
