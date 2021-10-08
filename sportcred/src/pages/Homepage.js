@@ -31,10 +31,7 @@ import {
     SERVER_ROOT
 } from "../urls";
 
-// for Auth0 Signin
-import {useAuth0} from "@auth0/auth0-react"
-import LoginButton from '../customComponents/buttons/LoginButton';
-import LogoutButton from '../customComponents/buttons/LogoutButton';
+
 
 
 //--------------------
@@ -236,51 +233,8 @@ const PostsPage = () => {
 
 
 const Homepage = () => {
-    const [loginOrRegister, setLoginOrRegister] = useState("Register");
-    const [loginOrRegisterComponent, setLoginOrRegisterComponent] = useState(<SigninComponent />);
-
-    const { user, getAccessTokenSilently, isAuthenticated } = useAuth0();
-
-    if (isAuthenticated) {
-        getAccessTokenSilently().then((value) => sessionStorage.setItem('token', value));
-    } 
-  
-    const buttonPress = () => {
-        if (counter === 0) {
-            counter++;
-            setLoginOrRegister("Login")
-            setLoginOrRegisterComponent(<RegisterComponent />);
-        } else {
-            counter--;
-            setLoginOrRegister("Register")
-            setLoginOrRegisterComponent(<SigninComponent />);
-        }
-    }
     return (
         <div>
-            <FloatingSection>
-                <FloatingSection>
-                    {(isAuthenticated) 
-                        ? <LogoutButton/>
-                        : <LoginButton/>}
-                </FloatingSection>
-
-                <FloatingSection>
-                    {JSON.stringify(user, null, 2)}
-                </FloatingSection>
-
-            </FloatingSection>
-            <FloatingSection>
-                <h1>Sportscred App</h1>
-                {/* TODO: make navbar elsewhere */}
-                {loginOrRegisterComponent}
-                <a href="#" onClick={(e) => buttonPress()}>{loginOrRegister} </a>
-
-                <ul>
-                    <li><Link to={SIGNIN_URL}>Sigin</Link></li>
-                    <li><Link to={SIGNUP_URL}>Signup</Link></li>
-                </ul>
-            </FloatingSection>
             <FloatingSection>
                 <h2>Dev Notes</h2>
                 <pre style={{overflow: "auto"}}>

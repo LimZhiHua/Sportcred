@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-
+import FloatingSection from "../customComponents/FloatingSection";
+import {useAuth0} from "@auth0/auth0-react"
+import LoginButton from '../customComponents/buttons/LoginButton';
+import LogoutButton from '../customComponents/buttons/LogoutButton';
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
@@ -41,60 +44,19 @@ const useStyles = makeStyles((theme) => ({
 
 const Signin = () => {
     const styles = useStyles();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const { user, getAccessTokenSilently, isAuthenticated } = useAuth0();
 
-    function validateForm() {
-        console.log("good stuff")
-        return email.length > 0 && password.length > 0;
-    }
-
-    function handleSubmit(event) {
-        event.preventDefault();
-    }
+    if (isAuthenticated) {
+        getAccessTokenSilently().then((value) => sessionStorage.setItem('token', value));
+    } 
 
     return (
         <div>
-            <div className={styles.root}>
-                <div className={styles.container}>
-                    <TextField
-                        label="Username"
-                        id="filled-margin-none"
-                        defaultValue=""
-                        className={styles.textField}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <TextField
-                        label="Password"
-                        id="filled-password-input"
-                        type="password"
-                        autoComplete="current-password"
-                        className={styles.textField}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        className={styles.button}
-                        onClick={(e) => validateForm()}>
-                        Login
-                    </Button>
-                </div>
-            </div>
-
-            {/* <h1>Signin App TODO</h1>
-            <DefaultButton label="Default"/>
-            <AnswerButton label="Correct"/>
-            <DangerButton label="Incorrect"/>
-            <br></br>
-             <div>Text field</div>
-            <BasicTextFields label="Username"/>
-            <div>Text area</div>
-            <BasicTextArea label="Review"/>
-            <div><br></br>Post slider</div>
-            <PostSlider/>
-            <div><br></br>Default slider</div>
-            <SliderComponent/> */}
+                <FloatingSection>
+                    {(isAuthenticated) 
+                        ? <LogoutButton/>
+                        : <LoginButton/>}
+                </FloatingSection>
         </div>
     );
 }

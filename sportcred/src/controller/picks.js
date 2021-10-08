@@ -158,7 +158,6 @@ export const assignPick = async (userId, topicName, pick, year) => {
 
 export const getCurrentPick = async (userId, topicName, year) => {
 	const url = SERVER_ROOT + "/picks/currentPick/"
-  console.log("getting current pick")
 	const request = new Request(url, {
 	  method: "post",
 	  body: JSON.stringify({userId: userId, topicName: topicName, year: year}),
