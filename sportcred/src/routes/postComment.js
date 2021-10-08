@@ -40,9 +40,13 @@ const {postCommentValidation} = require('../validations/postCommentValidations')
  *         description: Success.
 */
 router.post('/postComment', async (req, res) => {
+  console.log("making new post comment route")
+  console.log("body is", req.body)
+  
   // Front end validations
   const {error} = postCommentValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
+  console.log("making new post comment route")
 
   // Find post
   const foundPost = await Post.findById(req.params.id)
@@ -59,7 +63,8 @@ router.post('/postComment', async (req, res) => {
     //       id: req.body.userId
     //   },
     text: req.body.text,
-    postId: req.params.id
+    postId: req.params.id,
+    authorId: req.body.author_id
   }
 
   try{

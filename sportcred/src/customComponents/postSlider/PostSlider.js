@@ -64,6 +64,12 @@ class PostSlider extends Component {
   }
 
   onClickAgree() {
+    // First, we need to check who has already agreed/disagreed with this post
+
+    // If user has agreed, then do nothing. If user disagreed, then remove disagree, add agree
+
+
+
     this.setState({progress : this.state.progress + 10})
   }
 

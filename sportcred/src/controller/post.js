@@ -3,7 +3,7 @@ import { SERVER_ROOT,  DEFAULT_HEADER } from "../urls";
 const fetch = require("node-fetch");
 
 export const newPost = async (new_post) => {
-
+  console.log("new post is", new_post)
   const url = SERVER_ROOT + "/post/"
 
   const request = {

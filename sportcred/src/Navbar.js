@@ -41,9 +41,9 @@ let Navbar = () => {
 
     const Logout = () =>{
     
-        sessionStorage.removeItem('token');
-        if (isAuthenticated) {
-            logout();
+      sessionStorage.removeItem('token');
+      if (isAuthenticated) {
+          logout();
 
       }
     }

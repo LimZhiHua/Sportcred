@@ -23,14 +23,14 @@ import FloatingSection from "../customComponents/FloatingSection";
 // controllers
 import { getAllPosts, newPost } from '../controller/post';
 import { getComments, newPostComment } from '../controller/postComment';
+import  {getUsername} from '../controller/user';
 
 // TODO: move
 import {
-    SIGNIN_URL,
-    SIGNUP_URL,
     SERVER_ROOT
 } from "../urls";
 
+import {useAuth0} from "@auth0/auth0-react"
 
 
 
@@ -65,6 +65,13 @@ const PostHeader = ({displayname = "Unknown", score = 0, datetime = new Date(Dat
 const PostCreate = ({onSubmit=()=>{}}) => {
     const [title, setTitle] = useState("");
     const [desc, setDesc] = useState("");
+    const { user } = useAuth0();
+    // i legit have no idea why i need this thing. normally, just calling user.sub.split("|") works.
+    // I think its cause normally i keep all my hooks and stuffs in 
+    let userID = null
+    if(user != null){
+        userID = user.sub.split("|")[1]
+    }
     return (
         <PostContainer>
             <div className="post-body right">
@@ -76,7 +83,8 @@ const PostCreate = ({onSubmit=()=>{}}) => {
                     onClick={()=>
                         newPost({
                             title: title,
-                            description: desc
+                            description: desc,
+                            authorId: userID
                         }).then(() => {
                             setTitle("");
                             setDesc("");
@@ -91,6 +99,7 @@ const PostCreate = ({onSubmit=()=>{}}) => {
 
 const Post = ({
         postId,
+        authorId,
         title = "Unset title", 
         content = ".... ....... .... .... ... ....... ...",
         numComments = 0,
@@ -99,7 +108,6 @@ const Post = ({
     
         const [showComment, setShowComment] = useState(false);
         // const [commentsData, setCommentsData]  = useState([]);
-
         // const refreshComments = () => getComments(postId).then((data)=>setCommentsData(data.commentsArray));
 
         // useEffect(() => {
@@ -108,7 +116,7 @@ const Post = ({
 
         return (
             <PostContainer>
-                <PostHeader/>
+                <PostHeader displayname={authorId}/>
                 <div className="post-body">
                     <div className="title">{title}</div>
                     <div className="content">{content}</div>
@@ -139,9 +147,10 @@ const Post = ({
         )
 }
 
-const PostComment = ({commentId, comment = "Unfinished comment... ... . . ...."}) => {
+const PostComment = ({commentId, comment = "Unfinished comment... ... . . ....", authorId}) => {
+
     return <PostContainer>
-        <PostHeader/>
+        <PostHeader displayname={authorId}/>
         <div className="post-body">
             <div className="content">{comment}</div>
         </div>
@@ -150,6 +159,8 @@ const PostComment = ({commentId, comment = "Unfinished comment... ... . . ...."}
 
 const CommentCreate = ({postId, onSubmit=()=>{}}) => {
     const [desc, setDesc] = useState("");
+    const { user } = useAuth0();
+    const userID = user.sub.split("|")[1]
     return <div className="flex-container">
         <div className="flex-main">
             <BasicTextArea fullWidth label="Comment" value={desc} onChange={e => setDesc(e.target.value)}/>
@@ -159,7 +170,8 @@ const CommentCreate = ({postId, onSubmit=()=>{}}) => {
             onClick={()=>
                 newPostComment(
                     desc,
-                    postId
+                    postId,
+                    userID
                 ).then(() => {
                     setDesc("");
                     onSubmit();
@@ -183,18 +195,23 @@ const CommentSection = ({postId}) => {
         <div className="comment-group">
             {/* <PostComment /> */}
             {
-                commentsData.map(comment => 
-                    <PostComment 
-                        key={comment._id} 
-                        commentId={comment._id}
-                        comment={comment.text}
-                    />
+                commentsData.map(comment => {
+
+                    return <PostComment 
+                    key={comment._id} 
+                    commentId={comment._id}
+                    comment={comment.text}
+                    authorId={comment.authorId}
+                />
+                }
+                   
                 )
             }
         </div>
         <div className="center-center"><AiOutlineLeft className="icon-button"/><span>Page #</span><AiOutlineRight className="icon-button"/></div>
     </div>
 }
+
 
 const PostsSection = ({postsData=[]}) => {
     console.log("posts", postsData);
@@ -203,6 +220,7 @@ const PostsSection = ({postsData=[]}) => {
             <Post 
                 key={post._id} 
                 postId={post._id}
+                authorId={post.authorId}
                 title={post.title}
                 content={post.description}
                 numComments={post.numComments}

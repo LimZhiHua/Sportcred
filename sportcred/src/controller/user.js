@@ -132,6 +132,29 @@ export const getUser = async (userId) => {
   return result;
 }
 
+export const getUsername = async (userId) => {
+  const url = SERVER_ROOT + "/user/get-username/" + userId
+  console.log("getting user", userId)
+  const request = {
+    method: "get",
+    headers:  DEFAULT_HEADER(),
+  }
+  
+  const result = {}
+
+  const response = await fetch(url, request);
+  result.status = response.status;
+  if (response.status === 200){
+    const msg = await response.json();
+    result.user = msg;
+  }else{
+    const msg = await response.text();
+    result.error = msg;
+  }
+
+  return result;
+}
+
 export const getUserByName = async (username) => {
   const url = SERVER_ROOT + "/user/get-user-by-name/" + username
 
