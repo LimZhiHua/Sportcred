@@ -8,6 +8,7 @@ const Playoffs = require('../models/playoffs')
 const PickTopic = require('../models/pickTopic')
 const Pick = require('../models/picks')
 const PlayersByTeams = require('../models/playersByTeams')
+const GamesByDate = require('../models/gamesByDate');
 
 //https://www.npmjs.com/package/fantasydata-node-client
 const fdClientModule = require('fantasydata-node-client');
@@ -17,6 +18,103 @@ const keys = {
 };
 
 const FantasyDataClient = new fdClientModule(keys);
+
+/**
+* @swagger
+* /picks/getAllScheduledGames:
+*   get:
+*     summary: Get all the games scheduled for regular season from the fantasy API
+*     description: Gets all games by date.
+*     tags:
+*      - games by date
+*     responses:
+*       500:
+*         description: Error getting games by date.
+*       200:
+*         description: Dictionary of Games mapped to Date.
+*  
+*/
+router.get('/getAllScheduledGames', async (req, res) => {
+	const gamesByDate = {};
+	const allDateTime = [];
+
+	currentYear = new Date().getFullYear() + 1;
+
+
+	//check if teh fantasy a[pi call needs to be made.
+	//Tbh this is another is a validation call in case any developer calls this api from swagger
+	const allData = await GamesByDate
+		.find({})
+		// .sort({_id: -1})
+		.catch((error) => {
+			return res.status(500).send("error getting the players by Team from the db")
+		});
+	if (allData.length !== 0) {
+		return res.status(200).send({ gamesByDate: "We already have data!" });
+	}
+
+	//following logic should only run if the db has no data for the current season
+	let allGamesRaw = await FantasyDataClient.NBAv3ScoresClient.getSchedulesPromise(currentYear)
+		.then((resp) => JSON.parse(resp))
+		.then(data => obj = data)
+		.catch((err) => {
+			return res.status(500).send("error on retrieving teams")
+		});
+	allGamesRaw.forEach(game => {
+		if (allDateTime.includes(game.DateTime) === false) {// we need distinct list of datetime
+			allDateTime.push(game.DateTime);
+			gamesByDate[game.DateTime] = [];
+		}
+		gamesByDate[game.DateTime].push({ 'team1': game.AwayTeam, 'team2': game.HomeTeam });
+
+	});
+	for (const [key, value] of Object.entries(gamesByDate)) {
+		const newRecord = {
+			dateTime: key,
+			team: value
+		}
+		console.log(newRecord);
+		const finalResult = new GamesByDate(newRecord);
+
+		finalResult.save();
+	}
+	try {
+		return res.status(200).send({ gamesByDate: gamesByDate });
+	} catch (err) {
+		return res.status(500).send(err)
+	}
+})
+
+/**
+* @swagger
+* /picks/getRegularSeasonData:
+*   get:
+*     summary: Fetch all the games scheduled for regular season from the db
+*     description: Gets all games by date.
+*     tags:
+*      - games by date
+*     responses:
+*       500:
+*         description: Error in fetching games by date from db.
+*       200:
+*         description: Dictionary of games mapped to date.
+*  
+*/
+router.get('/getRegularSeasonData', async (req, res) => {
+
+	const allData = await GamesByDate
+		.find({})
+		.catch((error) => {
+			return res.status(500).send("error getting the games by Date from the db")
+		});
+	try {
+		return res.status(200).send({ gamesByDate: allData });
+	} catch (err) {
+		return res.status(500).send(err)
+	}
+
+})
+
 
 /**
 * @swagger
@@ -40,18 +138,18 @@ router.get('/getAllPlayers', async (req, res) => {
 	currentYear = new Date().getFullYear()
 
 
-    // check if teh fantasy a[pi call needs to be made. 
+	// check if the fantasy api call needs to be made. 
 	// Tbh this is another is a validation call in case any developer calls this api from swagger
-	const allData  = await PlayersByTeams
-                    .find({})
-                    // .sort({_id: -1})
-                    .catch((error) => {
-                      return res.status(500).send("error getting the players by Team from the db")
-                  });
-	if(allData.length !== 0) {
-		return res.status(200).send({playersByTeam: "We already have data!"});
+	const allData = await PlayersByTeams
+		.find({})
+		// .sort({_id: -1})
+		.catch((error) => {
+			return res.status(500).send("error getting the players by Team from the db")
+		});
+	if (allData.length !== 0) {
+		return res.status(200).send({ playersByTeam: "We already have data!" });
 	}
-	
+
 
 	//following logic should only run if the db has n data for the current season
 	let allTeamsRaw = await FantasyDataClient.NBAv3ScoresClient.getTeamSeasonStatsPromise(currentYear)
@@ -60,43 +158,43 @@ router.get('/getAllPlayers', async (req, res) => {
 		.catch((err) => {
 			return res.status(500).send("error on retrieving teams")
 		});
-	
+
 	allTeamsRaw.forEach(team => {
-			allTeams.push(team.Team);
-			playersByTeam[team.Team] = [];
-		});
+		allTeams.push(team.Team);
+		playersByTeam[team.Team] = [];
+	});
 	try {
 		allTeams.forEach(team => {
-			let	data = FantasyDataClient.NBAv3StatsClient.getPlayersByTeamPromise(team)
+			let data = FantasyDataClient.NBAv3StatsClient.getPlayersByTeamPromise(team)
 				.then((resp) => JSON.parse(resp))
 				.then(data => obj = data)
 				.catch((err) => {
 					return res.status(500).send("error on retrieving players by team")
 				});
-				data.then(function(result){
-					result.forEach(player => {
-						playersByTeam[team].push(player.FirstName + " " + player.LastName);
-							});
-				})
+			data.then(function (result) {
+				result.forEach(player => {
+					playersByTeam[team].push(player.FirstName + " " + player.LastName);
+				});
+			})
 		});
 		setTimeout(() => {
 			for (const [key, value] of Object.entries(playersByTeam)) {
 				const newTeam = {
 					team: key,
 					players: value
-				  }
-				  const finalResult = new PlayersByTeams(newTeam);
+				}
+				const finalResult = new PlayersByTeams(newTeam);
 
-				  finalResult.save();
-			  }
-			return res.status(200).send({playersByTeam: playersByTeam});
+				finalResult.save();
+			}
+			return res.status(200).send({ playersByTeam: playersByTeam });
 		}, 2000);
 	} catch (err) {
 		return res.status(500).send(err)
 	}
-		
-		
-	
+
+
+
 })
 
 
@@ -117,18 +215,18 @@ router.get('/getAllPlayers', async (req, res) => {
 */
 router.get('/getPicksData', async (req, res) => {
 	console.log("Inissde the right api");
-	
-	const allData  = await PlayersByTeams
-                    .find({})
-                    .catch((error) => {
-                      return res.status(500).send("error getting the players by Team from the db")
-                  });
-  try {
-    return res.status(200).send({ playersByTeams: allData });
-  } catch (err) {
-    return res.status(500).send(err)
-  }
-	
+
+	const allData = await PlayersByTeams
+		.find({})
+		.catch((error) => {
+			return res.status(500).send("error getting the players by Team from the db")
+		});
+	try {
+		return res.status(200).send({ playersByTeams: allData });
+	} catch (err) {
+		return res.status(500).send(err)
+	}
+
 })
 
 router.post('/createPreseason', async (req, res) => {

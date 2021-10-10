@@ -8,6 +8,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputBase from '@material-ui/core/InputBase';
+import * as APIs from "../../controller/picks";
 import './regularSeason.css';
 
 const useStyles = makeStyles((theme) => ({
@@ -115,12 +116,17 @@ const RegularSeason = () => {
          setDate(event.target.value);
      };
 
+     const [result, setData] = React.useState([]);
+     const refreshData = () => APIs.getRegularSeasonData().then((data)=>setData(data.gamesByDate));
+     console.log("gamesByDate: ",result); // result has the data from the backend
+
      var dateLength = ["03-03-2021", '04-08-2021', '05-08-2021'];
 
     return (
         <div>
          <h1 className={styles.h1}>Regular Season Picks</h1>
          <div className={styles.subHeader}>
+         <Button variant="contained" onClick={refreshData}>Get Data</Button>
          <h2 className={styles.h2}>Daily Team Pick</h2>
         <FormControl variant="outlined" className={styles.formControl}>
         {/* <InputLabel id="demo-customized-select-label">Choose a date</InputLabel> */}
