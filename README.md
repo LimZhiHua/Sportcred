@@ -28,6 +28,10 @@ You will also see any lint errors in the console.
 Runs the app in the development mode.\
 Query to REST API at [http://localhost:5000](http://localhost:5000).
 
+### `npm run prod` to start the backend for production
+
+Note on heroku, the server port is dynamic and is written to process.env.PORT
+
 ### `npm run test`
 
 Launches the test runner in the interactive watch mode.\
@@ -42,6 +46,25 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run deploy`
+
+You will need: heroku cli https://devcenter.heroku.com/articles/heroku-cli 
+
+Login to a heroku account on the browser with privelleges to write on the project sportcred-staging 
+hosted at https://sportcred-staging.herokuapp.com/ 
+ 
+run `npm run deploy` 
+to deploy
+
+The deploy script is defaulted to deploy content on `origin` branch `release/v1`
+Please update accordingly
+
+### Production environment variables
+
+The prod environment variables are under
+* frontend `/.env.production`
+* backend  `/src/.env.production`
 
 ### `npm run eject`
 

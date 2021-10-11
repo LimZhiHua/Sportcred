@@ -1,6 +1,10 @@
 // Defaults ----------------------------------------------------------------
 
-export const SERVER_ROOT = process.env.REACT_APP_SERVER_DOMAIN + ":" + process.env.REACT_APP_SERVER_PORT;
+export let SERVER_ROOT = process.env.REACT_APP_SERVER_DOMAIN
+if (process.env.REACT_APP_SERVER_PORT !== "*") {
+    SERVER_ROOT+=":"+process.env.REACT_APP_SERVER_PORT;
+}
+
 export const DEFAULT_HEADER = () => {
     return {
         Accept: "application/json, text/plain, */*",

@@ -2,7 +2,10 @@
   "name": "sportcred",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000/",
+  "engines": {
+    "node": "16.x",
+    "npm": "6.x"
+  },
   "dependencies": {
     "@auth0/auth0-react": "^1.8.0",
     "@hapi/joi": "^17.1.1",
@@ -52,6 +55,8 @@
     "start": "react-scripts start",
     "server": "cd src && node server.js",
     "dev": "concurrently \"npm run server\" \"npm run start\"",
+    "prod": "cd src && node -r dotenv/config server.js dotenv_config_path=.env.production",
+    "deploy": "heroku login && heroku git:remote -a sportcred-staging && git push heroku release/v1:main",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
