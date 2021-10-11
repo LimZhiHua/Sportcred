@@ -187,7 +187,7 @@ export const finishTrivia = async (sid, pid, total) => {
         result.error = msg
     }
 
-    const currUser = await getUser(result.currPlayer.userId)
+    const currUser = await getUser(result.playerID)
     if(result.otherPlayer == null){
       result.otherPlayer = result.currPlayer
     }
