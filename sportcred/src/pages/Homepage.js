@@ -251,6 +251,11 @@ const PostsPage = () => {
 
 
 const Homepage = () => {
+
+    const { getAccessTokenSilently, isAuthenticated} = useAuth0();
+    if (isAuthenticated) {
+        getAccessTokenSilently().then((value) => sessionStorage.setItem('token', value));
+    } 
     return (
         <div>
             <FloatingSection>
