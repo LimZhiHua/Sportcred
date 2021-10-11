@@ -537,7 +537,38 @@ router.get('/get-user/:id', async (req, res) => {
   return res.status(200).send(user);
 })
 
-
+ /**
+ * @swagger
+ * /user/get-username/{id}:
+ *   get:
+ *     summary: Gets the user by ID.
+ *     description: Returns the user's username given it's ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the user to retrieve.
+ *         schema:
+ *           type: string
+ *     tags:
+ *      - auth
+ *     responses:
+ *       400:
+ *         description: Cannot find user.
+ *       200:
+ *         description: The username
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/schemas/User'
+*/
+router.get('/get-username/:id', async (req, res) => {
+  const user = await User.findOne({_id: req.params.id});
+  console.log("user is", user)
+  if (!user) return res.status(400).send('user query failed');
+  return res.status(200).send(user);
+})
  /**
  * @swagger
  * /user/get-user-by-name/{username}:

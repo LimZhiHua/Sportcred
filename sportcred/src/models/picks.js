@@ -7,15 +7,18 @@ const pickSchema = new mongoose.Schema({
       ref: 'User'
   },
 
-  topicId: {
-      type: mongoose.Schema.Types.ObjectId,
+  topicName: {
+      type: mongoose.Schema.Types.String,
       ref: 'PickTopic'
   },
 
   pick: {
     type: String,
-  }
+  },
 
+  year:{
+    type: mongoose.Schema.Types.Number,
+  }
 })
 
-module.exports = mongoose.model('Pick', pickSchema)
+module.exports = mongoose.model('picks', pickSchema)

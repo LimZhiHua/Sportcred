@@ -102,7 +102,8 @@ router.post('/', async (req, res) => {
     //       id: req.body.userId
     //   },
     title: req.body.title,
-    description: req.body.description
+    description: req.body.description,
+    authorId: req.body.authorId
   }
 
   try {

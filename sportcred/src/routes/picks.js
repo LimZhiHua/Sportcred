@@ -213,20 +213,18 @@ router.get('/getAllPlayers', async (req, res) => {
 *         description: Dictionary of Teams mapped to players.
 *  
 */
-router.get('/getPicksData', async (req, res) => {
-	console.log("Inissde the right api");
-
-	const allData = await PlayersByTeams
-		.find({})
-		.catch((error) => {
-			return res.status(500).send("error getting the players by Team from the db")
-		});
-	try {
-		return res.status(200).send({ playersByTeams: allData });
-	} catch (err) {
-		return res.status(500).send(err)
-	}
-
+router.get('/getPicksData', async (req, res) => {	
+	const allData  = await PlayersByTeams
+                    .find({})
+                    .catch((error) => {
+                      return res.status(500).send("error getting the players by Team from the db")
+                  });
+  try {
+    return res.status(200).send({ playersByTeams: allData });
+  } catch (err) {
+    return res.status(500).send(err)
+  }
+	
 })
 
 router.post('/createPreseason', async (req, res) => {
@@ -419,16 +417,18 @@ router.get('/playoffsTopics', async (req, res) => {
 
 router.post('/assignPick', async (req, res) => {
 
-	const topicId = req.body.topicId;
+	const topicName = req.body.topicName;
 	const userId = req.body.userId;
 	const pick = req.body.pick;
+	const year = req.body.year;
 
-	console.log('topicId ' + topicId + ' userId ' + userId + ' pick ' + pick)
+	console.log('topicId ' + topicName + ' userId ' + userId + ' pick ' + pick)
 
 	// Check if the user already has a pick for this topic.
 	try {
-		const existing_pick = await Pick.findOne({ topicId: topicId, userId: userId });
-		console.log(existing_pick)
+		const existing_pick = await Pick.findOne({ topicName: topicName, userId: userId, year:year });
+		console.log("existing pick is",)
+		console.log( existing_pick)
 		if (existing_pick) {
 			const query = { _id: existing_pick._id }
 			const update = { pick: pick }
@@ -446,9 +446,10 @@ router.post('/assignPick', async (req, res) => {
 
 	// Create and assign pick
 	const new_pick = new Pick({
-		topicId: topicId,
+		topicName: topicName,
 		userId: userId,
-		pick: pick
+		pick: pick,
+		year: year
 	})
 
 	try {
@@ -462,11 +463,11 @@ router.post('/assignPick', async (req, res) => {
 
 router.post('/currentPick', async (req, res) => {
 
-	const topicId = req.body.topicId;
+	const topicName = req.body.topicName;
 	const userId = req.body.userId;
-
+	const year = req.body.year;
 	try {
-		const existing_pick = await Pick.findOne({ topicId: topicId, userId: userId });
+		const existing_pick = await Pick.findOne({ topicName: topicName, userId: userId, year: year });
 		if (existing_pick) {
 			return res.status(200).send(existing_pick);
 		} else {
@@ -480,24 +481,6 @@ router.post('/currentPick', async (req, res) => {
 
 })
 
-router.post('/currentPick', async (req, res) => {
 
-	const topicId = req.body.topicId;
-	const userId = req.body.userId;
-
-	try {
-		const existing_pick = await Pick.findOne({ topicId: topicId, userId: userId });
-		if (existing_pick) {
-			return res.status(200).send(existing_pick);
-		} else {
-			return res.status(400).send(null);
-		}
-
-
-	} catch (err) {
-		return res.status(400).send(null);
-	}
-
-})
 
 module.exports = router;

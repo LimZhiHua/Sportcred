@@ -4,11 +4,12 @@ import { Link } from "react-router-dom";
 import { AiOutlineMenu, AiOutlineLeft, AiOutlineSetting } from "react-icons/ai";
 import { Button } from 'reactstrap';
 import { isOnRoute, getThisRoute } from './utils';
+import { useAuth0} from "@auth0/auth0-react"
 
 import {
     HOME_URL,
     PROFILE_URL,
-    // SIGNIN_URL,
+    SIGNIN_URL,
     // SIGNUP_URL,
     TRIVIA_LANDING_URL,
     DEBATE_LANDING_URL,
@@ -25,9 +26,11 @@ let Navlink = (props) => {
     return <Link to={props.to}><div className={"menu-item " + activeOnRoute(props.to)}>{props.children}</div></Link>;
 }
 
+
 let Navbar = () => {
     const [opened, setOpened] = useState(false)
     const [thisRoute, setThisRoute] = useState(getThisRoute());
+    const {logout, isAuthenticated} = useAuth0();
 
     // Force navbar to repaint when route is changed
     useEffect(() => {
@@ -35,7 +38,16 @@ let Navbar = () => {
             setThisRoute(getThisRoute());
         });
     }, [setThisRoute]);
+
+    const Logout = () =>{
     
+      sessionStorage.removeItem('token');
+      if (isAuthenticated) {
+          logout();
+
+      }
+    }
+
     return (
       <div id="navbar" key={thisRoute} className={((opened)? "opened":"")}>
         <div className={"body flex-container flex-vertical"}>
@@ -54,7 +66,8 @@ let Navbar = () => {
           </div>
           <div>
             <div className="menu-item"><Link to="/"><AiOutlineSetting/></Link><Link to={COMPONENTS_URL}> Components (TEMP)</Link></div>
-            <Navlink to={HOME_URL}>Logout</Navlink>
+            <Navlink to={SIGNIN_URL}>Login/Signup</Navlink>
+            <Button onClick={Logout}>Logout</Button>
             <div className="menu-item spacer"></div>  
           </div>
         </div>
