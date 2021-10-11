@@ -1,15 +1,6 @@
+// Defaults ----------------------------------------------------------------
 
-import { useAuth0 } from "@auth0/auth0-react";
-// require('dotenv').config();
-
-////////////////////////////////////////////////
-// TODO: Why is it not working ?????
-////////////////////////////////////////////////
-
-export const SERVER_ROOT = "http://localhost:5000";
-// export const SERVER_ROOT = process.env.SERVER_ROOT + ":" + process.env.SERVER_PORT;
-// console.log("urls: ", SERVER_ROOT);
-
+export const SERVER_ROOT = process.env.REACT_APP_SERVER_DOMAIN + ":" + process.env.REACT_APP_SERVER_PORT;
 export const DEFAULT_HEADER = () => {
     return {
         Accept: "application/json, text/plain, */*",
@@ -19,9 +10,7 @@ export const DEFAULT_HEADER = () => {
     }
 };
 
-// export const DEFAULT_HEADER = {}
-
-// Prod
+// Prod ----------------------------------------------------------------
 
 export const HOME_URL = "/";
 
@@ -41,5 +30,5 @@ export const REGULAR_SEASON_URL = PICKSPREDICT_LANDING_URL + '/regular-season';
 export const PLAYOFFS_BRACKET_URL = PICKSPREDICT_LANDING_URL + '/playoffs-bracket';
 export const PRESEASON_URL =  PICKSPREDICT_LANDING_URL + '/preseason';
 
-// Dev
+// Dev ----------------------------------------------------------------
 export const COMPONENTS_URL = "/components"
