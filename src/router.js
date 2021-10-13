@@ -62,7 +62,7 @@ const AppRouter = () => (
     <ProtectedRoute exact path={PROFILE_URL} component={Profile} />
     <ProtectedRoute exact path={EDIT_PROFILE_URL} component={EditProfile} />
 
-    <Route exact path={HOME_URL} component={Homepage} />
+    <ProtectedRoute exact path={HOME_URL} component={Homepage} />
     <ProtectedRoute exact path={TRIVIA_LANDING_URL} component={TriviaLanding} />
     <ProtectedRoute exact path={TRIVIA_SINGLE_PLAYER_URL} component={TriviaSinglePlayer} />
 

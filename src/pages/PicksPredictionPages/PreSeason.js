@@ -151,15 +151,10 @@ const PreSeason = () => {
      
      const [result, setData] = React.useState([]);
 
-     const [defaultDefensePlayer, setDefaultDefensePlayer] = useState('')
      const [selectedDefensePlayer, setSelectedDefensePlayer] = useState('')
-     const [defaultRookiePlayer, setDefaultRookiePlayer] = useState('')
      const [selectedRookiePlayer, setSelectedRookiePlayer] = useState('')
-     const [defaultMVPPlayer, setDefaultMVPPlayer] = useState('')
      const [selectedMVPPlayer, setSelectedMVPPlayer] = useState('')
-     const [default6thPlayer, setDefault6thPlayer] = useState('')
      const [selected6thPlayer, setSelected6thPlayer] = useState('')
-     const [defaultImprovedPlayer, setDefaultImprovedPlayer] = useState('')
      const [selectedImprovedPlayer, setSelectedImprovedPlayer] = useState('')
      const curYear = 2021
 
@@ -240,63 +235,25 @@ const PreSeason = () => {
       }
      }   
      //---------setting the default players for the dropdowns------------
-     const setDefaultDefense = async () => {
-      let player = (await APIs.getCurrentPick(playerID, "Defense Player", curYear))
-      if(player.status !== 400){
-        player = player.pick.pick
-      }else{
-        player = "Please Select a Player"
-      }
-      setDefaultDefensePlayer(player)
-     } 
-     const setDefaultRookie = async () => {
-      let player = (await APIs.getCurrentPick(playerID, "Rookie Player", curYear))
-      if(player.status !== 400){
-        player = player.pick.pick
-      }else{
-        player = "Please Select a Player"
-      }
-      setDefaultRookiePlayer(player)
-     } 
 
-     const setDefaultMVP = async () => {
-      let player = (await APIs.getCurrentPick(playerID, "MVP Player", curYear))
+     const setDefaultItem = async (sectionName, settingFunction) => {
+      let player = (await APIs.getCurrentPick(playerID, sectionName, curYear))
       if(player.status !== 400){
         player = player.pick.pick
       }else{
         player = "Please Select a Player"
       }
-      setDefaultMVPPlayer(player)
-     }
-
-     const setDefault6th = async () => {
-      let player = (await APIs.getCurrentPick(playerID, "6th Player", curYear))
-      if(player.status !== 400){
-        player = player.pick.pick
-      }else{
-        player = "Please Select a Player"
-      }
-      setDefault6thPlayer(player)
-     } 
-
-     const setDefaultImproved = async () => {
-      let player = (await APIs.getCurrentPick(playerID, "Improved Player", curYear))
-      if(player.status !== 400){
-        player = player.pick.pick
-      }else{
-        player = "Please Select a Player"
-      }
-      setDefaultImprovedPlayer(player)
+      settingFunction(player)
      } 
      
      // first time we open the page, lets get the default players based on their last saved selection
     useEffect(() => {
       refreshData();
-      setDefaultDefense();
-      setDefaultRookie();
-      setDefaultMVP();
-      setDefault6th();
-      setDefaultImproved();
+      setDefaultItem("Defense Player", setSelectedDefensePlayer)
+      setDefaultItem("Rookie Player", setSelectedRookiePlayer)
+      setDefaultItem("MVP Player", setSelectedMVPPlayer)
+      setDefaultItem( "6th Player", setSelected6thPlayer)
+      setDefaultItem("Improved Player", setSelectedImprovedPlayer)
     }, []);
 
     // this is to convert the players from our API call to a flat array (to stick in our menuitems)
@@ -304,25 +261,25 @@ const PreSeason = () => {
       setPlayerList(toSingleArray(result))
    },[result])
 
-   if(defaultDefensePlayer!== "" && defaultRookiePlayer !== "" && playerList.length !== 0 ){
+   if(playerList.length !== 0 ){
     return (
       <div>
        <h1 className={styles.h1}>Pre-Season Predictions</h1>
        <Button variant="contained" onClick={refreshData}>Get All Players</Button>
        <FloatingSection>
-          <SinglePlayerDropdown title={"MVP of the Year"} boxTitle={"Season MVPs"} selected={handleChangeMVP} default={defaultMVPPlayer} styles = {styles} values={playerList}    onSelect={saveMVPPlayer} ></SinglePlayerDropdown>
+          <SinglePlayerDropdown title={"MVP of the Year"} boxTitle={"Season MVPs"} selected={handleChangeMVP} default={selectedMVPPlayer} styles = {styles} values={playerList}    onSelect={saveMVPPlayer} ></SinglePlayerDropdown>
        </FloatingSection>
        <FloatingSection>
-          <SinglePlayerDropdown title={"Defense Player of the Year"} boxTitle={"Season Defense Player"} selected={handleChangeDefense} default={defaultDefensePlayer} styles = {styles} values={playerList}    onSelect={saveDefensePlayer} ></SinglePlayerDropdown>
+          <SinglePlayerDropdown title={"Defense Player of the Year"} boxTitle={"Season Defense Player"} selected={handleChangeDefense} default={selectedDefensePlayer} styles = {styles} values={playerList}    onSelect={saveDefensePlayer} ></SinglePlayerDropdown>
        </FloatingSection>
         <FloatingSection>
-          <SinglePlayerDropdown title={"Rookie of the Year"} boxTitle={"Season Rookie"} selected={handleChangeRookie} default={defaultRookiePlayer} styles = {styles} values={playerList}    onSelect={saveRookiePlayer} ></SinglePlayerDropdown>
+          <SinglePlayerDropdown title={"Rookie of the Year"} boxTitle={"Season Rookie"} selected={handleChangeRookie} default={selectedRookiePlayer} styles = {styles} values={playerList}    onSelect={saveRookiePlayer} ></SinglePlayerDropdown>
        </FloatingSection>
        <FloatingSection>
-          <SinglePlayerDropdown title={"6th Player of the Year"} boxTitle={"Season 6th Player"} selected={handleChange6th} default={default6thPlayer} styles = {styles} values={playerList}    onSelect={save6thPlayer} ></SinglePlayerDropdown>
+          <SinglePlayerDropdown title={"6th Player of the Year"} boxTitle={"Season 6th Player"} selected={handleChange6th} default={selected6thPlayer} styles = {styles} values={playerList}    onSelect={save6thPlayer} ></SinglePlayerDropdown>
        </FloatingSection>
        <FloatingSection>
-          <SinglePlayerDropdown title={"Most Improved Player of the Year"} boxTitle={"Season Most Improved Player Player"} selected={handleChangeImproved} default={defaultImprovedPlayer} styles = {styles} values={playerList}    onSelect={saveImprovedPlayer} ></SinglePlayerDropdown>
+          <SinglePlayerDropdown title={"Most Improved Player of the Year"} boxTitle={"Season Most Improved Player Player"} selected={handleChangeImproved} default={selectedImprovedPlayer} styles = {styles} values={playerList}    onSelect={saveImprovedPlayer} ></SinglePlayerDropdown>
        </FloatingSection>
 
        </div>
