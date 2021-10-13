@@ -186,11 +186,11 @@ export const finishTrivia = async (sid, pid, total) => {
         const msg = await response.text()
         result.error = msg
     }
+    if(result.currPlayer == null){
+      result.currPlayer = result.otherPlayer
+    }    
+    const currUser = await getUser(result.currPlayer.userId)
 
-    const currUser = await getUser(result.playerID)
-    if(result.otherPlayer == null){
-      result.otherPlayer = result.currPlayer
-    }
     await sendNotif({
         sender: pid,
         notifBody: currUser.user.username + " has scored " + result.currPlayer.totalScore + "/" + total + " in your trivia battle!",
