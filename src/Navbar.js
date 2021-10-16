@@ -15,7 +15,7 @@ import {
     DEBATE_LANDING_URL,
     ZONE_LANDING_URL,
     PICKSPREDICT_LANDING_URL,
-    COMPONENTS_URL
+    DEV_HOME_URL
   } from "./urls";
 
 function activeOnRoute(route) {

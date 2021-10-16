@@ -35,4 +35,5 @@ export const PLAYOFFS_BRACKET_URL = PICKSPREDICT_LANDING_URL + '/playoffs-bracke
 export const PRESEASON_URL =  PICKSPREDICT_LANDING_URL + '/preseason';
 
 // Dev ----------------------------------------------------------------
-export const COMPONENTS_URL = "/components"
+
+export const DEV_HOME_URL = "/dev"
