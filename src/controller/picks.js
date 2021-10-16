@@ -215,6 +215,10 @@ export const assignPick = async (userId, topicName, pick, year) => {
 	return result;
 }
 
+
+
+
+
 export const getCurrentPick = async (userId, topicName, year) => {
 	const url = SERVER_ROOT + "/picks/currentPick/"
 	const request = new Request(url, {
@@ -236,3 +240,41 @@ export const getCurrentPick = async (userId, topicName, year) => {
 	return result;
 }
 
+export const getCurrentRegularPick = async (userId) => {
+  console.log("gettinr regular picks for ", userId)
+	const url = SERVER_ROOT + "/picks/getRegularPicksData/" + userId
+	const request = new Request(url, {
+	  method: "get",
+	  headers:  DEFAULT_HEADER(),
+	});
+
+	const result = {}
+
+	const response = await fetch(request);
+	result.status = response.status;
+  console.log("responded with ")
+	if (response.status === 200) {
+	  const msg = await response.json()
+	  result.pick = msg;
+	}
+
+	return result;
+}
+
+export const assignRegularPick = async (userId, pick, matchID) => {
+  console.log("assigning regular pick lol",matchID)
+  const url = SERVER_ROOT + "/picks/assignRegularPick/"
+
+	const request = new Request(url, {
+	  method: "post",
+	  body: JSON.stringify({userId: userId, pick: pick, matchID:matchID }),
+	  headers:  DEFAULT_HEADER(),
+	});
+
+	const result = {}
+
+	const response = await fetch(request);
+	result.status = response.status;
+
+	return result;
+}

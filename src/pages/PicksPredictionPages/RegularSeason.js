@@ -10,8 +10,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputBase from '@material-ui/core/InputBase';
 import * as APIs from "../../controller/picks";
 import './regularSeason.css';
-import {getRegularSeasonData} from "../../controller/picks"
-
+import {getRegularSeasonData, assignRegularPick, getCurrentRegularPick} from "../../controller/picks"
+import {useAuth0} from "@auth0/auth0-react"
 import {SimpleDropdown} from "../../customComponents/dropdown/simpleDropdown"
 
 const todayDate = new Date()
@@ -143,7 +143,6 @@ const parseData = async () =>{
   let dateInfo = {}
   let dateList = []
   let dateIndex = -1 // starting at -1 so that when we add our 1st item, the index becomes 0
-  console.log(gameList)
   // Dates are in yyyy-mm-dd
   // Gonna use a for loop instead of a map cause i want to keep track of the previous date
   let curDate =  todayDate.toISOString().split("T")[0]
@@ -156,7 +155,7 @@ const parseData = async () =>{
     }else{
 
       // if we have gone to a new date, we create a new array in gamesByDate
-      gamesByDate.push([[gameList[i].team]])
+      gamesByDate.push([gameList[i].team])
       dateIndex ++;
       // Make sure to add that date to the dateInfo dictionary too!
       dateInfo[gameList[i].dateTime.split("T")[0]] = dateIndex
@@ -164,50 +163,101 @@ const parseData = async () =>{
     }
   }
   // we store this game data in this form. 1st array contains all the games in one day, 2nd array is the actual date.
-  console.log(([gamesByDate, dateInfo, dateList]))
+  console.log("dude show up",([gamesByDate, dateInfo, dateList]))
   return([gamesByDate, dateInfo, dateList])
 }  
   
 const RegularSeason = () => {
     const styles = useStyles();
+    const { user } = useAuth0();
+    const userID = user.sub.split("|")[1]
 
-     const [date, setDate] = React.useState('');
      //gameData holds the info for all the games across all the dates
      const [gameData, setGameData] = useState(null)
      // curGameData contains the info for the selected date
      const [curGameData, setCurGameData] = useState([])
-    
+    // this is for the selected date in the dropdown
      const [selectedDate, setSelecetdDate] = useState()
+     // This is to store the list of all the picks the user has
+    const [userPicks, setUserPicks] = useState([]);
 
-     var dateLength = ["03-03-2021", '04-08-2021', '05-08-2021'];
+    // because we need the current date to find out our pick info, i need to store it in another variable (cant just use selected date)
+    const [curDate, setCurDate] = useState("")
 
     const getData = async () =>{
       setGameData(await parseData())
+      const pickData =  (await getCurrentRegularPick(userID)).pick.RegularSeasonPicks
+      let picksDict = {}
+      for(var i = 0; i < pickData.length; i++){
+        picksDict[pickData[i].matchID] = pickData[i].pick
+      }
+      setUserPicks(picksDict)
     }
 
-    // once we select a date, we need to find out the games being played on that day.
+
     const setCurrentDateInfo = (event) =>{
       setSelecetdDate(event.target.value)
-      console.log("selected", event.target.value)
+    }
+
+    const setSelectedPickInfo = (event, data)=> {
+      //picksData[data] = event.target.value
+      //setSelectedPick(picksData)
+      assignRegularPick(userID, event.target.value, data)
+    }
+    // once we select a date, we need to find out the games being lpayed on that day.
+    const handleDateSelection = () =>{
+      // find out the index using our dicitonary
+      const index = gameData[1][selectedDate]
+      setCurGameData(gameData[0][index])
+      setCurDate(selectedDate)
     }
 
      useEffect ( () =>{
        getData()
     },[])
-    if(gameData !== null){
+
+
+    useEffect ( () =>{
+      if(gameData != null){
+        setCurGameData(gameData[0][0])
+        setSelecetdDate(gameData[2][0])
+      }
+    },[gameData])
+
+
+    const testing = async () =>{
+      //assignRegularPick("615a8f09579c1200124577df", "obi wan", "2021-10-16")
+      console.log(userPicks)
+      //getDefaultPick()
+    }
+    if(gameData !== null && curGameData != null){
         return (
           <div>
+            <button onClick={testing}> hello there </button>
           <h1 className={styles.h1}>Regular Season Picks</h1>
           <div className={styles.subHeader}>
-          {/* <InputLabel id="demo-customized-select-label">Choose a date</InputLabel> */}
-        <SimpleDropdown boxTitle="Select your Date" values={gameData[2]} styles={styles} selected={setCurrentDateInfo} default={gameData[2][0]}>
-        </SimpleDropdown>
+        <SimpleDropdown key={"wtf"} boxTitle="Select your Date" values={gameData[2]} styles={styles} selected={setCurrentDateInfo} onSelect={handleDateSelection} default={''} answerBox={true}></SimpleDropdown>
           </div>
+          {/* curGameData is an array of arrays of arrays like this.
+              [
+                [ [team1,team2], [team3, team4] ],
+                [ [team5,team6], [team7, team8], [team9, team10] ]
+              ]
+             For each of the "team" options, I need to generate a floating section => I double map. The first lets me gets an array of arrays. For each of those, i generate anothe box 
+
+          */}
           {
-            dateLength.map(element => {
-              return (<FloatingSection><div className='voteGroup'> <div><div className='date'> {element}
-              </div></div> <div className='vs-bock'><div className='inline'>Team 1</div>     vs    <div className='inline'>Team 2</div></div> </div>
-              </FloatingSection>);  
+            curGameData.map(teamList => {
+              //teamList should look like:  [ [team1,team2], [team3, team4] ]
+              return teamList.map(match => {
+                // match should look like: [team1,team2]
+                return (<FloatingSection>
+                          <div className='voteGroup'> <div>
+                          </div>
+                           <div className='vs-bock'><div className='inline'>{match["team1"]}</div>     vs    <div className='inline'>{match["team2"]}</div></div> </div>
+                           <SimpleDropdown key={curDate+match["team1"] + "vs" + match["team2"]} boxTitle="Take your pick" values={["",match["team1"], match["team2"]]} styles={styles}  selected={((e) => setSelectedPickInfo(e, curDate+match["team1"]+"vs"+match["team2"]))} answerBox={false} default={userPicks[curDate+match["team1"] + "vs" + match["team2"]] || ""}></SimpleDropdown>
+                        </FloatingSection>); 
+              })
             })
           }
           </div>

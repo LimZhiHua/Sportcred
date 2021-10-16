@@ -4,6 +4,10 @@ import FormControl from '@material-ui/core/FormControl';
 import {AnswerButton} from "../buttons/Buttons"
 
 export function SimpleDropdown(props){
+    let answerBox = <div></div>
+    if(props.answerBox){
+        answerBox = <AnswerButton style={{width: '100px', height: '10px'}} label='Select' onClick={props.onSelect}></AnswerButton> 
+    }
         return(
             <div>
                 <div>{props.boxTitle}</div>
@@ -23,7 +27,7 @@ export function SimpleDropdown(props){
                     </Select>
                     </FormControl>
                     <div>
-                    <AnswerButton style={{width: '100px', height: '10px'}} label='Select' onClick={props.onSelect}></AnswerButton>
+                    {answerBox}
                     </div>
         </div>
         )
