@@ -36,15 +36,17 @@ let Navbar = () => {
     useEffect(() => {
         window.addEventListener("hashchange", () => {
             setThisRoute(getThisRoute());
+            // Auto close navbar panel on mobile view
+            if (window.innerWidth < 600) {
+              setOpened(false);
+            }
         });
-    }, [setThisRoute]);
+    }, [setThisRoute, setOpened]);
 
     const Logout = () =>{
-    
       sessionStorage.removeItem('token');
       if (isAuthenticated) {
           logout();
-
       }
     }
 
@@ -57,17 +59,17 @@ let Navbar = () => {
               <img src="Logo.png" className="App-logo" alt=""></img>
             </Link>
             <div>
-              <Navlink to={PROFILE_URL}>Profile</Navlink>
               <Navlink to={ZONE_LANDING_URL}>Open Court</Navlink>
               <Navlink to={TRIVIA_LANDING_URL}>Trivia</Navlink>
-              <Navlink to={DEBATE_LANDING_URL}>Debates</Navlink>
+              <Navlink to={DEBATE_LANDING_URL}>Analysis</Navlink>
               <Navlink to={PICKSPREDICT_LANDING_URL}>Picks and Predictions</Navlink>
             </div>
           </div>
           <div>
-            <div className="menu-item"><Link to="/"><AiOutlineSetting/></Link><Link to={COMPONENTS_URL}> Components (TEMP)</Link></div>
-            <Navlink to={SIGNIN_URL}>Login/Signup</Navlink>
-            <Button onClick={Logout}>Logout</Button>
+            <Navlink to={PROFILE_URL}><AiOutlineSetting/> Profile</Navlink>
+            {(isAuthenticated)
+              ? <div className="menu-item" onClick={Logout}>Logout</div>
+              : <Navlink to={SIGNIN_URL}>Login</Navlink>}
             <div className="menu-item spacer"></div>  
           </div>
         </div>
