@@ -163,7 +163,6 @@ const parseData = async () =>{
     }
   }
   // we store this game data in this form. 1st array contains all the games in one day, 2nd array is the actual date.
-  console.log("dude show up",([gamesByDate, dateInfo, dateList]))
   return([gamesByDate, dateInfo, dateList])
 }  
   
@@ -236,7 +235,7 @@ const RegularSeason = () => {
             <button onClick={testing}> hello there </button>
           <h1 className={styles.h1}>Regular Season Picks</h1>
           <div className={styles.subHeader}>
-        <SimpleDropdown key={"wtf"} boxTitle="Select your Date" values={gameData[2]} styles={styles} selected={setCurrentDateInfo} onSelect={handleDateSelection} default={''} answerBox={true}></SimpleDropdown>
+        <SimpleDropdown key={"date dropdown"} boxTitle="Select your Date" values={gameData[2]} styles={styles} selected={setCurrentDateInfo} onSelect={handleDateSelection} default={''} answerBox={true}></SimpleDropdown>
           </div>
           {/* curGameData is an array of arrays of arrays like this.
               [
