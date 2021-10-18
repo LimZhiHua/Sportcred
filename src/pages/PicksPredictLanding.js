@@ -1,5 +1,4 @@
-import React, {useState} from "react";
-import FloatingSection from "../customComponents/FloatingSection";
+import React from "react";
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from "react-router-dom";
@@ -8,8 +7,6 @@ import {
     PLAYOFFS_BRACKET_URL,
     PRESEASON_URL,
   } from "../urls";
-
-import { isOnRoute, getThisRoute } from '../utils';
 
 const useStyles = makeStyles((theme) => ({
     regular: {

@@ -1,15 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import FloatingSection from "../../customComponents/FloatingSection";
 import Button from '@material-ui/core/Button';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import MenuItem from '@material-ui/core/MenuItem';
-import InputBase from '@material-ui/core/InputBase';
+import { makeStyles } from '@material-ui/core/styles';
+
 import './PreSeason.css';
-import {AnswerButton,} from "../../customComponents/buttons/Buttons";
 import * as APIs from "../../controller/picks";
 
 import {useAuth0} from "@auth0/auth0-react"
@@ -79,43 +73,6 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const BootstrapInput = withStyles((theme) => ({
-//   root: {
-//     'label': {
-//       marginTop: theme.spacing(0), 
-//     },
-//     '& label.Mui-focused': {
-//       padding: '10px 26px 10px 12px',
-//     },
-//   },
-  input: {
-    borderRadius: 4,
-    position: 'relative',
-    //backgroundColor: theme.palette.background.paper,
-    border: '1px solid #ced4da',
-    fontSize: 16,
-    padding: '10px 26px 10px 12px',
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(','),
-    '&:focus': {
-      borderRadius: 4,
-      borderColor: '#80bdff',
-      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-    },
-  },
-}))(InputBase);
 
 
 const PreSeason = () => {
@@ -156,6 +113,12 @@ const PreSeason = () => {
      const [selectedMVPPlayer, setSelectedMVPPlayer] = useState('')
      const [selected6thPlayer, setSelected6thPlayer] = useState('')
      const [selectedImprovedPlayer, setSelectedImprovedPlayer] = useState('')
+
+     const [defaultDefensePlayer, setDefaultDefensePlayer] = useState('')
+     const [defaultRookiePlayer, setDefaultRookiePlayer] = useState('')
+     const [defaultMVPPlayer, setDefaultMVPPlayer] = useState('')
+     const [default6thPlayer, setDefault6thPlayer] = useState('')
+     const [defaultImprovedPlayer, setDefaultImprovedPlayer] = useState('')
      const curYear = 2021
 
 
@@ -181,9 +144,9 @@ const PreSeason = () => {
     };
      //---------saving the selected player----------------
      const saveDefensePlayer = async () => {
-      if(selectedDefensePlayer != "Please Select a Player"){
+      if(selectedDefensePlayer !== "Please Select a Player"){
         const response = await APIs.assignPick(playerID, "Defense Player", selectedDefensePlayer, curYear)
-        if(response.status == 200){
+        if(response.status === 200){
           window.alert(selectedDefensePlayer + " has been saved as your defense player pick")
         }else{
           window.alert("Something went wrong when trying to save your pick")
@@ -192,9 +155,9 @@ const PreSeason = () => {
      }
 
      const saveRookiePlayer = async () => {
-      if(selectedRookiePlayer != "Please Select a Player"){
+      if(selectedRookiePlayer !== "Please Select a Player"){
         const response = await APIs.assignPick(playerID, "Rookie Player", selectedRookiePlayer, curYear)
-        if(response.status == 200){
+        if(response.status === 200){
           window.alert(selectedRookiePlayer + " has been saved as your rookie player pick")
         }else{
           window.alert("Something went wrong when trying to save your pick")
@@ -205,7 +168,7 @@ const PreSeason = () => {
      const saveMVPPlayer = async () => {
       if(selectedMVPPlayer !== "Please Select a Player"){
         const response = await APIs.assignPick(playerID, "MVP Player", selectedMVPPlayer, curYear)
-        if(response.status == 200){
+        if(response.status === 200){
           window.alert(selectedMVPPlayer + " has been saved as your MVP pick")
         }else{
           window.alert("Something went wrong when trying to save your pick")
@@ -214,9 +177,9 @@ const PreSeason = () => {
      }   
     
      const save6thPlayer = async () => {
-      if(selected6thPlayer != "Please Select a Player"){
+      if(selected6thPlayer !== "Please Select a Player"){
         const response = await APIs.assignPick(playerID, "6th Player", selected6thPlayer, curYear)
-        if(response.status == 200){
+        if(response.status === 200){
           window.alert(selected6thPlayer + " has been saved as your 6th player pick")
         }else{
           window.alert("Something went wrong when trying to save your pick")
@@ -225,9 +188,9 @@ const PreSeason = () => {
      }   
 
      const saveImprovedPlayer = async () => {
-      if(selectedImprovedPlayer != "Please Select a Player"){
+      if(selectedImprovedPlayer !== "Please Select a Player"){
         const response = await APIs.assignPick(playerID, "Improved Player", selectedImprovedPlayer, curYear)
-        if(response.status == 200){
+        if(response.status === 200){
           window.alert(selectedImprovedPlayer + " has been saved as your most improved pick")
         }else{
           window.alert("Something went wrong when trying to save your pick")
@@ -236,25 +199,26 @@ const PreSeason = () => {
      }   
      //---------setting the default players for the dropdowns------------
 
-     const setDefaultItem = async (sectionName, settingFunction) => {
-      let player = (await APIs.getCurrentPick(playerID, sectionName, curYear))
-      if(player.status !== 400){
-        player = player.pick.pick
-      }else{
-        player = "Please Select a Player"
-      }
-      settingFunction(player)
-     } 
      
      // first time we open the page, lets get the default players based on their last saved selection
     useEffect(() => {
       refreshData();
-      setDefaultItem("Defense Player", setSelectedDefensePlayer)
-      setDefaultItem("Rookie Player", setSelectedRookiePlayer)
-      setDefaultItem("MVP Player", setSelectedMVPPlayer)
-      setDefaultItem( "6th Player", setSelected6thPlayer)
-      setDefaultItem("Improved Player", setSelectedImprovedPlayer)
-    }, []);
+      
+      const setDefaultItem = async (sectionName, settingFunction) => {
+        let player = (await APIs.getCurrentPick(playerID, sectionName, curYear))
+        if(player.status !== 400){
+          player = player.pick.pick
+        }else{
+          player = "Please Select a Player"
+        }
+        settingFunction(player)
+       } 
+      setDefaultItem("Defense Player", setDefaultDefensePlayer)
+      setDefaultItem("Rookie Player", setDefaultRookiePlayer)
+      setDefaultItem("MVP Player", setDefaultMVPPlayer)
+      setDefaultItem( "6th Player", setDefault6thPlayer)
+      setDefaultItem("Improved Player", setDefaultImprovedPlayer)
+    },[]);
 
     // this is to convert the players from our API call to a flat array (to stick in our menuitems)
      useEffect ( () =>{
@@ -265,21 +229,20 @@ const PreSeason = () => {
     return (
       <div>
        <h1 className={styles.h1}>Pre-Season Predictions</h1>
-       <Button variant="contained" onClick={refreshData}>Get All Players</Button>
        <FloatingSection>
-          <SinglePlayerDropdown title={"MVP of the Year"} boxTitle={"Season MVPs"} selected={handleChangeMVP} default={selectedMVPPlayer} styles = {styles} values={playerList}    onSelect={saveMVPPlayer} ></SinglePlayerDropdown>
+          <SinglePlayerDropdown key={"MVP"}title={"MVP of the Year"} boxTitle={"Season MVPs"} selected={handleChangeMVP}  default={defaultMVPPlayer} styles = {styles} values={playerList}    onSelect={saveMVPPlayer} ></SinglePlayerDropdown>
        </FloatingSection>
        <FloatingSection>
-          <SinglePlayerDropdown title={"Defense Player of the Year"} boxTitle={"Season Defense Player"} selected={handleChangeDefense} default={selectedDefensePlayer} styles = {styles} values={playerList}    onSelect={saveDefensePlayer} ></SinglePlayerDropdown>
+          <SinglePlayerDropdown  key={"Defense"} title={"Defense Player of the Year"} boxTitle={"Season Defense Player"} selected={handleChangeDefense} default={defaultDefensePlayer} styles = {styles} values={playerList}    onSelect={saveDefensePlayer} ></SinglePlayerDropdown>
        </FloatingSection>
         <FloatingSection>
-          <SinglePlayerDropdown title={"Rookie of the Year"} boxTitle={"Season Rookie"} selected={handleChangeRookie} default={selectedRookiePlayer} styles = {styles} values={playerList}    onSelect={saveRookiePlayer} ></SinglePlayerDropdown>
+          <SinglePlayerDropdown  key={"Rookie"} title={"Rookie of the Year"} boxTitle={"Season Rookie"} selected={handleChangeRookie} default={defaultRookiePlayer} styles = {styles} values={playerList}    onSelect={saveRookiePlayer} ></SinglePlayerDropdown>
        </FloatingSection>
        <FloatingSection>
-          <SinglePlayerDropdown title={"6th Player of the Year"} boxTitle={"Season 6th Player"} selected={handleChange6th} default={selected6thPlayer} styles = {styles} values={playerList}    onSelect={save6thPlayer} ></SinglePlayerDropdown>
+          <SinglePlayerDropdown  key={"6th"} title={"6th Player of the Year"} boxTitle={"Season 6th Player"} selected={handleChange6th} default={default6thPlayer} styles = {styles} values={playerList}    onSelect={save6thPlayer} ></SinglePlayerDropdown>
        </FloatingSection>
        <FloatingSection>
-          <SinglePlayerDropdown title={"Most Improved Player of the Year"} boxTitle={"Season Most Improved Player Player"} selected={handleChangeImproved} default={selectedImprovedPlayer} styles = {styles} values={playerList}    onSelect={saveImprovedPlayer} ></SinglePlayerDropdown>
+          <SinglePlayerDropdown  key={"Improved"} title={"Most Improved Player of the Year"} boxTitle={"Season Most Improved Player Player"} selected={handleChangeImproved} default={defaultImprovedPlayer} styles = {styles} values={playerList}    onSelect={saveImprovedPlayer} ></SinglePlayerDropdown>
        </FloatingSection>
 
        </div>

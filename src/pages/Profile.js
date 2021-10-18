@@ -46,11 +46,10 @@ const Profile = () => {
     
     const userID = user.sub.split("|")[1]
 
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     async function getUserInfo() {
         const info = await getUser(userID)
         const user = info.user
-        console.log("info is", info.user)
         setACS(user.acs)
         setDescription(user.description)
         setEmail(user.email)
@@ -83,7 +82,7 @@ const Profile = () => {
                     style={{padding: "1em"}}>
                 <Grid   item 
                         md="auto" 
-                        xs="12" 
+                        xs={12} 
                         style={{backgroundColor: "#343434"}}>
                     <img 
                         src={profilePicB64? profilePicB64 : null} 
@@ -94,7 +93,7 @@ const Profile = () => {
                                 minHeight:       "300px",
                                 backgroundColor: "#909090"}}/>
                 </Grid>
-                <Grid item md xs="12">
+                <Grid item md xs={12}>
                     <Paper  className={classes.paperWhite} 
                             style={{backgroundColor: "#909090",
                                     boxSizing:       "border-box",

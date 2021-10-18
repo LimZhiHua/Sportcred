@@ -87,6 +87,8 @@ const TriviaSinglePlayer = () => {
                         return answerArray[i].answerBody
                     }
                 }
+                // this is if for some reason, there is no correct answer
+                return ''
             })
     
             // look man, i aint going through and remembering all the correct answers when testing. Just open console to see the answers

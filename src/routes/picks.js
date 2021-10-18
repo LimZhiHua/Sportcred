@@ -9,7 +9,7 @@ const PickTopic = require('../models/pickTopic')
 const Pick = require('../models/picks')
 const PlayersByTeams = require('../models/playersByTeams')
 const GamesByDate = require('../models/gamesByDate');
-
+const RegularSeasonPicks = require("../models/regularSeasonPicks")
 //https://www.npmjs.com/package/fantasydata-node-client
 const fdClientModule = require('fantasydata-node-client');
 const keys = {
@@ -227,6 +227,66 @@ router.get('/getPicksData', async (req, res) => {
 	
 })
 
+
+router.get('/getRegularPicksData/:Id', async (req, res) => {	
+	const userID = req.params.Id
+	const allData  = await RegularSeasonPicks
+                    .find({userId: userID })
+                    .catch((error) => {
+                      return res.status(500).send("error getting the players by Team from the db")
+                  });
+  try {
+    return res.status(200).send({ RegularSeasonPicks: allData });
+  } catch (err) {
+    return res.status(500).send(err)
+  }
+	
+})
+
+router.post('/assignRegularPick', async (req, res) => {
+
+	const userId = req.body.userId;
+	const pick = req.body.pick;
+	const matchID = req.body.matchID;
+
+	console.log(userId + ' pick ' + pick)
+
+	// Check if the user already has a pick for this topic.
+	try {
+		const existing_pick = await RegularSeasonPicks.findOne({ userId: userId, matchID:matchID });
+		console.log("existing pick is",)
+		console.log( existing_pick)
+		if (existing_pick) {
+			const query = { _id: existing_pick._id }
+			const update = { pick: pick }
+			try {
+				await RegularSeasonPicks.updateOne(query, update, {})
+				return res.status(200).send('pick updated');
+			} catch {
+				return res.status(400).send('pick could not be updated');
+			}
+
+		}
+	} catch {
+		console.log('creating new regular pick')
+	}
+
+	// Create and assign pick
+	const new_pick = new RegularSeasonPicks({
+		userId: userId,
+		pick: pick,
+		matchID: matchID,
+	})
+
+	try {
+		await new_pick.save();
+		return res.status(200).send("pick created");
+	} catch (err) {
+		return res.status(400).send("error creating pick");
+	}
+
+})
+
 router.post('/createPreseason', async (req, res) => {
 
 	const exists = await Preseason.findOne();
@@ -249,6 +309,24 @@ router.post('/createRegularSeason', async (req, res) => {
 
 	const exists = await RegularSeason.findOne();
 	if (exists) return res.status(400).send('Regular Season already exists');
+
+	const regularSeason = new RegularSeason({
+		topics: []
+	})
+
+	try {
+		await regularSeason.save();
+		return res.status(200).send('Regular Season saved');
+	} catch (err) {
+		return res.status(400).send('error creating Regular Season');
+	}
+
+})
+
+router.post('/createRegularSeason', async (req, res) => {
+
+	const exists = await RegularSeasonPicks.findOne();
+	if (exists) return res.status(400).send('RegularSeasonPicks already exists');
 
 	const regularSeason = new RegularSeason({
 		topics: []

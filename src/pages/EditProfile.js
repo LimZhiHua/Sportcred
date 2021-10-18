@@ -63,6 +63,7 @@ const EditProfile = () => {
 
     useEffect ( () =>{
         getUserInfo()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[description, email])
 
     // For setting the default new info.
@@ -79,7 +80,6 @@ const EditProfile = () => {
         console.log("image is this size:", file_size)
         if(file_size < 100000){
             let b64Image = await toBase64(event.target.files[0])
-            setProfilePicB64(b64Image)
             setNewProfilePicB64(b64Image)
         }else{
             window.alert("Please selecta an image with size less than 100kb")
@@ -132,10 +132,10 @@ const EditProfile = () => {
         <FloatingSection>
             <h1>Edit Profile</h1>   
             <Grid container spacing = {1} >
-                <Grid item xs={8} container justify="flex-start">
+                <Grid item xs={8} container >
                     <h1> Hello {username}</h1>
                 </Grid>
-                <Grid item xs={4} container justify="flex-end">
+                <Grid item xs={4} container>
                     <DefaultButton label="save" onClick={saveNewInfo}/>
                 </Grid>
             </Grid>
@@ -146,25 +146,25 @@ const EditProfile = () => {
                                 <h2> <b>Username:</b> </h2>
                             </Grid>        
                             <Grid item xs = {9}>
-                                <BasicTextArea label = {username} handleChange={changeUsername}></BasicTextArea>
+                                <BasicTextArea label = {username} onChange={changeUsername}></BasicTextArea>
                             </Grid>                            
                             <Grid item xs={3} >
                                 <h2> <b>Status:</b> </h2>
                             </Grid>        
                             <Grid item xs = {9}>
-                                <BasicTextArea label = {status} handleChange={changeStatus}></BasicTextArea>
+                                <BasicTextArea label = {status} onChange={changeStatus}></BasicTextArea>
                             </Grid>
                             <Grid item xs={3} >
                                 <h2> <b>Bio:</b> </h2>
                             </Grid>        
                             <Grid item xs = {9}>
-                                <BasicTextArea label = {description} handleChange={changeDescription}></BasicTextArea>
+                                <BasicTextArea label = {description} onChange={changeDescription}></BasicTextArea>
                             </Grid>
                             <Grid item xs={3} >
                                 <h2> <b>Email:</b> </h2>
                             </Grid>        
                             <Grid item xs = {9}>
-                                <BasicTextArea label = {email} handleChange={changeEmail}></BasicTextArea>
+                                <BasicTextArea label = {email} onChange={changeEmail}></BasicTextArea>
                             </Grid>
                         </Grid>
                     </Grid>

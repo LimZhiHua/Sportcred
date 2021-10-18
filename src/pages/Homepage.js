@@ -9,7 +9,6 @@ import {
 } from "react-icons/ai";
 
 // components
-
 import PostSlider from "../customComponents/postSlider/PostSlider";
 import {BasicTextFields, BasicTextArea} from "../customComponents/inputFields/inputFields"
 import {AnswerButton} from "../customComponents/buttons/Buttons"
@@ -24,9 +23,6 @@ import { getComments, newPostComment } from '../controller/postComment';
 import {useAuth0} from "@auth0/auth0-react"
 
 
-//--------------------
-
-var counter = 0;
 
 const PostContainer = (props) => {
     return (
@@ -174,9 +170,9 @@ const CommentSection = ({postId}) => {
 
     const [commentsData, setCommentsData]  = useState([]);
     const refreshComments = () => getComments(postId).then((data)=>setCommentsData(data.commentsArray));
-
     useEffect(() => {
-        refreshComments();
+        refreshComments()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     
     console.log("comments", commentsData);

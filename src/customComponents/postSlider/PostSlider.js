@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import './postSlider.css'
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 
 const styles = theme => ({
   agree: {

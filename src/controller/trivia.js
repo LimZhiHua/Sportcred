@@ -1,8 +1,6 @@
 import { SERVER_ROOT,  DEFAULT_HEADER } from "../urls";
 import { sendNotif } from "./notif";
 import { getUser } from "./user";
-import {useAuth0} from "@auth0/auth0-react"
-import React,{userState} from 'react'; // import useState
 
 const fetch = require("node-fetch");
 
