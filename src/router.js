@@ -20,7 +20,7 @@ import {
   REGULAR_SEASON_URL,
   PRESEASON_URL,
   PLAYOFFS_BRACKET_URL,
-  COMPONENTS_URL
+  DEV_HOME_URL
 } from "./urls";
 
 import Homepage from "./pages/Homepage";
@@ -39,7 +39,7 @@ import RegularSeason from "./pages/PicksPredictionPages/RegularSeason";
 import PlayOffBrackets from "./pages/PicksPredictionPages/PlayOffBrackets";
 import PreSeason from "./pages/PicksPredictionPages/PreSeason";
 
-import ComponentPage from "./devPages/componentsPage";
+import DevHomePage from "./devPages/devHome";
 
 import { withAuthenticationRequired} from "@auth0/auth0-react"
 import Loading from "../src/pages/Loading"
@@ -74,7 +74,7 @@ const AppRouter = () => (
     <ProtectedRoute exact path={PLAYOFFS_BRACKET_URL} component={PlayOffBrackets} />
     
     {/* Dev */}
-    <Route exact path={COMPONENTS_URL} component={ComponentPage} />
+    <Route exact path={DEV_HOME_URL} component={DevHomePage} />
   </Switch>
 );
 

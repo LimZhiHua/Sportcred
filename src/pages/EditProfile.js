@@ -63,6 +63,7 @@ const EditProfile = () => {
 
     useEffect ( () =>{
         getUserInfo()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[description, email])
 
     // For setting the default new info.

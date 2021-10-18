@@ -50,49 +50,70 @@ const Profile = () => {
     async function getUserInfo() {
         const info = await getUser(userID)
         const user = info.user
-        console.log("info is", info.user)
         setACS(user.acs)
         setDescription(user.description)
         setEmail(user.email)
         setStatus(user.status)
         setUsername(user.username)
         setProfilePicB64(user.profilePic)
-
     }
 
-    useEffect ( () =>{
+    useEffect (() =>{
         getUserInfo()
-    })
+    });
+
+    const LabelDetail = ({label, value, indented=false}) => {
+        return (
+            <div className="post-header">
+                <b>{label}: </b> 
+                {(indented)
+                    ? <div className="indent">{value}</div>
+                    : <span>{value}</span>}
+            </div>
+        );
+    };
 
     return (
-        <div>
-            <Grid container spacing = {3}>
-                <Grid item xs={4}>
-                    <Paper className={classes.paperWhite}>{username} </Paper>
+        <div style={{padding: "1em"}}>
+            <h1 style={{color: "white"}}>My Profile</h1>
+            <Grid   container 
+                    spacing={1} 
+                    alignItems="center"
+                    style={{padding: "1em"}}>
+                <Grid   item 
+                        md="auto" 
+                        xs="12" 
+                        style={{backgroundColor: "#343434"}}>
+                    <img 
+                        src={profilePicB64? profilePicB64 : null} 
+                        alt={profilePicB64? profilePicB64.name : null} 
+                        style={{minWidth:        "200px",
+                                maxwidth:        "500px", 
+                                height:          "300px",
+                                minHeight:       "300px",
+                                backgroundColor: "#909090"}}/>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item md xs="12">
+                    <Paper  className={classes.paperWhite} 
+                            style={{backgroundColor: "#909090",
+                                    boxSizing:       "border-box",
+                                    minHeight:       "300px",
+                                    textAlign:       "left"}}>
+                        <LabelDetail label="ACS" value={acs}/>
+                        <LabelDetail label="Username" value={username}/>
+                        <LabelDetail label="Email" value={email}/>
+                        <LabelDetail label="Status" value={status} indented={true}/><br/>
+                        <LabelDetail label="About Me" value={description} indented={true}/>
+                    </Paper>
                 </Grid>
-                <Grid item xs={4}>
-                    <DefaultButton label= {"Edit"} onClick={goToEditProfile} />
-                </Grid>
-                <Grid item xs={4}>
-                    <Paper className={classes.paperWhite}><b>ACS: </b>{acs} </Paper>
-                </Grid>
-                <Grid item xs={4}>
-                        <img src={profilePicB64? profilePicB64 : null} alt={profilePicB64? profilePicB64.name : null} style={{maxWidth: "500px", maxHeight:"300px"}}/>
-                </Grid>
-                <Grid item xs={4}>
-                    <Paper className={classes.paperWhite}> <div><b>About Me:</b> <br/>{description}</div> </Paper>
-                </Grid>
-                <Grid item xs={12}>
-                    <FloatingSection>
-                         <h1>Im guessing we are going to have a component for the feed? since we will likely be using it in other parts of the app</h1>
-                    </FloatingSection>
-                </Grid>
-
-
-        </Grid>
-
+            </Grid>
+            <DefaultButton label= {"Edit"} onClick={goToEditProfile} />
+            <br/>
+            <br/>
+            <FloatingSection><h1>My Posts</h1></FloatingSection>
+            <FloatingSection>
+                <h1>Im guessing we are going to have a component for the feed? since we will likely be using it in other parts of the app</h1>
+            </FloatingSection>
         </div>
 
     )

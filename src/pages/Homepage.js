@@ -1,5 +1,5 @@
 import './Homepage.css'
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from '@material-ui/core/Grid';
 
 // icons
@@ -7,9 +7,6 @@ import {
     AiOutlineMessage, AiOutlineMore, AiOutlineShareAlt,
     AiOutlineLeft, AiOutlineRight,
 } from "react-icons/ai";
-
-// material ui
-import Button from '@material-ui/core/Button';
 
 // components
 import PostSlider from "../customComponents/postSlider/PostSlider";
@@ -20,12 +17,9 @@ import FloatingSection from "../customComponents/FloatingSection";
 // controllers
 import { getAllPosts, newPost } from '../controller/post';
 import { getComments, newPostComment } from '../controller/postComment';
+// import  {getUsername} from '../controller/user';
 
-// TODO: move
-import {
-    SERVER_ROOT
-} from "../urls";
-
+// Auth
 import {useAuth0} from "@auth0/auth0-react"
 
 
@@ -250,18 +244,6 @@ const Homepage = () => {
     } 
     return (
         <div>
-            <FloatingSection>
-                <h2>Dev Notes</h2>
-                <pre style={{overflow: "auto"}}>
-                    - Auth stuff and reducers from Binary-1's project not imported (Just so its less confusing)
-                </pre>
-            </FloatingSection>
-            <FloatingSection>
-                <h2>Test Client API Calls<br></br>(Check Network Tab for Success)</h2>
-                <Button variant="contained" onClick={getAllPosts}>Get All Posts</Button>
-                <a href={SERVER_ROOT + "/api-docs/"}><Button variant="contained" color="primary">See API DOCS</Button></a>
-            </FloatingSection>
-            <hr/>
             <PostsPage></PostsPage>
         </div>
     )
