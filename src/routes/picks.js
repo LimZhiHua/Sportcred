@@ -230,8 +230,6 @@ router.get('/getPicksData', async (req, res) => {
 
 router.get('/getRegularPicksData/:Id', async (req, res) => {	
 	const userID = req.params.Id
-	console.log("getting regular picks data!!!!!", userID)
-
 	const allData  = await RegularSeasonPicks
                     .find({userId: userID })
                     .catch((error) => {

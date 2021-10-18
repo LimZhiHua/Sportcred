@@ -1,8 +1,7 @@
 
 import React, {useState, useEffect} from "react";
 import FloatingSection from "../../customComponents/FloatingSection";
-import { Bracket, RoundProps } from 'react-brackets';
-import { makeStyles } from '@material-ui/core/styles';
+import { Bracket } from 'react-brackets';
 import SwipeableViews from 'react-swipeable-views';
 import {Grid} from '@material-ui/core/';
 import {getRegularSeasonData} from "../../controller/picks"
@@ -10,13 +9,7 @@ import { SimpleDropdown } from "../../customComponents/dropdown/simpleDropdown"
 
 
 //import { Bracket } from 'react-tournament-bracket';1
-const useDefaultStyles = makeStyles({
-  root: {
-    background: '#909090',
-    width: '2',
-  },
- 
-});
+
 
 const todayDate = new Date()
 const rounds = [
@@ -126,7 +119,7 @@ const PlayOffBrackets = () => {
     for(var i = 0; i < gameList.length; i++){
       // We check the previous date with the date from 
       curDate =  gameList[i].dateTime.split("T")[0]
-      if(curDate ==  prevDate){
+      if(curDate ===  prevDate){
         // If we are on the same date, then we just append to our current array
         gamesByDate[dateIndex].push(gameList[i].team)
       }else{
@@ -179,9 +172,9 @@ const PlayOffBrackets = () => {
               <Bracket rounds={rounds.slice(0,1)} roundTitleComponent={title} style={{align:"center"}}/>
             </Grid>
             <Grid item xs={6} container justify="flex-start">
-              <SimpleDropdown boxTitle={"Season MVPs"} styles = {styles} values={["a", "b","c"]}> </SimpleDropdown>
-              <SimpleDropdown boxTitle={"Season MVPs"} styles = {styles} values={["a", "b","c"]}> </SimpleDropdown>
-              <SimpleDropdown boxTitle={"Season MVPs"} styles = {styles} values={["a", "b","c"]}> </SimpleDropdown>
+              <SimpleDropdown boxTitle={"Season MVPs"} styles = {styles} values={["a", "b","c"]} default={"a"}> </SimpleDropdown>
+              <SimpleDropdown boxTitle={"Season MVPs"} styles = {styles} values={["a", "b","c"]}  default={"a"}>  </SimpleDropdown>
+              <SimpleDropdown boxTitle={"Season MVPs"} styles = {styles} values={["a", "b","c"]}  default={"a"}> </SimpleDropdown>
 
             </Grid>
           </Grid>

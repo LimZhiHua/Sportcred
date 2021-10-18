@@ -1,7 +1,4 @@
 import { SERVER_ROOT,  DEFAULT_HEADER } from "../urls";
-const Preseason = require('../models/preseason')
-const PickTopic = require('../models/pickTopic')
-const Picks = require('../models/picks')
 const fetch = require("node-fetch");
 
 
@@ -198,7 +195,6 @@ export const getPlayoffsTopics = async () => {
 }
 
 export const assignPick = async (userId, topicName, pick, year) => {
-  console.log("assigning pick lol")
   const url = SERVER_ROOT + "/picks/assignPick/"
 
 	const request = new Request(url, {

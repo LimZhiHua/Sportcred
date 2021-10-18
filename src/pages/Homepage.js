@@ -1,6 +1,5 @@
 import './Homepage.css'
-import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState,useEffect } from "react";
 import Grid from '@material-ui/core/Grid';
 
 // icons
@@ -13,8 +12,6 @@ import {
 import Button from '@material-ui/core/Button';
 
 // components
-import SigninComponent from "../customComponents/SigninComponent";
-import RegisterComponent from "../customComponents/RegisterComponent";
 import PostSlider from "../customComponents/postSlider/PostSlider";
 import {BasicTextFields, BasicTextArea} from "../customComponents/inputFields/inputFields"
 import {AnswerButton} from "../customComponents/buttons/Buttons"
@@ -23,7 +20,6 @@ import FloatingSection from "../customComponents/FloatingSection";
 // controllers
 import { getAllPosts, newPost } from '../controller/post';
 import { getComments, newPostComment } from '../controller/postComment';
-import  {getUsername} from '../controller/user';
 
 // TODO: move
 import {
@@ -33,10 +29,6 @@ import {
 import {useAuth0} from "@auth0/auth0-react"
 
 
-
-//--------------------
-
-var counter = 0;
 
 const PostContainer = (props) => {
     return (
@@ -184,9 +176,9 @@ const CommentSection = ({postId}) => {
 
     const [commentsData, setCommentsData]  = useState([]);
     const refreshComments = () => getComments(postId).then((data)=>setCommentsData(data.commentsArray));
-
     useEffect(() => {
-        refreshComments();
+        refreshComments()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     
     console.log("comments", commentsData);

@@ -1,14 +1,6 @@
 import React,{useEffect, useState} from "react";
 import FloatingSection from "../../customComponents/FloatingSection";
-import Button from '@material-ui/core/Button';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import MenuItem from '@material-ui/core/MenuItem';
-import InputBase from '@material-ui/core/InputBase';
-import * as APIs from "../../controller/picks";
+import { makeStyles } from '@material-ui/core/styles';
 import './regularSeason.css';
 import {getRegularSeasonData, assignRegularPick, getCurrentRegularPick} from "../../controller/picks"
 import {useAuth0} from "@auth0/auth0-react"
@@ -43,26 +35,6 @@ const useStyles = makeStyles((theme) => ({
     rowGroup: {
         display: 'inline'
     },
-    formControl: {
-    marginLeft: '20rem',
-    margin: theme.spacing(1),
-    minWidth: 200,
-    '& label.Mui-focused': {
-      color: '#c4c4c4',
-    },
-    //height: 100,
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: '#c4c4c4',
-      },
-      '&:hover fieldset': {
-        borderColor: '#ffff',
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: '#c4c4c4',
-      },
-    },
-    },
     selectEmpty: {
         marginTop: theme.spacing(2),
     },
@@ -93,44 +65,6 @@ const useStyles = makeStyles((theme) => ({
        },
       },
 }));
-
-const BootstrapInput = withStyles((theme) => ({
-//   root: {
-//     'label': {
-//       marginTop: theme.spacing(0), 
-//     },
-//     '& label.Mui-focused': {
-//       padding: '10px 26px 10px 12px',
-//     },
-//   },
-  input: {
-    borderRadius: 4,
-    position: 'relative',
-    //backgroundColor: theme.palette.background.paper,
-    border: '1px solid #ced4da',
-    fontSize: 16,
-    padding: '10px 26px 10px 12px',
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(','),
-    '&:focus': {
-      borderRadius: 4,
-      borderColor: '#80bdff',
-      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-    },
-  },
-}))(InputBase);
 
 const parseData = async () =>{
   // gamesByDate gives me an array. each element has:
@@ -235,7 +169,7 @@ const RegularSeason = () => {
             <button onClick={testing}> hello there </button>
           <h1 className={styles.h1}>Regular Season Picks</h1>
           <div className={styles.subHeader}>
-        <SimpleDropdown key={"date dropdown"} boxTitle="Select your Date" values={gameData[2]} styles={styles} selected={setCurrentDateInfo} onSelect={handleDateSelection} default={''} answerBox={true}></SimpleDropdown>
+        <SimpleDropdown id={"Date Selector"} boxTitle="Select your Date" values={gameData[2]} styles={styles} selected={setCurrentDateInfo} onSelect={handleDateSelection} default={''} answerBox={true}></SimpleDropdown>
           </div>
           {/* curGameData is an array of arrays of arrays like this.
               [
@@ -250,11 +184,11 @@ const RegularSeason = () => {
               //teamList should look like:  [ [team1,team2], [team3, team4] ]
               return teamList.map(match => {
                 // match should look like: [team1,team2]
-                return (<FloatingSection>
+                return (<FloatingSection key={curDate+match["team1"] + "vs" + match["team2"]}>
                           <div className='voteGroup'> <div>
                           </div>
                            <div className='vs-bock'><div className='inline'>{match["team1"]}</div>     vs    <div className='inline'>{match["team2"]}</div></div> </div>
-                           <SimpleDropdown key={curDate+match["team1"] + "vs" + match["team2"]} boxTitle="Take your pick" values={["",match["team1"], match["team2"]]} styles={styles}  selected={((e) => setSelectedPickInfo(e, curDate+match["team1"]+"vs"+match["team2"]))} answerBox={false} default={userPicks[curDate+match["team1"] + "vs" + match["team2"]] || ""}></SimpleDropdown>
+                           <SimpleDropdown  key={curDate+match["team1"] + "vs" + match["team2"]} boxTitle="Take your pick" values={["",match["team1"], match["team2"]]} styles={styles}  selected={((e) => setSelectedPickInfo(e, curDate+match["team1"]+"vs"+match["team2"]))} answerBox={false} default={userPicks[curDate+match["team1"] + "vs" + match["team2"]] || ""}></SimpleDropdown>
                         </FloatingSection>); 
               })
             })

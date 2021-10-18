@@ -13,13 +13,13 @@ export function SimpleDropdown(props){
                 <div>{props.boxTitle}</div>
                 <FormControl variant="outlined" className={props.styles.formControl}>
                     <Select
-                        id="demo-customized-select"
+                        id={props.id}
                         onChange={props.selected}
                         defaultValue={props.default}
                     >
                         {
                         props.values.map((item, index) => (
-                        <MenuItem  key={index} value={item} style={{backgroundColor: 'grey', color: "white"}} >
+                        <MenuItem  key={index + item} value={item} style={{backgroundColor: 'grey', color: "white"}} >
                             <p style={{ color: 'white' }}> {item}</p> 
                         </MenuItem>
                         ))

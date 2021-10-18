@@ -46,7 +46,7 @@ const Profile = () => {
     
     const userID = user.sub.split("|")[1]
 
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     async function getUserInfo() {
         const info = await getUser(userID)
         const user = info.user
@@ -61,9 +61,7 @@ const Profile = () => {
     }
 
     useEffect ( () =>{
-
         getUserInfo()
-
     })
 
     return (
