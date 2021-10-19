@@ -25,7 +25,7 @@ const postCommentSchema = new mongoose.Schema({
     authorId:{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
-    }
+    },
 })
 
 module.exports = mongoose.model("PostComment", postCommentSchema)

@@ -158,4 +158,29 @@ router.get("/:id", async (req, res) => {
     return res.status(200).send(foundPost)
 })
 
+router.post("/:id", async (req, res) => {
+  const likes = req.body.likes
+  const dislikes = req.body.dislikes
+  const foundPost = await Post
+    .findOne({_id: req.params.id})
+    .catch((err) => {
+      return res.status(400).send(err)
+    })
+  
+  console.log("found post is", foundPost)
+  if (!foundPost) 
+    return res.status(500).send({msg:"could not find post"})
+  else{
+    const query = {_id: req.params.id}
+    const update = { likes:likes, dislikes:dislikes}
+    try{
+      await Post.updateOne(query, update, {})
+      return res.status(200).send({msg:"Post updated"})
+    }catch{
+      return res.status(400).send({msg:"post could not be updated"})
+    }
+
+  }
+})
+
 module.exports = router;

@@ -86,12 +86,16 @@ const PostCreate = ({onSubmit=()=>{}}) => {
 const Post = ({
         postId,
         authorId,
-        title = "Unset title", 
+        title = "Unset title",
+        likes,
+        dislikes,
         content = ".... ....... .... .... ... ....... ...",
         numComments = 0,
         CommentSection = () => <div></div>
     }) => {
-    
+        const { user } = useAuth0();
+        const userID = user.sub.split("|")[1]
+
         const [showComment, setShowComment] = useState(false);
         // const [commentsData, setCommentsData]  = useState([]);
         // const refreshComments = () => getComments(postId).then((data)=>setCommentsData(data.commentsArray));
@@ -110,7 +114,7 @@ const Post = ({
                 <div className="post-footer lined-footer">
                     <Grid container spacing={3} alignItems="center">
                         <Grid item xs={12} sm={8}>
-                            <PostSlider/>
+                            <PostSlider likes={likes} dislikes={dislikes}postID ={postId}userID={userID}/>
                         </Grid>
                         <Grid item xs={5} sm={2}>
                             <div className="center-center icon-button"
@@ -208,6 +212,8 @@ const PostsSection = ({postsData=[]}) => {
                 postId={post._id}
                 authorId={post.authorId}
                 title={post.title}
+                likes={post.likes}
+                dislikes={post.dislikes}
                 content={post.description}
                 numComments={post.numComments}
                 CommentSection={CommentSection}
