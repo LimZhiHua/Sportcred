@@ -28,7 +28,19 @@ const postSchema = new mongoose.Schema({
     numComments: {
         type: Number,
         default: 0
-    }
+    },
+
+    likes:{
+        type: mongoose.Schema.Types.Array,
+        ref: "likes",
+        default: []
+      },
+
+    dislikes:{
+        type: mongoose.Schema.Types.Array,
+        ref: "dislikes",
+        default: []
+    },
 
 })
 

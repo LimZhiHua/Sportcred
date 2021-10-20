@@ -86,3 +86,27 @@ export const getPost = async (post_id) => {
 
   return result;
 }
+
+export const editPost = async (post_id, likes, dislikes)=>{
+  const url = SERVER_ROOT + "/post/" + post_id
+  const result = {}
+  const request = {
+    method: "post",
+    body: JSON.stringify({likes: likes, dislikes:dislikes}),
+    headers:  DEFAULT_HEADER(),
+  }
+
+  const response = await fetch(url, request);
+  console.log("response was", response)
+  if (response.status === 200) {
+    result.status = 200
+    result.msg = await response.json()
+  } else {
+    const msg = await response.text();
+    result.status = response.status;
+    result.error = msg;
+  }
+
+  return result;
+
+}

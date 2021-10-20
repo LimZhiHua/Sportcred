@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import FloatingSection from "../../customComponents/FloatingSection";
-import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 
 import './PreSeason.css';
