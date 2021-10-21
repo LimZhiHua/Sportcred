@@ -181,7 +181,7 @@ export const getUserByName = async (username) => {
 
 export const editData = async (userData) => {
         const response = await fetch(
-            SERVER_ROOT + "/user/edit-prof",
+            SERVER_ROOT + "/user/updateACS",
             {
                 method: "POST",
                 headers:  DEFAULT_HEADER(),
@@ -210,6 +210,34 @@ export const editData = async (userData) => {
           result.error = msg;
         }
         return result;
-    }
+}
     
+
+export const updateACS = async (userID, change) => {
+  console.log("change is", change)
+  const response = await fetch(
+      SERVER_ROOT + "/profile/update-acs",
+      {
+          method: "POST",
+          headers:  DEFAULT_HEADER(),
+          body: JSON.stringify({
+              userID: userID,
+              change: change
+          }),
+      }
+  );
+  const result = {}
+  if (response.status === 200){
+    const msg = await response.json();
+    console.log(msg);
+    result.user = msg.user;
+    result.status = 200;
+  }else{
+    const msg = await response.text();
+    console.log(msg);
+    result.error = msg;
+  }
+  return result;
+}
+
 

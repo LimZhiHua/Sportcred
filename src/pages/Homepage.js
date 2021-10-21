@@ -179,7 +179,6 @@ const CommentSection = ({postId}) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     
-    console.log("comments", commentsData);
     return <div className="comment-section">
         <CommentCreate postId={postId} onSubmit={refreshComments}/>
         <div className="comment-group">

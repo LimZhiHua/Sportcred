@@ -1,7 +1,6 @@
 import { SERVER_ROOT,  DEFAULT_HEADER } from "../urls";
 import { sendNotif } from "./notif";
-import { getUser } from "./user";
-
+import { getUser, updateACS } from "./user";
 const fetch = require("node-fetch");
 
 
@@ -162,7 +161,7 @@ export const incrementScore = async (sid, pid) => {
     return result;
 }
 
-export const finishTrivia = async (sid, pid, total) => {
+export const finishTrivia = async (sid, pid, total, change) => {
     const url = SERVER_ROOT + "/trivia/finish-trivia";
     const request = {
       method: "post",
@@ -184,8 +183,11 @@ export const finishTrivia = async (sid, pid, total) => {
         const msg = await response.text()
         result.error = msg
     }
+
+    // this is for singleplayer
     if(result.currPlayer == null){
       result.currPlayer = result.otherPlayer
+      updateACS(result.currPlayer.userId, change)
     }    
     const currUser = await getUser(result.currPlayer.userId)
 
@@ -196,6 +198,9 @@ export const finishTrivia = async (sid, pid, total) => {
         recipient: result.otherPlayer.userId,
         type: "Info"
     })
+
+    // dont forget to update the ACS of the players!
+    
 
     return result;
 }
