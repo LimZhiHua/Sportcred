@@ -11,7 +11,7 @@ import {
   } from "../urls";
   
 import {useAuth0} from "@auth0/auth0-react"
-
+import { PostsPage } from "../customComponents/Posts";
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -112,7 +112,7 @@ const Profile = () => {
             <br/>
             <FloatingSection><h1>My Posts</h1></FloatingSection>
             <FloatingSection>
-                <h1>Im guessing we are going to have a component for the feed? since we will likely be using it in other parts of the app</h1>
+               <PostsPage filter={true}></PostsPage>
             </FloatingSection>
         </div>
 

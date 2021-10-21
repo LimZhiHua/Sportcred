@@ -181,7 +181,7 @@ export const getUserByName = async (username) => {
 
 export const editData = async (userData) => {
         const response = await fetch(
-            SERVER_ROOT + "/user/updateACS",
+            SERVER_ROOT + "/user/edit-prof",
             {
                 method: "POST",
                 headers:  DEFAULT_HEADER(),

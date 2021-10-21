@@ -202,21 +202,41 @@ const CommentSection = ({postId}) => {
 }
 
 
-const PostsSection = ({postsData=[]}) => {
-    console.log("posts", postsData);
+const PostsSection = ({userFilter= false, postsData=[]}) => {
+    const { user } = useAuth0();
+    const userID = user.sub.split("|")[1]
+    console.log("user filter is", userFilter)
     return <>{
         postsData.map(post => 
-            <Post 
-                key={post._id} 
-                postId={post._id}
-                authorId={post.authorId}
-                title={post.title}
-                likes={post.likes}
-                dislikes={post.dislikes}
-                content={post.description}
-                numComments={post.numComments}
-                CommentSection={CommentSection}
-            />
+            {   // if we dont care about who our posts are from, just return them (no user filter)
+                if(!userFilter){
+                    return   <Post 
+                    key={post._id} 
+                    postId={post._id}
+                    authorId={post.authorId}
+                    title={post.title}
+                    likes={post.likes}
+                    dislikes={post.dislikes}
+                    content={post.description}
+                    numComments={post.numComments}
+                    CommentSection={CommentSection}
+                />
+                // if we do care, then we return a post only if it is a correct one (return <div></div> otherwise, so it doesn't complain about returning nulls)
+                }else if(userID === post.authorId){
+                    return   <Post 
+                    key={post._id} 
+                    postId={post._id}
+                    authorId={post.authorId}
+                    title={post.title}
+                    likes={post.likes}
+                    dislikes={post.dislikes}
+                    content={post.description}
+                    numComments={post.numComments}
+                    CommentSection={CommentSection}
+                />
+                }
+            }
+          
         )
     }</>
 }
@@ -231,11 +251,12 @@ export const PostsPage = (props) => {
         refreshPosts();
     }, [])
 
+    //userFilter is just for the profile page to filter out your own posts
     return (
         <>
             <PostCreate onSubmit={refreshPosts}/>
             {/* <Post CommentSection={()=><CommentSection/>}/> */}
-            <PostsSection postsData={postsData}/>
+            <PostsSection userFilter = {props.filter}  postsData={postsData}/>
         </>
     )
 }
