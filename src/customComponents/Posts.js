@@ -17,7 +17,7 @@ import FloatingSection from "../customComponents/FloatingSection";
 // controllers
 import { getAllPosts, newPost } from '../controller/post';
 import { getComments, newPostComment } from '../controller/postComment';
-// import  {getUsername} from '../controller/user';
+ import  {getUsername} from '../controller/user';
 
 // Auth
 import {useAuth0} from "@auth0/auth0-react"
@@ -86,6 +86,7 @@ const PostCreate = ({onSubmit=()=>{}}) => {
 const Post = ({
         postId,
         authorId,
+        author,
         title = "Unset title",
         likes,
         dislikes,
@@ -97,6 +98,7 @@ const Post = ({
         const userID = user.sub.split("|")[1]
 
         const [showComment, setShowComment] = useState(false);
+
         // const [commentsData, setCommentsData]  = useState([]);
         // const refreshComments = () => getComments(postId).then((data)=>setCommentsData(data.commentsArray));
 
@@ -104,9 +106,10 @@ const Post = ({
         //     if (showComment) refreshComments();
         // }, [showComment])
 
+
         return (
             <PostContainer>
-                <PostHeader displayname={authorId}/>
+                <PostHeader displayname={author}/>
                 <div className="post-body">
                     <div className="title">{title}</div>
                     <div className="content">{content}</div>
@@ -205,15 +208,16 @@ const CommentSection = ({postId}) => {
 const PostsSection = ({userFilter= false, postsData=[]}) => {
     const { user } = useAuth0();
     const userID = user.sub.split("|")[1]
-    console.log("user filter is", userFilter)
     return <>{
         postsData.map(post => 
-            {   // if we dont care about who our posts are from, just return them (no user filter)
+            {   
+                // if we dont care about who our posts are from, just return them (no user filter)
                 if(!userFilter){
                     return   <Post 
                     key={post._id} 
                     postId={post._id}
                     authorId={post.authorId}
+                    author={post.author}
                     title={post.title}
                     likes={post.likes}
                     dislikes={post.dislikes}
@@ -227,6 +231,7 @@ const PostsSection = ({userFilter= false, postsData=[]}) => {
                     key={post._id} 
                     postId={post._id}
                     authorId={post.authorId}
+                    author={post.author}
                     title={post.title}
                     likes={post.likes}
                     dislikes={post.dislikes}

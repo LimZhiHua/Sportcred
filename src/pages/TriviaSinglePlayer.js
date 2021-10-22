@@ -218,7 +218,6 @@ const TriviaSinglePlayer = () => {
         const token = await getAccessTokenSilently()
         try{
             const trivCount =  (await getTriviaCount(playerID, token)).triviaCount
-            console.log("triv cont is", trivCount)
             setTriviaCount(trivCount)
         }catch(error){
             console.log(error)

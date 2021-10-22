@@ -41,6 +41,11 @@ const postSchema = new mongoose.Schema({
         ref: "dislikes",
         default: []
     },
+    author:{
+        type: mongoose.Schema.Types.String,
+        ref: "author",
+        default: []
+    },
 
 })
 

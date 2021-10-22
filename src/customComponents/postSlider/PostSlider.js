@@ -58,70 +58,94 @@ class PostSlider extends Component {
   
   constructor(props) {
       super(props);
-      this.state = {progress: 0 };
+      this.state = {progress: 0, likes:[], dislikes:[] };
       this.onClickAgree = this.onClickAgree.bind(this);
       this.onClickDisagree = this.onClickDisagree.bind(this);
   }
   componentDidMount(){
+    this.initializeLikes();
     this.initializeProgress();
   }
+
+  componentDidUpdate(prevProps, prevState){
+    let postID = this.props.postID
+    let likes = this.state.likes
+    let dislikes = this.state.dislikes
+    if((likes.length !== prevState.likes.length || dislikes.length !== prevState.dislikes.length)&& (likes.length + dislikes.length) !== 0){
+      let likePerc = likes.length/(likes.length + dislikes.length) * 100
+      editPost(postID, likes, dislikes) 
+      this.setState({progress : likePerc})
+    }
+
+  }
+  initializeLikes() {
+    this.setState({likes : this.props.likes})
+    this.setState({dislikes : this.props.dislikes})
+  }
+
   initializeProgress() {
-    const curProp = this.props
-    let likes = curProp.likes
-    let dislikes = curProp.dislikes
     let likePerc = 0
+    let likes = this.props.likes
+    let dislikes = this.props.dislikes
     // dont wanna divide by 0 lol
-    if((likes.length + dislikes.length)>0){
+    if((    likes.length + dislikes.length)>0){
       likePerc = likes.length/(likes.length + dislikes.length) * 100
     }
-    console.log("like perc is", likePerc)
+
     this.setState({progress : likePerc})
   }
 
   onClickAgree() {
     // First, we need to check who has already agreed/disagreed with this post
     const curProp = this.props
-    let likes = curProp.likes
-    let dislikes = curProp.dislikes
+    let likes = this.state.likes
+    let dislikes = this.state.dislikes
     let userID = curProp.userID
     let postID = curProp.postID
     // If user has agreed, then do nothing. If user disagreed, then remove disagree, add agree
     if(likes.includes(userID)){
       return
     }else{
-        likes.push(userID)
+        //likes.push(userID)
+        this.setState({likes: [...this.state.likes, userID]})
     }
     // Remove it from the dislikes if he likes it
-    dislikes = dislikes.filter(item => item !== userID)
+    this.setState({dislikes: dislikes.filter(item => item !== userID)})
 
+    /*
     // now that we know who likes/dislikes our thing, we should update the backend.
     editPost(postID, likes, dislikes)
     // Calculate the new percentage
     let likePerc = likes.length/(likes.length + dislikes.length) * 100
     
     this.setState({progress : likePerc})
+    */
   }
 
   onClickDisagree() {
     // this is like onClickAgree execpt with disagree instead
     const curProp = this.props
-    let likes = curProp.likes
-    let dislikes = curProp.dislikes
+    let likes = this.state.likes
+    let dislikes = this.state.dislikes
     let userID = curProp.userID
     let postID = curProp.postID
 
     if(dislikes.includes(userID)){
       return
     }else{
-      dislikes.push(userID)
+      //dislikes.push(userID)
+      this.setState({dislikes: [...this.state.dislikes, userID]})
     }
     // Remove it from the dislikes if he likes it
-    likes = likes.filter(item => item !== userID)
+    if(likes.includes(userID)){
+      this.setState({likes: likes.filter(item => item !== userID)})
+    }
+    /*
     // Calculate the new percentage
     let likePerc = likes.length/(likes.length + dislikes.length) * 100
-    editPost(postID, likes, dislikes)
-
+    editPost(postID, likes, dislikes) 
     this.setState({progress : likePerc})
+    */
   }
 
   render() {

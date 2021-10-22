@@ -565,9 +565,8 @@ router.get('/get-user/:id', async (req, res) => {
 */
 router.get('/get-username/:id', async (req, res) => {
   const user = await User.findOne({_id: req.params.id});
-  console.log("user is", user)
   if (!user) return res.status(400).send('user query failed');
-  return res.status(200).send(user);
+  return res.status(200).send({username: user.username});
 })
  /**
  * @swagger
