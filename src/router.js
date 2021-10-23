@@ -1,8 +1,8 @@
 import React from "react";
-import { 
-  Switch, 
-  Route, 
-  // Redirect 
+import {
+  Switch,
+  Route,
+  // Redirect
 } from "react-router-dom";
 
 
@@ -14,7 +14,10 @@ import {
   SIGNUP_URL,
   TRIVIA_LANDING_URL,
   TRIVIA_SINGLE_PLAYER_URL,
-  DEBATE_LANDING_URL,
+  ANALYSIS_LANDING_URL,
+  ANALYSIS_ANSWER_URL,
+  ANALYSIS_RATING_URL,
+  ANALYSIS_HISTORY_URL,
   ZONE_LANDING_URL,
   PICKSPREDICT_LANDING_URL,
   REGULAR_SEASON_URL,
@@ -33,6 +36,9 @@ import TriviaLanding from "./pages/TriviaLanding";
 import TriviaSinglePlayer from "./pages/TriviaSinglePlayer";
 
 import DebateLanding from "./pages/DebateLanding";
+import AnalysisAnswer from "./pages/AnalysisAnswer";
+import AnalysisRate from "./pages/AnalysisRate";
+import AnalysisHistory from "./pages/AnalysisHistory.js";
 import ZoneLanding from "./pages/ZoneLanding";
 import PicksPredictLanding from "./pages/PicksPredictLanding";
 import RegularSeason from "./pages/PicksPredictionPages/RegularSeason";
@@ -66,13 +72,17 @@ const AppRouter = () => (
     <ProtectedRoute exact path={TRIVIA_LANDING_URL} component={TriviaLanding} />
     <ProtectedRoute exact path={TRIVIA_SINGLE_PLAYER_URL} component={TriviaSinglePlayer} />
 
-    <ProtectedRoute exact path={DEBATE_LANDING_URL} component={DebateLanding} />
+    <Route exact path={ANALYSIS_LANDING_URL} component={DebateLanding} />
+    <Route exact path={ANALYSIS_ANSWER_URL} component={AnalysisAnswer} />
+    <Route exact path={ANALYSIS_RATING_URL} component={AnalysisRate} />
+    <Route exact path={ANALYSIS_HISTORY_URL} component={AnalysisHistory} />
+
     <ProtectedRoute exact path={ZONE_LANDING_URL} component={ZoneLanding} />
     <ProtectedRoute exact path={PICKSPREDICT_LANDING_URL} component={PicksPredictLanding} />
     <ProtectedRoute exact path={REGULAR_SEASON_URL} component={RegularSeason} />
     <ProtectedRoute exact path={PRESEASON_URL} component={PreSeason} />
     <ProtectedRoute exact path={PLAYOFFS_BRACKET_URL} component={PlayOffBrackets} />
-    
+
     {/* Dev */}
     <Route exact path={DEV_HOME_URL} component={DevHomePage} />
   </Switch>

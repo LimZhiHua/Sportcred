@@ -12,7 +12,7 @@ import {
     SIGNIN_URL,
     // SIGNUP_URL,
     TRIVIA_LANDING_URL,
-    DEBATE_LANDING_URL,
+    ANALYSIS_LANDING_URL,
     ZONE_LANDING_URL,
     PICKSPREDICT_LANDING_URL,
     DEV_HOME_URL
@@ -61,7 +61,7 @@ let Navbar = () => {
             <div>
               <Navlink to={ZONE_LANDING_URL}>Open Court</Navlink>
               <Navlink to={TRIVIA_LANDING_URL}>Trivia</Navlink>
-              <Navlink to={DEBATE_LANDING_URL}>Analysis</Navlink>
+              <Navlink to={ANALYSIS_LANDING_URL}>Analysis</Navlink>
               <Navlink to={PICKSPREDICT_LANDING_URL}>Picks and Predictions</Navlink>
             </div>
           </div>
@@ -70,10 +70,10 @@ let Navbar = () => {
             {(isAuthenticated)
               ? <div className="menu-item" onClick={Logout}>Logout</div>
               : <Navlink to={SIGNIN_URL}>Login</Navlink>}
-            <div className="menu-item spacer"></div>  
+            <div className="menu-item spacer"></div>
           </div>
         </div>
-        <Button className={"burger-btn outline center-center"} 
+        <Button className={"burger-btn outline center-center"}
                 color="secondary"
                 onClick={() => setOpened(!opened)}>
           {(opened === false) ? <AiOutlineMenu color="white"/> : <AiOutlineLeft color="white"/>}
