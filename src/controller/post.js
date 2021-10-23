@@ -97,7 +97,6 @@ export const editPost = async (post_id, likes, dislikes)=>{
   }
 
   const response = await fetch(url, request);
-  console.log("response was", response)
   if (response.status === 200) {
     result.status = 200
     result.msg = await response.json()

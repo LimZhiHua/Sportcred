@@ -24,6 +24,8 @@ const TriviaSinglePlayer = () => {
     const [curAnswers, setCurAnswers] = useState([])
     const [correctAnswers, setCorrectAnswers] = useState([])
 
+    const [firstTime, setFirstTime] = useState(0)
+
 
     const [secondsLeft, setSecondsLeft] = useState(17)
 
@@ -34,6 +36,8 @@ const TriviaSinglePlayer = () => {
 
     const {getAccessTokenSilently} = useAuth0();
     const { user } = useAuth0();
+
+
 
     //-------------------------request body formats for making the API calls-----------------------------------------------
     
@@ -103,6 +107,7 @@ const TriviaSinglePlayer = () => {
             // reason why i used gameEnded and gameStarted is for the end game screen. 
             gameEnded = false;
             setGameStarted(true)
+            setFirstTime(0)
         }catch(error){
             console.log(error)
         }
@@ -111,9 +116,6 @@ const TriviaSinglePlayer = () => {
  
     // Once they finish answering, there is a play again button to bring them back to home.
     const endGame = () =>{
-
-        // Currently, cause we have no users, it crashes cause he tries to getUser. 
-        finishTrivia(sessionID, playerID, score)
         setGameStarted(false)
         setQuestNum(0)
         setScore(0)
@@ -155,7 +157,7 @@ const TriviaSinglePlayer = () => {
         }
     }
 
-    const questionBoard = () =>{
+    const QuestionBoard = () =>{
         return(
             <div>
                 <h1> {curQuestion}</h1>
@@ -185,17 +187,27 @@ const TriviaSinglePlayer = () => {
                 if(secondsLeft  <=0 )    {
                     nextQuestion()
                 }
-                return questionBoard()
+                return QuestionBoard()
             }else{
                 gameEnded = true;
-                return scoreScreen()
-            }
-           
+                // see the place where i defined counter to see why i did this stupid fix
+                if(firstTime === 0){
+                    setFirstTime(1)
+                    let updateVal = -5
+                    if(score > 2){
+                        updateVal = 5
+                    }
+                    finishTrivia(sessionID, playerID, score, updateVal)
+                }
+                return ScoreScreen()
+            }  
         }
                
     }    
 
-    const scoreScreen = () =>{
+
+
+    const ScoreScreen = () =>{
         return <div>
         <p> You got {score}/{questionList.length}</p>
         {playAgainButton()}
@@ -206,7 +218,6 @@ const TriviaSinglePlayer = () => {
         const token = await getAccessTokenSilently()
         try{
             const trivCount =  (await getTriviaCount(playerID, token)).triviaCount
-            console.log("triv cont is", trivCount)
             setTriviaCount(trivCount)
         }catch(error){
             console.log(error)
@@ -214,7 +225,7 @@ const TriviaSinglePlayer = () => {
       }
  
       const subtractCount = async () =>{
-        const trivCount =  await SubtractTriviaCount(playerID)
+        await SubtractTriviaCount(playerID)
         getCount()
       }
     // --------------these are for testing. you can delete them later if you want
@@ -226,11 +237,11 @@ const TriviaSinglePlayer = () => {
 
     //-------------lets group the useEffects together--------------------------------------------
 
-   useEffect ( () =>{})
-   
+  
     useEffect ( () =>{
        getCount()
     },[triviaCount])
+
 
     useEffect( () => {
         setCurQuestion(questionList[questNum])

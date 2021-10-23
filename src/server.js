@@ -53,7 +53,7 @@ const vote = require('./routes/vote')
 const notif = require('./routes/notif')
 const picks = require('./routes/picks')
 const trivia = require('./routes/trivia')
-
+const profile = require("./routes/profile")
 app.use(express.static('../build'));
 app.use(cors());
 // app.use(cors({ origin: '*' }));
@@ -71,6 +71,7 @@ app.use('/radar', radar);
 app.use('/notif', notif);
 app.use('/picks', picks);
 app.use('/trivia', trivia);
+app.use("/profile", profile) 
 
 // ----------------------------------- Swagger API Docs ------------------------------------------------
 // https://dev.to/kabartolo/how-to-document-an-express-api-with-swagger-ui-and-jsdoc-50do

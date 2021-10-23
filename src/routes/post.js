@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../models/post')
+const User = require("../models/user")
 const { postValidation, getPostValidation } = require('../validations/postValidations');
 
  /**
@@ -39,7 +40,7 @@ const { postValidation, getPostValidation } = require('../validations/postValida
 router.get('/', async (req, res) => {
   const limit     = Math.abs(parseInt(req.query.limit)) || 25;
   const page      = Math.abs(parseInt(req.query.page)) - 1 || 0;
-  const allPosts  = await Post
+  let allPosts  = await Post
                     .find({})
                     .sort({_id: -1})
                     .skip(page*limit)
@@ -47,8 +48,19 @@ router.get('/', async (req, res) => {
                     .catch((error) => {
                       return res.status(500).send("error getting all posts")
                   });
-  try {
-    return res.status(200).send({ postsArray: allPosts });
+
+
+  
+  // the author of the post might have changed his username, so we gotta go and get the new one
+  let updateUsername = []
+  for (var index in allPosts){
+    const username =  (await User.findOne({_id: allPosts[index].authorId})).username
+    let newPost = allPosts[index]
+    newPost["author"] = username
+    updateUsername.push(newPost)
+  }
+    try {
+    return res.status(200).send({ postsArray: updateUsername });
   } catch (err) {
     return res.status(500).send(err)
   }
@@ -167,7 +179,6 @@ router.post("/:id", async (req, res) => {
       return res.status(400).send(err)
     })
   
-  console.log("found post is", foundPost)
   if (!foundPost) 
     return res.status(500).send({msg:"could not find post"})
   else{
