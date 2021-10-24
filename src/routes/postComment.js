@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const Post = require('../models/post')
+const User = require('../models/user')
+
 const PostComment = require('../models/postComment');
 const {postCommentValidation} = require('../validations/postCommentValidations');
 
@@ -56,6 +58,7 @@ router.post('/postComment', async (req, res) => {
   if (foundPost === null) {
     return res.status(404).send("foundPost is null");  
   }
+  console.log("post is", foundPost)
 
   // Create postComment
   const newPostComment = {
@@ -64,7 +67,8 @@ router.post('/postComment', async (req, res) => {
     //   },
     text: req.body.text,
     postId: req.params.id,
-    authorId: req.body.author_id
+    authorId: req.body.author_id,
+    author:""
   }
 
   try{
@@ -75,10 +79,10 @@ router.post('/postComment', async (req, res) => {
     // Update post's comment count
     foundPost.numComments += 1;
     await foundPost.save();
-
+    console.log("incrementing the number of fond posts")
     return res.status(200).send("postComment saved")
-
   } catch(err){
+    console.log(err)
     return res.status(500).send('error creating postComment');
   }
 });
@@ -125,7 +129,7 @@ router.post('/postComment', async (req, res) => {
 router.get('/comments', async (req, res) => {
   const limit     = Math.abs(parseInt(req.query.limit)) || 5;
   const page      = Math.abs(parseInt(req.query.page)) - 1 || 0;
-  const comments  = await PostComment
+  let allComments  = await PostComment
                     .find({postId: req.params.id})
                     .sort({_id: -1})
                     .skip(page*limit)
@@ -133,9 +137,16 @@ router.get('/comments', async (req, res) => {
                     .catch((error) => {
                       return res.status(500).send("error getting comments")
                   });
+  let allCommentsUpdated = await  Promise.all(
+    allComments.map( async (comment) =>{
+      const username =  (await User.findOne({_id: comment.authorId})).username
+      let newComment = comment
+      newComment["author"] = username
+      return newComment
+    }))
   
   try {
-    return res.status(200).send({ commentsArray: comments });
+    return res.status(200).send({ commentsArray: allComments });
   } catch (err) {
     return res.status(500).send(err)
   }
