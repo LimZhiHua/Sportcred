@@ -5,7 +5,7 @@ import "../App.css";
 import {DefaultButton, AnswerButton} from "../customComponents/buttons/Buttons"
 import {Grid} from '@material-ui/core/';
 
- import  {addTrivia, getTrivia, incrementScore, finishTrivia, resetTriviaCount, getTriviaCount, SubtractTriviaCount} from '../controller/trivia';
+ import  {addTrivia, getTrivia, incrementScore, finishTrivia, resetTriviaCount, getTriviaCount, SubtractTriviaCount, generateTriviaQuestions} from '../controller/trivia';
 
  import {useAuth0} from "@auth0/auth0-react"
 
@@ -194,7 +194,7 @@ const TriviaSinglePlayer = () => {
                 if(firstTime === 0){
                     setFirstTime(1)
                     let updateVal = -5
-                    if(score > 2){
+                    if(score > 5){
                         updateVal = 5
                     }
                     finishTrivia(sessionID, playerID, score, updateVal)
@@ -234,6 +234,9 @@ const TriviaSinglePlayer = () => {
         console.log("output of reset trivia count is", await resetTriviaCount(playerID, token))
     }
 
+    const testing = async ()=>{
+        generateTriviaQuestions()
+    }
 
     //-------------lets group the useEffects together--------------------------------------------
 
@@ -260,6 +263,7 @@ const TriviaSinglePlayer = () => {
     //
     return (
         <FloatingSection>
+            <button onClick={testing}> testtt </button>
             <button onClick={resetCount}>testing reset</button>
             <button onClick={getCount}>testing get</button>
             <button onClick={subtractCount}>testing subtract</button>

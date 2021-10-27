@@ -2,9 +2,7 @@ const mongoose = require('mongoose')
 const triviaPlayer = require("./triviaPlayer")
 
 const answerOptionSchema = new mongoose.Schema({
-    optionNumber: {
-        type: Number
-    },
+
     answerBody: {
         type: String,
         min: 1,
@@ -22,6 +20,11 @@ const questionSchema = new mongoose.Schema({
         required: true,
         min: 5,
         max: 1000
+    },
+    category:{
+        type: String,
+        min: 5,
+        max: 1000 
     },
     answers: {
         type: [answerOptionSchema],
