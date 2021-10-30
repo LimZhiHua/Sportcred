@@ -34,8 +34,6 @@ export function SinglePlayerDropdown(props){
                         </div>
                     </div>
                 </div>
-            <div className='img-holder'></div>
-
         </div>
     </div>
     )

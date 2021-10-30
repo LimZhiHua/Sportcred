@@ -7,6 +7,7 @@ import * as APIs from "../../controller/picks";
 
 import {useAuth0} from "@auth0/auth0-react"
 import { SinglePlayerDropdown } from "../../customComponents/dropdown/singleSelect";
+import { SimpleDropdown } from "../../customComponents/dropdown/simpleDropdown";
 
 const useStyles = makeStyles((theme) => ({
     regular: {
@@ -107,6 +108,8 @@ const PreSeason = () => {
      
      const [result, setData] = React.useState([]);
 
+
+     // should probably change it in the future, but this was the most staightforward way to do it initially
      const [selectedDefensePlayer, setSelectedDefensePlayer] = useState('')
      const [selectedRookiePlayer, setSelectedRookiePlayer] = useState('')
      const [selectedMVPPlayer, setSelectedMVPPlayer] = useState('')
@@ -229,19 +232,19 @@ const PreSeason = () => {
       <div>
        <h1 className={styles.h1}>Pre-Season Predictions</h1>
        <FloatingSection>
-          <SinglePlayerDropdown key={"MVP"}title={"MVP of the Year"} boxTitle={"Season MVPs"} selected={handleChangeMVP}  default={defaultMVPPlayer} styles = {styles} values={playerList}    onSelect={saveMVPPlayer} ></SinglePlayerDropdown>
+          <SimpleDropdown key={"MVP"}title={"MVP of the Year"} answerBox={true} boxTitle={"Season MVPs"} selected={handleChangeMVP}  default={defaultMVPPlayer} styles = {styles} values={playerList}    onSelect={saveMVPPlayer} ></SimpleDropdown>
        </FloatingSection>
        <FloatingSection>
-          <SinglePlayerDropdown  key={"Defense"} title={"Defense Player of the Year"} boxTitle={"Season Defense Player"} selected={handleChangeDefense} default={defaultDefensePlayer} styles = {styles} values={playerList}    onSelect={saveDefensePlayer} ></SinglePlayerDropdown>
+          <SimpleDropdown  key={"Defense"} title={"Defense Player of the Year"} answerBox={true} boxTitle={"Season Defense Player"} selected={handleChangeDefense} default={defaultDefensePlayer} styles = {styles} values={playerList}    onSelect={saveDefensePlayer} ></SimpleDropdown>
        </FloatingSection>
         <FloatingSection>
-          <SinglePlayerDropdown  key={"Rookie"} title={"Rookie of the Year"} boxTitle={"Season Rookie"} selected={handleChangeRookie} default={defaultRookiePlayer} styles = {styles} values={playerList}    onSelect={saveRookiePlayer} ></SinglePlayerDropdown>
+          <SimpleDropdown  key={"Rookie"} title={"Rookie of the Year"} answerBox={true} boxTitle={"Season Rookie"} selected={handleChangeRookie} default={defaultRookiePlayer} styles = {styles} values={playerList}    onSelect={saveRookiePlayer} ></SimpleDropdown>
        </FloatingSection>
        <FloatingSection>
-          <SinglePlayerDropdown  key={"6th"} title={"6th Player of the Year"} boxTitle={"Season 6th Player"} selected={handleChange6th} default={default6thPlayer} styles = {styles} values={playerList}    onSelect={save6thPlayer} ></SinglePlayerDropdown>
+          <SimpleDropdown  key={"6th"} title={"6th Player of the Year"} answerBox={true} boxTitle={"Season 6th Player"} selected={handleChange6th} default={default6thPlayer} styles = {styles} values={playerList}    onSelect={save6thPlayer} ></SimpleDropdown>
        </FloatingSection>
        <FloatingSection>
-          <SinglePlayerDropdown  key={"Improved"} title={"Most Improved Player of the Year"} boxTitle={"Season Most Improved Player Player"} selected={handleChangeImproved} default={defaultImprovedPlayer} styles = {styles} values={playerList}    onSelect={saveImprovedPlayer} ></SinglePlayerDropdown>
+          <SimpleDropdown  key={"Improved"} title={"Most Improved Player of the Year"}answerBox={true}  boxTitle={"Season Most Improved Player Player"} selected={handleChangeImproved} default={defaultImprovedPlayer} styles = {styles} values={playerList}    onSelect={saveImprovedPlayer} ></SimpleDropdown>
        </FloatingSection>
 
        </div>

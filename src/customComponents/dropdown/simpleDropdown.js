@@ -8,6 +8,7 @@ export function SimpleDropdown(props){
     if(props.answerBox){
         answerBox = <AnswerButton style={{width: '100px', height: '10px'}} label='Select' onClick={props.onSelect}></AnswerButton> 
     }
+    console.log("props is", props)
         return(
             <div>
                 <div>{props.boxTitle}</div>

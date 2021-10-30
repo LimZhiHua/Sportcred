@@ -14,7 +14,6 @@ import {
     TRIVIA_LANDING_URL,
     DEBATE_LANDING_URL,
     PICKSPREDICT_LANDING_URL,
-    DEV_HOME_URL
   } from "./urls";
 
 function activeOnRoute(route) {
@@ -58,6 +57,7 @@ let Navbar = () => {
               <img src="Logo.png" className="App-logo" alt=""></img>
             </Link>
             <div>
+              <Navlink to={HOME_URL}>Open Court</Navlink>
               <Navlink to={TRIVIA_LANDING_URL}>Trivia</Navlink>
               <Navlink to={DEBATE_LANDING_URL}>Analysis</Navlink>
               <Navlink to={PICKSPREDICT_LANDING_URL}>Picks and Predictions</Navlink>
