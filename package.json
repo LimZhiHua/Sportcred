@@ -56,7 +56,7 @@
     "server": "cd src && node server.js",
     "dev": "concurrently \"npm run server\" \"npm run start\"",
     "prod": "cd src && node -r dotenv/config server.js dotenv_config_path=.env.production",
-    "deploy": "heroku login && heroku git:remote -a sportcred-staging && git push heroku release/v1:main",
+    "deploy": "heroku login && heroku git:remote -a sportcred-staging && git push heroku release/v4:main -f",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
