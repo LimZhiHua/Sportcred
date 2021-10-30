@@ -6,7 +6,7 @@ import {AnswerButton} from "../buttons/Buttons"
 export function SimpleDropdown(props){
     let answerBox = <div></div>
     if(props.answerBox){
-        answerBox = <AnswerButton style={{width: '100px', height: '10px'}} label='Select' onClick={props.onSelect}></AnswerButton> 
+        answerBox = <AnswerButton style={{width: '100px', height: '15px'}} label='Select' onClick={props.onSelect}></AnswerButton> 
     }
     console.log("props is", props)
         return(

@@ -162,6 +162,7 @@ const RegularSeason = () => {
           <h1 className={styles.h1}>Regular Season Picks</h1>
           <div className={styles.subHeader}>
         <SimpleDropdown id={"Date Selector"} boxTitle="Select your Date" values={gameData[2]} styles={styles} selected={setCurrentDateInfo} onSelect={handleDateSelection} default={''} answerBox={true}></SimpleDropdown>
+          <br></br>
           </div>
           {/* curGameData is an array of arrays of arrays like this.
               [
