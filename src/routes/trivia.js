@@ -234,7 +234,6 @@ router.post('/finish-trivia', async (req, res) => {
 
 router.post('/reset-trivia-count',  checkJwt, async (req, res) => {
     // Find the user in the database
-
     try {
         const user = await User.findById({_id: req.body.playerID});
         if (!user) return res.status(400).send('cannot find the user');
@@ -244,7 +243,8 @@ router.post('/reset-trivia-count',  checkJwt, async (req, res) => {
       const lastLogin = user.lastLogin.toISOString().split("T")[0]
       console.log("last login is", lastLogin)
       console.log("current date is", curDate)
-      if(curDate < lastLogin){
+      if(curDate > lastLogin){
+         console.log("resetting the trivia count!")
          await User.update({email : user.email}, 
             {$set: { "triviaCount": 10, "lastLogin": new Date() }});  
         // await User.updateOne({_id: req.body.playerID}, {lastLogin: curDate})
@@ -331,6 +331,7 @@ router.post('/subtract-trivia-count/:id', async (req, res) => {
 router.post('/generate-trivia-questions/', async (req, res) => {
 
     // Find the user in the database
+    /*
     const questions = {
         "questions": [
            {
@@ -973,7 +974,7 @@ router.post('/generate-trivia-questions/', async (req, res) => {
            }
         ]
      }
-   
+   */
     const exitingQuesions = await TriviaQuestions.countDocuments()
     if(exitingQuesions === 0){
         const response = await TriviaQuestions.insertMany(questions.questions)
