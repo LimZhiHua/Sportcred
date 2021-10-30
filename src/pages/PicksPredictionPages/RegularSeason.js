@@ -156,20 +156,13 @@ const RegularSeason = () => {
         setSelecetdDate(gameData[2][0])
       }
     },[gameData])
-
-
-    const testing = async () =>{
-      //assignRegularPick("615a8f09579c1200124577df", "obi wan", "2021-10-16")
-      console.log(userPicks)
-      //getDefaultPick()
-    }
     if(gameData !== null && curGameData != null){
         return (
           <div>
-            <button onClick={testing}> hello there </button>
           <h1 className={styles.h1}>Regular Season Picks</h1>
           <div className={styles.subHeader}>
         <SimpleDropdown id={"Date Selector"} boxTitle="Select your Date" values={gameData[2]} styles={styles} selected={setCurrentDateInfo} onSelect={handleDateSelection} default={''} answerBox={true}></SimpleDropdown>
+          <br></br>
           </div>
           {/* curGameData is an array of arrays of arrays like this.
               [

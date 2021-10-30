@@ -2,7 +2,8 @@ const mongoose = require("mongoose")
 
 const postCommentSchema = new mongoose.Schema({
     author: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.String,
+        default: "",
         ref: 'User'
       },
 

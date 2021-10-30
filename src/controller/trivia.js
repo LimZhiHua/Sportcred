@@ -3,7 +3,39 @@ import { sendNotif } from "./notif";
 import { getUser, updateACS } from "./user";
 const fetch = require("node-fetch");
 
+export const generateTriviaQuestions = async (playerID, token)=>{
 
+  
+  const response = await fetch(
+    SERVER_ROOT + "/trivia/generate-trivia-questions",
+    {
+        method: "POST",
+        headers:  DEFAULT_HEADER(),
+    }
+);
+/*
+const response = await fetch(
+  SERVER_ROOT + "/trivia/for-testing",
+  {
+      method: "POST",
+      headers:  DEFAULT_HEADER(),
+  }
+);
+*/
+const result = {}
+if (response.status === 200){
+  const msg = await response.json();
+  console.log(msg);
+  result.user = msg.user;
+  result.status = 200;
+}else{
+  const msg = await response.text();
+  console.log(msg);
+  result.error = msg;
+}
+return result;
+  
+}
 
 export const resetTriviaCount = async (playerID, token) => {
   const response = await fetch(

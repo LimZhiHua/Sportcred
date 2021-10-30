@@ -44,7 +44,7 @@ const postSchema = new mongoose.Schema({
     author:{
         type: mongoose.Schema.Types.String,
         ref: "author",
-        default: []
+        default: ""
     },
 
 })

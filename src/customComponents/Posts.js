@@ -140,10 +140,10 @@ const Post = ({
         )
 }
 
-const PostComment = ({commentId, comment = "Unfinished comment... ... . . ....", authorId}) => {
+const PostComment = ({commentId, comment = "Unfinished comment... ... . . ....", author}) => {
 
     return <PostContainer>
-        <PostHeader displayname={authorId}/>
+        <PostHeader displayname={author}/>
         <div className="post-body">
             <div className="content">{comment}</div>
         </div>
@@ -164,7 +164,7 @@ const CommentCreate = ({postId, onSubmit=()=>{}}) => {
                 newPostComment(
                     desc,
                     postId,
-                    userID
+                    userID,
                 ).then(() => {
                     setDesc("");
                     onSubmit();
@@ -194,6 +194,7 @@ const CommentSection = ({postId}) => {
                     commentId={comment._id}
                     comment={comment.text}
                     authorId={comment.authorId}
+                    author={comment.author}
                 />
                 }
                    
