@@ -12,13 +12,9 @@ import {
     SIGNIN_URL,
     // SIGNUP_URL,
     TRIVIA_LANDING_URL,
-<<<<<<< HEAD
     DEBATE_LANDING_URL,
-=======
-    ANALYSIS_LANDING_URL,
-    ZONE_LANDING_URL,
->>>>>>> analysis
     PICKSPREDICT_LANDING_URL,
+    ANALYSIS_LANDING_URL
   } from "./urls";
 
 function activeOnRoute(route) {
