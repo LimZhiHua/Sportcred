@@ -246,10 +246,12 @@ router.post('/reset-trivia-count',  checkJwt, async (req, res) => {
       console.log("current date is", curDate)
       if(curDate < lastLogin){
          await User.update({email : user.email}, 
-            {$set: { "triviaCount": 10, }});  
+            {$set: { "triviaCount": 10, "lastLogin": new Date() }});  
         // await User.updateOne({_id: req.body.playerID}, {lastLogin: curDate})
-            
          res.send({ action: true });
+      }else{
+         await User.update({email : user.email}, 
+            {$set: { "lastLogin": new Date() }});  
       }
         // Updating the user (in the future, should change it to use id instead of email)
        
