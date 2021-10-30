@@ -228,11 +228,11 @@ const TriviaSinglePlayer = () => {
         await SubtractTriviaCount(playerID)
         getCount()
       }
-    // --------------these are for testing. you can delete them later if you want
     const resetCount = async () =>{
         const token = await getAccessTokenSilently()
         console.log("output of reset trivia count is", await resetTriviaCount(playerID, token))
     }
+    // --------------these are for testing. you can delete them later if you want
 
     const testing = async ()=>{
         generateTriviaQuestions()
@@ -244,6 +244,7 @@ const TriviaSinglePlayer = () => {
     useEffect ( () =>{
        getCount()
     },[triviaCount])
+
 
 
     useEffect( () => {

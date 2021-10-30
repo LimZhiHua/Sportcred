@@ -53,6 +53,7 @@ const userSchema = new mongoose.Schema({
   triviaCount: {
     data: Buffer, contentType: Number,
     },
+
 })
 
 module.exports = mongoose.model('User', userSchema)
