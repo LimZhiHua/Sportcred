@@ -247,6 +247,7 @@ const TriviaSinglePlayer = () => {
 
     useEffect ( () => {
         resetCount()
+        getCount()
     },[])
 
 
