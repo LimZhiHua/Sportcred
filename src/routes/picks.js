@@ -73,10 +73,18 @@ router.get('/getAllScheduledGames', async (req, res) => {
 			dateTime: key,
 			team: value
 		}
-		console.log(newRecord);
-		const finalResult = new GamesByDate(newRecord);
+		console.log("new record is", newRecord);
+		try{
+			if(newRecord !== null && newRecord.dateTime !== null && newRecord.dateTime !== "null"){
+				const finalResult = new GamesByDate(newRecord);
 
-		finalResult.save();
+				finalResult.save();
+			}
+			
+		}catch (err){
+			console.log("error is", err)
+		}
+
 	}
 	try {
 		return res.status(200).send({ gamesByDate: gamesByDate });

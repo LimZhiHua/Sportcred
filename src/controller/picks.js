@@ -38,7 +38,7 @@ export const getRegularSeasonData = async () => {
 
 export const getGamesByDate = async () => {
   const url = SERVER_ROOT + "/picks/getRegularSeasonData"
-
+  console.log("running get games by date")
   const result = {}
 
   const response = await fetch(url);

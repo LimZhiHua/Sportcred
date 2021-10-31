@@ -73,7 +73,7 @@ router.post('/addQuestion', async (req, res) => {
 
 /**
  * @swagger
- * /analysis/getQuestion:
+ * /analysis/getQuestion/:id:
  *   get:
  *     summary: Get today's analysis question and know whether user has responsed.
  *     description: Get today's analysis question and know whether user has responsed.
@@ -104,14 +104,18 @@ router.post('/addQuestion', async (req, res) => {
  *                   type: boolean
  *                   description: Whether the user has answered for today
 */
-router.get('/getQuestion', async (req, res) => {
+router.get('/getQuestion/:id', async (req, res) => {
     // ignore the time in date
+    console.log("running get question")
+    console.log("req query is", req.params.id)
     const a = new Date(Date.now()); 
+    console.log("a is", a)
     const date = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
     const question = await AnalysisQuestion.findOne({scheduledDay: {$gte: date}});
+    console.log("question is", question)
     if (!question) return res.status(200).send({});
 
-    const response = await AnalysisResponse.findOne({questionId: question._id, userId: req.query.userId})
+    const response = await AnalysisResponse.findOne({questionId: question._id, userId:  req.params.id})
     return res.status(200).send({
         questionId: question._id,
         question: question.question,
@@ -254,12 +258,12 @@ router.post('/addResponse', async (req, res) => {
  *               items: 
  *                $ref: '#/components/schemas/AnalysisResponse'
 */
-router.get('/getResponses', async (req, res) => {
-    // TODO: if use has not responsed to the analysis, do not allow bypassing to responses
+router.get('/getResponses/:questionId', async (req, res) => {
+    // TODO: if use has not responsed to the analysis, do not allow bypassing to responses  
     const limit = Math.abs(parseInt(req.query.limit)) || 100;
     const page  = Math.abs(parseInt(req.query.page)) - 1 || 0;
     const responses = await AnalysisResponse
-                                .find({questionId: req.query.questionId})
+                                .find({questionId: req.params.questionId})
                                 .sort({_id: -1})
                                 .skip(page*limit)
                                 .limit(limit)
@@ -267,6 +271,56 @@ router.get('/getResponses', async (req, res) => {
                                   return res.status(400).send("Question does not exist");
                                 });
     return res.status(200).send(responses);
+});
+
+/**
+ * @swagger
+ * /analysis/getResponses:
+ *   get:
+ *     summary: Get a single response.
+ *     description: Get a single response based on questionID and userID.
+ *     parameters:
+ *       - in: query
+ *         name: questionId
+ *         default: 100
+ *         description: The question ID
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: limit
+ *         default: 100
+ *         description: Get the most recent limit of responses
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: page
+ *         default: 1
+ *         description: The page of responses sized according to the limit
+ *         schema:
+ *           type: integer
+ *     tags:
+ *      - analysis
+ *     responses:
+ *       200:
+ *         description: a response based on userID and questionId
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items: 
+ *                $ref: '#/components/schemas/AnalysisResponse'
+*/
+router.get('/getResponse/:questionId/:userId', async (req, res) => {
+  // TODO: if use has not responsed to the analysis, do not allow bypassing to responses  
+  const response = await AnalysisResponse
+                              .findOne({questionId: req.params.questionId, userId:req.params.userId})
+                              .catch(() => {
+                                return res.status(400).send("Question does not exist");
+                              });
+  if(response == null){
+    return res.status(404).send("response not found");
+  }
+  return res.status(200).send(response);
 });
 
 /**
@@ -414,13 +468,44 @@ router.post('/addVote', async (req, res) => {
   if (response.userId === req.body.userId) return res.status(200).send("Cannot vote on your own response");
 
   try {
+    const exists = await AnalysisVote.findOne({userId: req.body.userId, responseId: req.body.responseId})
+    if(exists !== null){
+      return res.status(409).send("user has already voted on this response!");
+    }
     var analysisVote = new AnalysisVote({
       responseId: req.body.responseId,
       rating: req.body.rating,
       userId: req.body.userId
     });
-    analysisVote.save();
-    res.status(200).send({id: analysisVote._id});
+    await analysisVote.save();
+    let counter = 1 + response.responseCount
+    let sum = response.responseCount * response.averageScore + req.body.rating
+   
+    await AnalysisResponse.updateOne({_id: req.body.responseId},{averageScore: sum/counter, responseCount: counter});
+    
+    res.status(200).send();
+   
+  } catch (err) {
+      console.log(err);
+      res.status(500).send(err);
+  }
+});
+
+
+router.get('/getVotes/:responseId', async (req, res) => {
+  const vote = await AnalysisVote.findOne({responseId: req.params.responseId});
+  if (!vote) return res.status(400).send("Vote not found");
+
+  console.log("id is", req.params.responseId)
+  try {
+    const votes = await AnalysisVote.find({responseId: req.params.responseId})
+    if(votes === null){
+      return res.status(400).send("no one has voted on this");
+    }else{
+      console.log("votes is", votes)
+    }
+  
+    res.status(200).send(votes);
   } catch (err) {
       console.log(err);
       res.status(500).send(err);
