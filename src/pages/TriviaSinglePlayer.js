@@ -268,11 +268,6 @@ const TriviaSinglePlayer = () => {
     //
     return (
         <FloatingSection>
-            <button onClick={testing}> testtt </button>
-            <button onClick={resetCount}>testing reset</button>
-            <button onClick={getCount}>testing get</button>
-            <button onClick={subtractCount}>testing subtract</button>
-
             <h1>Trivia Single Player</h1>
             <p> {triviaCount}/10 games today</p>
             <br></br>
