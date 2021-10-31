@@ -331,7 +331,7 @@ router.post('/subtract-trivia-count/:id', async (req, res) => {
 router.post('/generate-trivia-questions/', async (req, res) => {
 
     // Find the user in the database
-    /*
+    
     const questions = {
         "questions": [
            {
@@ -974,7 +974,7 @@ router.post('/generate-trivia-questions/', async (req, res) => {
            }
         ]
      }
-   */
+   
     const exitingQuesions = await TriviaQuestions.countDocuments()
     if(exitingQuesions === 0){
         const response = await TriviaQuestions.insertMany(questions.questions)
