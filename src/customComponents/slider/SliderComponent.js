@@ -24,20 +24,35 @@ function SliderComponent(props) {
     }
 
 
+    if(props.fixed){
+      return (
+        <div className="default-slider-class">
+            <Slider 
+            className={classes.root}
+            min={0}
+            max={100}
+            value={props.averageScore}
+            valueLabelDisplay="auto"
+            >
+            </Slider>
+        </div>
+        )
+    }else{
+      return (
+        <div className="default-slider-class">
+            <Slider 
+            className={classes.root}
+            min={0}
+            max={100}
+            defaultValue={0}
+            valueLabelDisplay="auto"
+            onChange={saveScore}
+            >
+            </Slider>
+        </div>
+        )
+    }
 
-    return (
-      <div className="default-slider-class">
-          <Slider 
-          className={classes.root}
-          min={0}
-          max={100}
-          default={0}
-          valueLabelDisplay="auto"
-          onChange={saveScore}
-          >
-          </Slider>
-      </div>
-      )
 }
 
 export default SliderComponent;

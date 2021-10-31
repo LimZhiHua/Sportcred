@@ -49,11 +49,9 @@ export const getDailyQuestion = async (userID) => {
   }
 
   const response = await fetch(url, request);
-  console.log("response is", response)
   if (response.status === 200) {
     result.status = 200
     const msg = await response.json()
-    console.log("msg is", msg)
     result.foundPost = msg;
   } else {
     const msg = await response.text();
@@ -77,9 +75,10 @@ export const getQuestions = async () => {
   if (response.status === 200) {
     result.status = 200
     const msg = await response.json()
+    console.log("msg is", msg)
     // ADD:
     /////////////////////////////////////
-    result.questionsArray = msg.questionsArray;
+    result.questionsArray = msg;
     ////////////////////////////////////
   } else {
     const msg = await response.text();
@@ -176,6 +175,33 @@ export const getResponses = async (questionID) => {
   return result;
 }
 
+
+export const getResponse = async (questionID, userID) => {
+  const url = SERVER_ROOT + "/analysis/getResponse/" + questionID + "/" + userID
+  const request = {
+    method: "get",
+    headers:  DEFAULT_HEADER()
+  }
+
+  const result = {}
+
+  const response = await fetch(url, request);
+  if (response.status === 200) {
+    result.status = 200
+    const msg = await response.json()
+    // ADD:
+    /////////////////////////////////////
+    result.responseArray = msg;
+    ////////////////////////////////////
+  } else {
+    const msg = await response.text();
+    result.status = response.status;
+    result.error = msg;
+  }
+
+  return result;
+}
+
 export const addVote = async (responseID, userID, rating) => {
 
   const result = {}
@@ -192,10 +218,39 @@ export const addVote = async (responseID, userID, rating) => {
   }
 
   const response = await fetch(url, request);
+
+
+  
+  if (response.status === 200) {
+    result.status = 200
+    
+  } else {
+    const msg = await response.text();
+    result.status = response.status;
+    result.error = msg;
+  }
+  
+  return result;
+}
+
+
+export const getVotes = async (responseID) => {
+
+  const result = {}
+
+  const url = SERVER_ROOT + "/analysis/getVotes/" +  responseID
+
+  const request = {
+    method: "get",
+    headers:  DEFAULT_HEADER(),
+  }
+
+  const response = await fetch(url, request);
   if (response.status === 200) {
     result.status = 200
     const msg = await response.json()
-    result.foundPost = msg.foundPost;
+    console.log("msg is", msg)
+    result.votes = msg;
   } else {
     const msg = await response.text();
     result.status = response.status;

@@ -43,6 +43,7 @@ const AnalysisRate = () => {
       // Go through each item in scoreList and run add vote on it
       let success = true
       try{
+  
         for( let key in scoreList){
           let response = await addVote(key, userID, scoreList[key] )
           if(response.status !== 200){
