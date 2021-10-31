@@ -42,11 +42,16 @@ const AnalysisRate = () => {
     if(!submitted){
       // Go through each item in scoreList and run add vote on it
       let success = true
+      // we need to make sure they cannot vote on it multiple times. if response status is 409, that means there is a conflict. Store the conflicts to let user know
+      let conflicts = false
       try{
   
         for( let key in scoreList){
           let response = await addVote(key, userID, scoreList[key] )
-          if(response.status !== 200){
+          if(response.status === 409){
+            conflicts = true
+            success = false
+          }else if(response.status !== 200){
             success = false
           }
         }
@@ -57,10 +62,14 @@ const AnalysisRate = () => {
         window.alert("Successfully saved your scores!")
         setSubmitted(true)
       }else{
-        window.alert("an error occured saving one or more of your scores.")
+        if(conflicts){
+          window.alert("You have already submitted your daily response!")
+        }else{
+          window.alert("an error occured saving one or more of your scores.")
+        }
       }
     }else{
-      window.alert("you have already submitted your daily response!")
+      window.alert("You have already submitted your daily response!")
     }
     
   }

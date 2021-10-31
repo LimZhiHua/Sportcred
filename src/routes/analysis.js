@@ -470,7 +470,7 @@ router.post('/addVote', async (req, res) => {
   try {
     const exists = await AnalysisVote.findOne({userId: req.body.userId, responseId: req.body.responseId})
     if(exists !== null){
-      return res.status(400).send("user has already voted on this response!");
+      return res.status(409).send("user has already voted on this response!");
     }
     var analysisVote = new AnalysisVote({
       responseId: req.body.responseId,

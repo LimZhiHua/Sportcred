@@ -8,7 +8,6 @@ import Card from "../customComponents/card/Card";
 import { DefaultButton } from "./buttons/Buttons";
 
 function AnalysisResponseVote(props) {
-  console.log("respose is", props.response)
     const response = props.response
     if(response !== undefined){
       const answer = response.response 
