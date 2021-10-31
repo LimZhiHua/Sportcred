@@ -106,22 +106,20 @@ router.post('/addQuestion', async (req, res) => {
 */
 router.get('/getQuestion/:id', async (req, res) => {
     // ignore the time in date
-    console.log("running get question")
-    console.log("req query is", req.params.id)
     const a = new Date(Date.now()); 
-    console.log("a is", a)
     const date = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
     const question = await AnalysisQuestion.findOne({scheduledDay: {$gte: date}});
-    console.log("question is", question)
-    if (!question) return res.status(200).send({});
-
+    if (!question) return res.status(200).send();
     const response = await AnalysisResponse.findOne({questionId: question._id, userId:  req.params.id})
+
     return res.status(200).send({
         questionId: question._id,
         question: question.question,
         answered: response !== null
-    });
-});
+    })
+    }
+    
+);
 
 /**
  * @swagger
@@ -158,7 +156,11 @@ router.get('/getQuestions', async (req, res) => {
     const limit     = Math.abs(parseInt(req.query.limit)) || 100;
     const page      = Math.abs(parseInt(req.query.page)) - 1 || 0;
     const questions = await AnalysisQuestion.find({}).sort({scheduledDay: -1}).skip(page*limit).limit(limit);
-    return res.status(200).send(questions);
+    if(questions === null){
+      return res.status(404).send("no daily question found")
+    }else{
+      return res.status(200).send(questions);
+    }
 });
 
 

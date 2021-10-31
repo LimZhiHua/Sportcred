@@ -10,7 +10,7 @@ import {useAuth0} from "@auth0/auth0-react"
 
 
 const AnalysisAnswer = () => {
-  const [todaysQuestion, setTodaysQuestion] = useState('')
+  const [todaysQuestion, setTodaysQuestion] = useState('Unfortunately, we have run out of questions ')
   const [questionID, setQuestionID] = useState(null)
   const [answer, setAnswer] = useState("")
   // this is to see if he has already answered
@@ -21,7 +21,7 @@ const AnalysisAnswer = () => {
 
   const setDailyQuestion = async () => {
     const dailyQuestion = (await getDailyQuestion(userID)).foundPost
-    console.log("question is", dailyQuestion)
+    console.log("----------------question is--------------", dailyQuestion)
     setTodaysQuestion(dailyQuestion.question)
     setQuestionID(dailyQuestion.questionId)
     setAnswered(dailyQuestion.answered)

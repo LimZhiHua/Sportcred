@@ -195,7 +195,7 @@ const PlayOffBrackets = () => {
     
 
     return (
-        <div>
+        <div>{/*
           <button onClick={testing}> </button>
             <h1>PlayOffBrackets TODO</h1>
             <FloatingSection>
@@ -203,7 +203,10 @@ const PlayOffBrackets = () => {
             </FloatingSection>
             <FloatingSection>
             {swiperBrackets}
-            </FloatingSection>
+            </FloatingSection>*/}
+          <FloatingSection>
+            <h1> Coming Soon!</h1>
+          </FloatingSection>
         </div>
     )
 }

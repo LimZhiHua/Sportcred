@@ -11,7 +11,7 @@ import AnalysisResponseVote from "../customComponents/analysisResponseVote"
 
 const AnalysisRate = () => {
 
-  const [responses, setResponses] = useState([])
+  const [responses, setResponses] = useState(undefined)
   const [questionID, setQuestionID] = useState(null)
   const [todaysQuestion, setTodaysQuestion] = useState('')
   const [submitted, setSubmitted] = useState(false)
@@ -78,8 +78,8 @@ const AnalysisRate = () => {
     setup()
 }, []);
 
-  return (
-    
+  if(responses !== undefined ){
+    return (
       <FloatingSection>
         <h1>Today's Question:</h1>
         <h1>{todaysQuestion}</h1>
@@ -95,9 +95,15 @@ const AnalysisRate = () => {
         }
         <DefaultButton key={"submitButton"}onClick={submit} style={{ 'backgroundColor': "#FF652F"}}label= {"SUBMIT"} />
 
-      </FloatingSection>
-    
-  )
+      </FloatingSection> 
+  )}else{
+    return (<FloatingSection>
+      <h1>Today's Question:</h1>
+        <h1>Unfortunately, we have run out of questions</h1>
+        <br></br>
+    </FloatingSection>)
+  }
+
 }
 
 
