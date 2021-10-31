@@ -72,10 +72,10 @@ const AppRouter = () => (
     <ProtectedRoute exact path={TRIVIA_LANDING_URL} component={TriviaLanding} />
     <ProtectedRoute exact path={TRIVIA_SINGLE_PLAYER_URL} component={TriviaSinglePlayer} />
 
-    <Route exact path={ANALYSIS_LANDING_URL} component={DebateLanding} />
-    <Route exact path={ANALYSIS_ANSWER_URL} component={AnalysisAnswer} />
-    <Route exact path={ANALYSIS_RATING_URL} component={AnalysisRate} />
-    <Route exact path={ANALYSIS_HISTORY_URL} component={AnalysisHistory} />
+    <ProtectedRoute exact path={ANALYSIS_LANDING_URL} component={DebateLanding} />
+    <ProtectedRoute exact path={ANALYSIS_ANSWER_URL} component={AnalysisAnswer} />
+    <ProtectedRoute exact path={ANALYSIS_RATING_URL} component={AnalysisRate} />
+    <ProtectedRoute exact path={ANALYSIS_HISTORY_URL} component={AnalysisHistory} />
 
     <ProtectedRoute exact path={ZONE_LANDING_URL} component={ZoneLanding} />
     <ProtectedRoute exact path={PICKSPREDICT_LANDING_URL} component={PicksPredictLanding} />

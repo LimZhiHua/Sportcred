@@ -30,28 +30,31 @@ export const addQuestion = async (question) => {
 
 }
 
-export const getDailyQuestion = async (date) => {
+export const getDailyQuestion = async (userID) => {
 
   const result = {}
 
-  if (date === "") {
-    const msg = "date is required"
+  if (userID === "") {
+    const msg = "userID is required"
     result.status = 400
     result.error = msg
     return result
   }
 
-  const url = SERVER_ROOT + "/analysis/getQuestion/" + date
+  const url = SERVER_ROOT + "/analysis/getQuestion/" + userID
 
   const request = {
     method: "get",
+    headers:  DEFAULT_HEADER(),
   }
 
   const response = await fetch(url, request);
+  console.log("response is", response)
   if (response.status === 200) {
     result.status = 200
     const msg = await response.json()
-    result.foundPost = msg.foundPost;
+    console.log("msg is", msg)
+    result.foundPost = msg;
   } else {
     const msg = await response.text();
     result.status = response.status;
@@ -87,13 +90,13 @@ export const getQuestions = async () => {
   return result;
 }
 
-export const addResponse = async (questionId, userId, response) => {
+export const addResponse = async (questionId, userId, answer) => {
   const url = SERVER_ROOT + "/analysis/addResponse"
   const request = {
     method: "post",
     body: JSON.stringify({questionId: questionId,
       userId: userId,
-      response: response}),
+      response: answer}),
     headers:  DEFAULT_HEADER(),
   }
 
@@ -114,7 +117,7 @@ export const addResponse = async (questionId, userId, response) => {
   return result;
 
 }
-
+/*
 export const addResponse = async (date) => {
 
   const result = {}
@@ -145,12 +148,13 @@ export const addResponse = async (date) => {
 
   return result;
 }
-
-export const getResponses = async () => {
-  const url = SERVER_ROOT + "/analysis/getResponses/"
-
+*/
+export const getResponses = async (questionID) => {
+  console.log("questiondid is", questionID)
+  const url = SERVER_ROOT + "/analysis/getResponses/" + questionID
   const request = {
     method: "get",
+    headers:  DEFAULT_HEADER()
   }
 
   const result = {}
@@ -161,7 +165,7 @@ export const getResponses = async () => {
     const msg = await response.json()
     // ADD:
     /////////////////////////////////////
-    result.questionsArray = msg.questionsArray;
+    result.responseArray = msg;
     ////////////////////////////////////
   } else {
     const msg = await response.text();
@@ -172,21 +176,19 @@ export const getResponses = async () => {
   return result;
 }
 
-export const addVote = async (date) => {
+export const addVote = async (responseID, userID, rating) => {
 
   const result = {}
 
-  if (date === "") {
-    const msg = "date is required"
-    result.status = 400
-    result.error = msg
-    return result
-  }
-
-  const url = SERVER_ROOT + "/analysis/addVote/" + date
+  const url = SERVER_ROOT + "/analysis/addVote"
 
   const request = {
-    method: "get",
+    method: "post",
+    headers:  DEFAULT_HEADER(),
+    body: JSON.stringify({responseId: responseID,
+      rating: rating ,
+      userId:userID }),
+
   }
 
   const response = await fetch(url, request);

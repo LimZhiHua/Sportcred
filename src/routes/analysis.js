@@ -73,7 +73,7 @@ router.post('/addQuestion', async (req, res) => {
 
 /**
  * @swagger
- * /analysis/getQuestion:
+ * /analysis/getQuestion/:id:
  *   get:
  *     summary: Get today's analysis question and know whether user has responsed.
  *     description: Get today's analysis question and know whether user has responsed.
@@ -104,14 +104,18 @@ router.post('/addQuestion', async (req, res) => {
  *                   type: boolean
  *                   description: Whether the user has answered for today
 */
-router.get('/getQuestion', async (req, res) => {
+router.get('/getQuestion/:id', async (req, res) => {
     // ignore the time in date
+    console.log("running get question")
+    console.log("req query is", req.params.id)
     const a = new Date(Date.now()); 
+    console.log("a is", a)
     const date = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
     const question = await AnalysisQuestion.findOne({scheduledDay: {$gte: date}});
+    console.log("question is", question)
     if (!question) return res.status(200).send({});
 
-    const response = await AnalysisResponse.findOne({questionId: question._id, userId: req.query.userId})
+    const response = await AnalysisResponse.findOne({questionId: question._id, userId:  req.params.id})
     return res.status(200).send({
         questionId: question._id,
         question: question.question,
@@ -254,12 +258,12 @@ router.post('/addResponse', async (req, res) => {
  *               items: 
  *                $ref: '#/components/schemas/AnalysisResponse'
 */
-router.get('/getResponses', async (req, res) => {
-    // TODO: if use has not responsed to the analysis, do not allow bypassing to responses
+router.get('/getResponses/:questionId', async (req, res) => {
+    // TODO: if use has not responsed to the analysis, do not allow bypassing to responses  
     const limit = Math.abs(parseInt(req.query.limit)) || 100;
     const page  = Math.abs(parseInt(req.query.page)) - 1 || 0;
     const responses = await AnalysisResponse
-                                .find({questionId: req.query.questionId})
+                                .find({questionId: req.params.questionId})
                                 .sort({_id: -1})
                                 .skip(page*limit)
                                 .limit(limit)
@@ -414,6 +418,10 @@ router.post('/addVote', async (req, res) => {
   if (response.userId === req.body.userId) return res.status(200).send("Cannot vote on your own response");
 
   try {
+    const exists = await AnalysisVote.findOne({userId: req.body.userId, responseId: req.body.responseId})
+    if(exists !== null){
+      return res.status(400).send("user has already voted on this response!");
+    }
     var analysisVote = new AnalysisVote({
       responseId: req.body.responseId,
       rating: req.body.rating,

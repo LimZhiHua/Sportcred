@@ -23,6 +23,10 @@ const analysisResponseSchema = new mongoose.Schema({
   averageScore: {
     type: Number,
     default: 0
+  },
+  responseCount:{
+    type: Number,
+    default:0
   }
 })
 
