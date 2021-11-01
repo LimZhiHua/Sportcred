@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
   acs: {
     type: Number,
     max: 1100,
+    min: 0,
     default: 100
   },
 

@@ -46,6 +46,12 @@ const postSchema = new mongoose.Schema({
         ref: "author",
         default: ""
     },
+    authorACS: {
+        type: Number,
+        max: 1100,
+        min: 0,
+        default: 100
+      },
 
 })
 

@@ -15,7 +15,6 @@ export const newPost = async (new_post) => {
   const result = {}
 
   const response = await fetch(url, request);
-
   if (response.status === 200) {
     result.status = 200
     const msg = await response.json()
@@ -40,9 +39,11 @@ export const getAllPosts = async () => {
   const result = {}
 
   const response = await fetch(url, request);
+
   if (response.status === 200) {
     result.status = 200
     const msg = await response.json()
+    console.log("msg is", msg)
     // ADD:
     /////////////////////////////////////
     result.postsArray = msg.postsArray;

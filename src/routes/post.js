@@ -54,9 +54,12 @@ router.get('/', async (req, res) => {
   // the author of the post might have changed his username, so we gotta go and get the new one
   let allPostsUpdated = await Promise.all(
     allPosts.map( async (curPost) =>{
-      const username =  (await User.findOne({_id: curPost.authorId})).username
+      const user =  (await User.findOne({_id: curPost.authorId}))
+      const username = user.username
+      const acs = user.acs
       let newPost = curPost
       newPost["author"] = username
+      newPost["authorACS"] = acs
       return newPost
     }))
     try {

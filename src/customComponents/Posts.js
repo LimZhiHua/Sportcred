@@ -87,6 +87,7 @@ const Post = ({
         postId,
         authorId,
         author,
+        acs,
         title = "Unset title",
         likes,
         dislikes,
@@ -109,7 +110,7 @@ const Post = ({
 
         return (
             <PostContainer>
-                <PostHeader displayname={author}/>
+                <PostHeader  score = {acs} displayname={author}/>
                 <div className="post-body">
                     <div className="title">{title}</div>
                     <div className="content">{content}</div>
@@ -209,6 +210,7 @@ const CommentSection = ({postId}) => {
 const PostsSection = ({userFilter= false, postsData=[]}) => {
     const { user } = useAuth0();
     const userID = user.sub.split("|")[1]
+    console.log("posts data is", postsData)
     return <>{
         postsData.map(post => 
             {   
@@ -219,6 +221,7 @@ const PostsSection = ({userFilter= false, postsData=[]}) => {
                     postId={post._id}
                     authorId={post.authorId}
                     author={post.author}
+                    acs = {post.authorACS}
                     title={post.title}
                     likes={post.likes}
                     dislikes={post.dislikes}
@@ -233,6 +236,7 @@ const PostsSection = ({userFilter= false, postsData=[]}) => {
                     postId={post._id}
                     authorId={post.authorId}
                     author={post.author}
+                    acs={post.acs}
                     title={post.title}
                     likes={post.likes}
                     dislikes={post.dislikes}
