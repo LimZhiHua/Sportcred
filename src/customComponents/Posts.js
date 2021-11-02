@@ -141,10 +141,10 @@ const Post = ({
         )
 }
 
-const PostComment = ({commentId, comment = "Unfinished comment... ... . . ....", author}) => {
+const PostComment = ({commentId, comment = "Unfinished comment... ... . . ....", author, authorACS}) => {
 
     return <PostContainer>
-        <PostHeader displayname={author}/>
+        <PostHeader displayname={author} score={authorACS}/>
         <div className="post-body">
             <div className="content">{comment}</div>
         </div>
@@ -196,6 +196,7 @@ const CommentSection = ({postId}) => {
                     comment={comment.text}
                     authorId={comment.authorId}
                     author={comment.author}
+                    authorACS={comment.authorACS}
                 />
                 }
                    

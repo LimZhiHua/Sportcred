@@ -27,6 +27,12 @@ const postCommentSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     },
+    authorACS: {
+      type: Number,
+      max: 1100,
+      min: 0,
+      default: 100
+    },
 })
 
 module.exports = mongoose.model("PostComment", postCommentSchema)

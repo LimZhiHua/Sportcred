@@ -68,7 +68,8 @@ router.post('/postComment', async (req, res) => {
     text: req.body.text,
     postId: req.params.id,
     authorId: req.body.author_id,
-    author:""
+    author:"",
+    authorACS: 0
   }
 
   try{
@@ -139,9 +140,12 @@ router.get('/comments', async (req, res) => {
                   });
   let allCommentsUpdated = await  Promise.all(
     allComments.map( async (comment) =>{
-      const username =  (await User.findOne({_id: comment.authorId})).username
+      const user =  (await User.findOne({_id: comment.authorId}))
+      const username = user.username
+      const authorACS = user.acs
       let newComment = comment
       newComment["author"] = username
+      newComment["authorACS"] = authorACS
       return newComment
     }))
   
