@@ -57,7 +57,7 @@ hosted at https://sportcred-staging.herokuapp.com/
 run `npm run deploy` 
 to deploy
 
-The deploy script is defaulted to deploy content on `origin` branch `release/v1`
+The deploy script is defaulted to deploy content on `origin` branch `release/v#.#`
 Please update accordingly
 
 ### Production environment variables
@@ -105,3 +105,46 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `yarn build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+# Archectiture
+
+## MVC - Kinda
+
+The archectiture was designed by team Binary and was intended to follow MVC. To some extent it does, but it's actual implementation splits roles differently. 
+
+**Models**
+The models here describes the schema of each collection in mongoDB and are reference by both the controllers in the frontend and the routes in the backend.
+
+**Pages (Kinda the V in MVC)**
+Pages contains the views for each different section of the app
+- events from the view may trigger controllers
+- events update their own state which in turns updates their own view.
+
+Ironically, Pages are more like actual controllers than the Controllers themselves are. Pages control when data change, and how the state and view updates.
+
+**Controllers (Not really the C in MVC)**
+The controllers here are responsible for making client side requests to the server. They signal events and simply return pure data without modifying state.
+
+**Routes**
+Routes are the api endpoints on the server. Routes perform the necessary effects to the database and returns the relevant data.
+
+## Other Folders / Files
+
+**server.js**
+The root of the backend server
+
+**index.js**
+The root of the frontend site
+
+**customComponents/**
+Contains shared components used across the app
+
+**urls.js**
+Defines frontend routes 
+
+**router.js**
+Configures the react hash router, points routes to their respective page
+
+**utils.js**
+Contains common helper functions
+
