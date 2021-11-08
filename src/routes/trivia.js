@@ -985,10 +985,74 @@ router.post('/generate-trivia-questions/', async (req, res) => {
     return res.status(200);
 })
 
+/**
+ * @swagger
+ * /trivia/insert-trivia-question:
+ *   post:
+ *     summary: Used to manually insert a trivia question.
+ *     description: inserts a trivia question
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               question:
+ *                 type: string
+ *                 description: the question in quotation marks.
+ *                 example: what is your name?
+ *               choices:
+ *                 type: array
+ *                 description: the choices in the form of an array. Make sure ther are exactly 4 of them, and that you include the answer! 
+ *                 example: ["Bob", "John", "Mary", "Sue"]
+ *               answer:
+ *                 type: string
+ *                 description: the answer in quotation marks.
+ *                 example: "Bob"
+ *               
+ * 
+ *     tags:
+ *      - trivia
+ *     responses:
+ *       404:
+ *         description: Game session not found.
+ *       200:
+ *         description: question inserted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               
+*/
+ 
+router.post('/insert-trivia-question/', async (req, res) => {
+  
 
+   const category = "basketball"
+   const star = req.body.star // i have no idea what star is. Some questions just seem to have it for some odd reason
+   const question = req.body.question
+   const choices = req.body.choices
+   const answer = req.body.answer
+   const trivQuest = {
+      "category": category,
+      "star": star,
+      "question": question,
+      "answer": answer,
+      "choices": choices
+   }
+ 
+   try{
+      await TriviaQuestions.create(trivQuest)
+      return res.status(200);
 
+   } catch (error) {
+      console.log(error);
+      res.send({ action: false, response: "you have some error in updating the user" });
+    }
 
-
+   
+})
 
 
 module.exports = router;
