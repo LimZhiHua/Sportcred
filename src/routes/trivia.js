@@ -1044,7 +1044,7 @@ router.post('/insert-trivia-question/', async (req, res) => {
  
    try{
       await TriviaQuestions.create(trivQuest)
-      return res.status(200);
+      return res.status(200).send();
 
    } catch (error) {
       console.log(error);
